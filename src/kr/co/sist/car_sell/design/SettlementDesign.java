@@ -30,7 +30,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import kr.co.sist.car_sell.event.SettlementEvt;
-import src_정산.project1.Design.dialogTest;
 
 /**
  * 
