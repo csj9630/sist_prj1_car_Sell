@@ -1,10 +1,13 @@
-package teamproject2;
+package kr.co.sist.car_sell.dao.OrderList;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import kr.co.sist.car_sell.dao.GetConnection;
+import kr.co.sist.car_sell.dto.OrderList.OrderListDetailManagerDTO;
 
 public class OrderListDetailManagerDAO {
 
@@ -30,7 +33,7 @@ public class OrderListDetailManagerDAO {
 		GetConnection gc=GetConnection.getInstance();
 		
 		try {
-			con=gc.getCon();
+			con=gc.getConn();
 			StringBuilder updateOrder=new StringBuilder();
 			updateOrder
 			.append("		update ORDER_HISTORY		")
@@ -59,7 +62,7 @@ public class OrderListDetailManagerDAO {
 		GetConnection gc=GetConnection.getInstance();
 		
 		try {
-			con=gc.getCon();
+			con=gc.getConn();
 			StringBuilder selectOneOrder=new StringBuilder();
 			selectOneOrder
 			.append("		select u.user_name, u.email, u.tel, u.address,\r\n"

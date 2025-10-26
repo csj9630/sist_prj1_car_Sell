@@ -1,9 +1,8 @@
-package kr.co.sist.car_sell.design.userMenu;
+package kr.co.sist.car_sell.design.UserMenu;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -11,16 +10,18 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import kr.co.sist.car_sell.event.UserMenu.UserMenuEvt;
+
 /**
  * 작업자 : 최승준<br>
  * '내 정보 메뉴' 화면을 디자인한 클래스<br>
  * 
  */
-public class AdminMenuDesign extends JFrame {
+public class UserMenuDesign extends JFrame {
 
-	private JButton jbtnModifyInfo, jbtnModifyPw, jbtnOrderList,jbtnBtn4;
+	private JButton jbtnModifyInfo, jbtnModifyPw, jbtnOrderList;
 
-	public AdminMenuDesign() {
+	public UserMenuDesign() {
 		super("사용자 정보");
 		JLabel jlTitle = new JLabel("내 정보");
 		
@@ -34,7 +35,6 @@ public class AdminMenuDesign extends JFrame {
 		jbtnModifyInfo = new JButton("내 정보 수정");
 		jbtnModifyPw = new JButton("비밀번호 수정");
 		jbtnOrderList = new JButton("주문 내역 ");
-		jbtnBtn4 = new JButton("관리자 ");//////////////
 		
 		//상단 패널에 타이틀 추가
 		jpNorth.add(jlTitle);
@@ -43,11 +43,9 @@ public class AdminMenuDesign extends JFrame {
 		jpCenter.add(jbtnModifyInfo);
 		jpCenter.add(jbtnModifyPw);
 		jpCenter.add(jbtnOrderList);
-		jpCenter.add(jbtnBtn4);
 		
 		//FlowLayout으로 설정
 		jpCenter.setLayout(new FlowLayout());
-		jpCenter.setLayout(new GridLayout(2,2));
 		
 		
 		//폰트 설정
@@ -61,11 +59,7 @@ public class AdminMenuDesign extends JFrame {
 		
 		jbtnModifyInfo.setLocation(500,500);
 	
-/////////////////////////////////
-//		jbtnModifyInfo.setBorder(BorderFactory.createEmptyBorder(20, 20,20, 20));// 상좌하우 여백
-//		jbtnModifyPw.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));// 상좌하우 여백
-//		jbtnOrderList.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));// 상좌하우 여백
-//		jbtnBtn4.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));// 상좌하우 여백
+
 		
 		//JPanel에 상하 여백 넣기
 		//----createEmptyBorder(int top, int left, int bottom, int right)
@@ -82,13 +76,13 @@ public class AdminMenuDesign extends JFrame {
 		
 		
 		//이벤트 등록
-//		UserMenuEvt ume = new UserMenuEvt(this);
+		UserMenuEvt ume = new UserMenuEvt(this);
 		
-//		jbtnModifyInfo.addActionListener(ume);
-//		jbtnModifyPw.addActionListener(ume);
-//		jbtnOrderList.addActionListener(ume);
-//		
-//		addWindowListener(ume);
+		jbtnModifyInfo.addActionListener(ume);
+		jbtnModifyPw.addActionListener(ume);
+		jbtnOrderList.addActionListener(ume);
+		
+		addWindowListener(ume);
 		
 		
 		
@@ -112,9 +106,6 @@ public class AdminMenuDesign extends JFrame {
 		return jbtnOrderList;
 	}
 
-	public static void main(String[] args) {
-		new AdminMenuDesign();
-	}
 
 }//class
 

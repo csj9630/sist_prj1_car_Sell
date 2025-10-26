@@ -1,4 +1,4 @@
-package teamproject2;
+package kr.co.sist.car_sell.event.OrderList;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,8 +8,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-import javax.swing.JLabel;
-import javax.swing.table.DefaultTableModel;
+import kr.co.sist.car_sell.design.OrderList.OrderListDetailManagerDesign;
+import kr.co.sist.car_sell.service.OrderList.OrderListDetailManagerService;
 
 public class OrderListDetailManagerEvent extends WindowAdapter implements ActionListener, WindowListener, ItemListener {
 	

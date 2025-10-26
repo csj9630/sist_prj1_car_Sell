@@ -1,4 +1,4 @@
-package teamproject2;
+package kr.co.sist.car_sell.dto.OrderList;
 
 import java.sql.Date;
 

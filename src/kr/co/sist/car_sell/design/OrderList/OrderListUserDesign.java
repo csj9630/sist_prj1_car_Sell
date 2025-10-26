@@ -1,8 +1,6 @@
-package teamproject2;
+package kr.co.sist.car_sell.design.OrderList;
 
-import java.awt.Color;
 import java.awt.Font;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JDialog;
@@ -10,6 +8,10 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import kr.co.sist.car_sell.dto.OrderList.OrderListUserDTO;
+import kr.co.sist.car_sell.event.OrderList.OrderListUserEvent;
+import kr.co.sist.car_sell.service.OrderList.OrderListUserService;
 
 public class OrderListUserDesign extends JDialog{
 	private JLabel jlogo;

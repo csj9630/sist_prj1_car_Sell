@@ -1,4 +1,4 @@
-package teamproject2;
+package kr.co.sist.car_sell.dao.OrderList;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -8,6 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import kr.co.sist.car_sell.dao.GetConnection;
+import kr.co.sist.car_sell.dto.OrderList.OrderListUserDTO;
 
 public class OrderListUserDAO {
 	private static OrderListUserDAO oluDAO;
@@ -33,7 +36,7 @@ public class OrderListUserDAO {
 		GetConnection gc=GetConnection.getInstance();
 		
 		try {
-			con=gc.getCon();
+			con=gc.getConn();
 			String selectOrder="select o.payment_code,o.order_date, o.delivery_state,\r\n"
 					+ "			 	   c.product_code,c.car_name, c.price,\r\n"
 					+ "				   u.user_code\r\n						  "

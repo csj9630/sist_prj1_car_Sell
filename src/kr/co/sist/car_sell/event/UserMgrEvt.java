@@ -1,4 +1,4 @@
-package carSell_prj_test_all;
+package kr.co.sist.car_sell.event;
 //	... (주석) ...
 
 import java.awt.event.ActionEvent;
@@ -10,6 +10,10 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
+import kr.co.sist.car_sell.design.UserMgrDesign;
+import kr.co.sist.car_sell.dto.UserMgrDTO;
+import kr.co.sist.car_sell.service.UserMgrService;
 
 public class UserMgrEvt extends WindowAdapter implements ActionListener {
 	

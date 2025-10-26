@@ -1,9 +1,10 @@
-package carSell_prj_test_all;
+package kr.co.sist.car_sell.service;
 
-import java.sql.SQLException; 
-import java.util.ArrayList; 
+import java.sql.SQLException;
 import java.util.List;
-import java.util.stream.Collectors; // [추가]
+
+import kr.co.sist.car_sell.dao.UserMgrDAO;
+import kr.co.sist.car_sell.dto.UserMgrDTO;
 
 /**
  * ... (클래스 다이어그램 주석) ...

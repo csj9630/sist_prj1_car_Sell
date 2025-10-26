@@ -1,8 +1,13 @@
-package kr.co.sist.car_sell.design.loginRegister;
+package kr.co.sist.car_sell.design.LoginRegister;
 
-import javax.swing.*;
 import java.awt.Font;
-import javax.swing.JDialog; 
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField; 
 
 public class LoginDesign extends JDialog { 
 

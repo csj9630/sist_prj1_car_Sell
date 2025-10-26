@@ -1,13 +1,10 @@
-package carSell_prj_test_all;
+package kr.co.sist.car_sell.design;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.sql.SQLException; // [추가]
-import java.util.ArrayList; // [추가]
-import java.util.List; // [추가]
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -16,7 +13,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane; // [추가]
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;

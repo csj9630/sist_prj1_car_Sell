@@ -1,13 +1,15 @@
-package kr.co.sist.car_sell.design.loginRegister;
+package kr.co.sist.car_sell.design.LoginRegister;
 
-import javax.swing.*;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.Dimension;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class FirstSelectDesign extends JFrame {
 

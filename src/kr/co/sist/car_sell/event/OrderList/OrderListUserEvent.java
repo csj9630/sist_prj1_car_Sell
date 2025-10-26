@@ -1,4 +1,4 @@
-package teamproject2;
+package kr.co.sist.car_sell.event.OrderList;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -6,6 +6,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowListener;
 
 import javax.swing.JOptionPane;
+
+import kr.co.sist.car_sell.design.OrderList.OrderListDetailUserDesign;
+import kr.co.sist.car_sell.design.OrderList.OrderListUserDesign;
 
 public class OrderListUserEvent extends WindowAdapter implements WindowListener, MouseListener {
 	

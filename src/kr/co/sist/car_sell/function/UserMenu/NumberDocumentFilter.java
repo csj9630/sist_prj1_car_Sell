@@ -1,4 +1,4 @@
-package kr.co.sist.car_sell.function.userMenu;
+package kr.co.sist.car_sell.function.UserMenu;
 
 import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;

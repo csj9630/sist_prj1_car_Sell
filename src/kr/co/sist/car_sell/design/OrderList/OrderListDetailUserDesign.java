@@ -1,15 +1,17 @@
-package teamproject2;
+package kr.co.sist.car_sell.design.OrderList;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
+
+import kr.co.sist.car_sell.dto.OrderList.OrderListDetailUserDTO;
+import kr.co.sist.car_sell.service.OrderList.OrderListDetailUserService;
 
 public class OrderListDetailUserDesign extends JDialog{
 	private JLabel jlblLogo, jlblOrderListDetail;

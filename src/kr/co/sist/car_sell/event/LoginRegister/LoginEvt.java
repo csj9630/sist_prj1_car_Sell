@@ -1,4 +1,4 @@
-package kr.co.sist.car_sell.event.loginRegister;
+package kr.co.sist.car_sell.event.LoginRegister;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,9 +6,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import kr.co.sist.car_sell.design.loginRegister.LoginDesign;
-import kr.co.sist.car_sell.design.loginRegister.RegisterDesign;
-import kr.co.sist.car_sell.design.loginRegister.UserOrderDesign;
+import kr.co.sist.car_sell.design.LoginRegister.LoginDesign;
+import kr.co.sist.car_sell.design.LoginRegister.RegisterDesign;
+import kr.co.sist.car_sell.design.LoginRegister.UserOrderDesign;
 
 public class LoginEvt implements ActionListener {
 

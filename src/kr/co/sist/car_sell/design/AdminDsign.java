@@ -1,4 +1,4 @@
-package carSell_prj_test_admin;
+package kr.co.sist.car_sell.design;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -12,6 +12,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import kr.co.sist.car_sell.event.AdminEvt;
 
 public class AdminDsign extends JFrame {
 

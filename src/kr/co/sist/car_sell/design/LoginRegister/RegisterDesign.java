@@ -1,4 +1,4 @@
-package kr.co.sist.car_sell.design.loginRegister;
+package kr.co.sist.car_sell.design.LoginRegister;
 
 
 import javax.swing.JFrame;

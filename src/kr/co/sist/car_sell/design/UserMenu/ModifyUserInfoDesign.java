@@ -1,4 +1,4 @@
-package kr.co.sist.car_sell.design.userMenu;
+package kr.co.sist.car_sell.design.UserMenu;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -16,7 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
 
-import kr.co.sist.car_sell.event.userMenu.ModifyUserInfoEvt;
+import kr.co.sist.car_sell.event.UserMenu.ModifyUserInfoEvt;
 
 public class ModifyUserInfoDesign extends JDialog {
 
