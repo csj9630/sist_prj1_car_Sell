@@ -2,12 +2,13 @@ package kr.co.sist.car_sell.event.loginRegister;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import java.util.Arrays;
-import prj_1.design.RegisterDesign;
+
+import kr.co.sist.car_sell.design.loginRegister.RegisterDesign;
 
 public class RegisterEvt implements ActionListener {
 

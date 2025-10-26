@@ -1,4 +1,4 @@
-package project1.Design;
+package kr.co.sist.car_sell.design;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -17,7 +17,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -29,6 +28,9 @@ import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+
+import kr.co.sist.car_sell.event.SettlementEvt;
+import src_정산.project1.Design.dialogTest;
 
 /**
  * 

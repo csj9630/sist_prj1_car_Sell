@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+import kr.co.sist.car_sell.design.SettlementDesign;
+
 public class dialogTest extends JFrame implements ActionListener{
 	
 	public dialogTest() {

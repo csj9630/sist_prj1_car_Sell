@@ -1,4 +1,4 @@
-package project1.Design;
+package kr.co.sist.car_sell.run;
 
 public class RunSettlement {
 

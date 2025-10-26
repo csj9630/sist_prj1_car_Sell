@@ -1,13 +1,14 @@
-package project1.Design;
+package kr.co.sist.car_sell.dao;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import kr.co.sist.car_sell.dto.SettlementDTO;
 
 public class SettlementDAO {
 	// Singleton Patton 사용을 위해 private으로 설정
@@ -102,7 +103,7 @@ public class SettlementDAO {
 		List<SettlementDTO> smDTOList = new ArrayList<SettlementDTO>();
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		GetConnection gc = GetConnection.getInsance();
+		GetConnection gc = GetConnection.getInstance();
 		ResultSet rs = null;
 		try {
 			System.out.println("년도 시작 : " + startPeriod);

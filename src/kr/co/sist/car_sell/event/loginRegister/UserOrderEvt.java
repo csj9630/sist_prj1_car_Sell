@@ -2,8 +2,10 @@ package kr.co.sist.car_sell.event.loginRegister;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JOptionPane;
-import prj_1.design.UserOrderDesign;
+
+import kr.co.sist.car_sell.design.loginRegister.UserOrderDesign;
 
 public class UserOrderEvt implements ActionListener {
 

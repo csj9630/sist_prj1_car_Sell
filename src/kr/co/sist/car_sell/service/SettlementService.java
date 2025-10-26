@@ -1,7 +1,10 @@
-package project1.Design;
+package kr.co.sist.car_sell.service;
 
 import java.sql.SQLException;
 import java.util.List;
+
+import kr.co.sist.car_sell.dao.SettlementDAO;
+import kr.co.sist.car_sell.dto.SettlementDTO;
 
 //searchPeriodOption(String, String,String, String, String) : List<SettlementDTO>
 //
