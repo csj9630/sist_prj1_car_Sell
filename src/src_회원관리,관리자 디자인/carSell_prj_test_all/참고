@@ -1,0 +1,5 @@
+test_user_info 로 설정되어있기때문에 나중에 이걸 user_info 로변경 usermgrDAO에서
+
+userMgrDTO를 그냥 userDTO를 재활용 하는 방법도 좋을것같음 
+
+ 
