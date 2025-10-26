@@ -1,6 +1,6 @@
-package kr.co.sist.car_sell.function;
+package kr.co.sist.car_sell.function.userMenu;
 
-import kr.co.sist.car_sell.design.ModifyUserPasswordDesign;
+import kr.co.sist.car_sell.design.userMenu.ModifyUserPasswordDesign;
 import kr.co.sist.car_sell.service.UserService;
 
 public class ModifyUserPasswordFunction {

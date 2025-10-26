@@ -1,4 +1,4 @@
-package kr.co.sist.car_sell.design;
+package kr.co.sist.car_sell.design.userMenu;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import kr.co.sist.car_sell.event.UserMenuEvt;
+import kr.co.sist.car_sell.event.userMenu.UserMenuEvt;
 
 /**
  * 작업자 : 최승준<br>

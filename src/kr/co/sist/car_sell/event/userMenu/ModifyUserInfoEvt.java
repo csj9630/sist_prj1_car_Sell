@@ -1,4 +1,4 @@
-package kr.co.sist.car_sell.event;
+package kr.co.sist.car_sell.event.userMenu;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -11,9 +11,9 @@ import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
 
-import kr.co.sist.car_sell.design.ModifyUserInfoDesign;
+import kr.co.sist.car_sell.design.userMenu.ModifyUserInfoDesign;
 import kr.co.sist.car_sell.dto.UserDTO;
-import kr.co.sist.car_sell.function.ModifyUserFunction;
+import kr.co.sist.car_sell.function.userMenu.ModifyUserFunction;
 import kr.co.sist.car_sell.service.UserService;
 
 /**

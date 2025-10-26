@@ -1,6 +1,6 @@
 package kr.co.sist.car_sell.run;
 
-import kr.co.sist.car_sell.design.UserMenuDesign;
+import kr.co.sist.car_sell.design.userMenu.UserMenuDesign;
 
 public class RunCarsell {
 

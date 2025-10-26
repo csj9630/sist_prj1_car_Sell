@@ -1,4 +1,4 @@
-package kr.co.sist.car_sell.event;
+package kr.co.sist.car_sell.event.userMenu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,9 +7,9 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JOptionPane;
 
-import kr.co.sist.car_sell.design.ModifyUserInfoDesign;
-import kr.co.sist.car_sell.design.ModifyUserPasswordDesign;
-import kr.co.sist.car_sell.design.UserMenuDesign;
+import kr.co.sist.car_sell.design.userMenu.ModifyUserInfoDesign;
+import kr.co.sist.car_sell.design.userMenu.ModifyUserPasswordDesign;
+import kr.co.sist.car_sell.design.userMenu.UserMenuDesign;
 
 /**
  * 작업자 : 최승준<br>

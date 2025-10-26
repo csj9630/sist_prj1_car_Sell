@@ -1,4 +1,4 @@
-package kr.co.sist.car_sell.event;
+package kr.co.sist.car_sell.event.userMenu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,9 +8,9 @@ import java.awt.event.WindowEvent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import kr.co.sist.car_sell.design.ModifyUserPasswordDesign;
+import kr.co.sist.car_sell.design.userMenu.ModifyUserPasswordDesign;
 import kr.co.sist.car_sell.dto.UserDTO;
-import kr.co.sist.car_sell.function.ModifyUserPasswordFunction;
+import kr.co.sist.car_sell.function.userMenu.ModifyUserPasswordFunction;
 import kr.co.sist.car_sell.service.UserService;
 
 /**

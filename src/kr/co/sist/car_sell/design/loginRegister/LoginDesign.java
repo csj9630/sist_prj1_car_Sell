@@ -1,4 +1,4 @@
-package prj_1.design;
+package kr.co.sist.car_sell.design.loginRegister;
 
 import javax.swing.*;
 import java.awt.Font;

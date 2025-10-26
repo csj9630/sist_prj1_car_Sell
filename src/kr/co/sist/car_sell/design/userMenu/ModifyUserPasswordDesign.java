@@ -1,4 +1,4 @@
-package kr.co.sist.car_sell.design;
+package kr.co.sist.car_sell.design.userMenu;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 
-import kr.co.sist.car_sell.event.ModifyUserPasswordEvt;
+import kr.co.sist.car_sell.event.userMenu.ModifyUserPasswordEvt;
 
 public class ModifyUserPasswordDesign extends JDialog {
 

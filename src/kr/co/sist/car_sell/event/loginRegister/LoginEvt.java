@@ -1,14 +1,14 @@
-package prj_1.evt;
+package kr.co.sist.car_sell.event.loginRegister;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays; // char[] 비교를 위해 필요
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import prj_1.design.LoginDesign;
-import prj_1.design.RegisterDesign;
-import prj_1.design.UserOrderDesign;
+
+import kr.co.sist.car_sell.design.loginRegister.LoginDesign;
+import kr.co.sist.car_sell.design.loginRegister.RegisterDesign;
+import kr.co.sist.car_sell.design.loginRegister.UserOrderDesign;
 
 public class LoginEvt implements ActionListener {
 
