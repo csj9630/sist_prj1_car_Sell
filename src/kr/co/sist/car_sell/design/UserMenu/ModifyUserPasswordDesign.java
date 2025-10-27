@@ -20,7 +20,7 @@ public class ModifyUserPasswordDesign extends JDialog {
 	private JLabel jlWrnPw, jlWrnNewPw, jlWrnNewPwCheck;
 	private JButton jbtnModify;
 
-	public ModifyUserPasswordDesign(UserMenuDesign umd, boolean modal) {
+	public ModifyUserPasswordDesign(UserMenuDesign umd, boolean modal, int user_code) {
 		super(umd, "비밀번호 수정", modal);
 
 		// 폰트 설정
@@ -140,7 +140,7 @@ public class ModifyUserPasswordDesign extends JDialog {
 		add("South", jpSouth);
 
 		//이벤트 리스너 등록
-		ModifyUserPasswordEvt mupe = new ModifyUserPasswordEvt(this);
+		ModifyUserPasswordEvt mupe = new ModifyUserPasswordEvt(this, user_code);
 		jbtnModify.addActionListener(mupe);
 		
 		// 창 설정
@@ -176,7 +176,5 @@ public class ModifyUserPasswordDesign extends JDialog {
 	public JButton getJbtnModify() {
 		return jbtnModify;
 	}
-	public static void main(String[] args) {
-		new ModifyUserPasswordDesign(new UserMenuDesign(), true);
-	}
+
 }// class

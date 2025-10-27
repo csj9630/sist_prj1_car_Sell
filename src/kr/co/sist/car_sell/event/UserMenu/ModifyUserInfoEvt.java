@@ -26,41 +26,40 @@ public class ModifyUserInfoEvt extends WindowAdapter implements ActionListener {
 	private UserDTO uDTO;
 
 	private boolean btnFlag = false;
+	private int user_code;// 사용자 식별 코드
 
 	public static final int UNEDITABLE = 211;
 	public static final int EDITABLE = 238;
 
-	public ModifyUserInfoEvt(ModifyUserInfoDesign mud) {
+	public ModifyUserInfoEvt(ModifyUserInfoDesign mud, int user_code) {
 		this.mud = mud;
 //		this.muf = new ModifyUserFunction(mud);
 		this.us = new UserService();
-		
-		editFlag(false, UNEDITABLE);
-		int user_code = 1;
-		loadUserInfo(user_code);//이 때 uDTO에 select한 정보 저장.
+
+		editFlag(false, UNEDITABLE); //모든 경고문 비활성화
+		this.user_code = user_code; //사용자 코드를 인스턴스로 저장.
+		loadUserInfo(this.user_code);// 이 때 uDTO에 select한 정보 저장.
 
 	}// ModifyUserInfoEvt
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource() == mud.getJbtnModify()) {
-			System.out.println("버튼 Flag : "+ btnFlag);
+			System.out.println("버튼 Flag : " + btnFlag);
 			if (btnFlag == false) {
 				enterEditMode();
-				//setTextForTest();//테스트용 값 넣기
+				// setTextForTest();//테스트용 값 넣기
 			} else if (btnFlag == true) {
 				if (!jtfEmptyWarning()) {
 					return;
 				} // end if
-				
+
 				if (!(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(mud, "저장하시겠습니까?"))) {
 					return;
 				} // end if;
-				
-				
+
 				saveChanges();
-			
-			
+
 			} // end else
 			btnFlag = !btnFlag;
 		} // end if
@@ -72,9 +71,8 @@ public class ModifyUserInfoEvt extends WindowAdapter implements ActionListener {
 		// TODO Auto-generated method stub
 		super.windowClosing(e);
 	}// windowClosing
-	
-	
-	//------------------------------------------------------------
+
+	// ------------------------------------------------------------
 
 	private void enterEditMode() {
 		editFlag(true, EDITABLE);
@@ -88,7 +86,7 @@ public class ModifyUserInfoEvt extends WindowAdapter implements ActionListener {
 
 	private void saveChanges() {
 
-		editFlag(false, UNEDITABLE);	
+		editFlag(false, UNEDITABLE);
 		warningSet(false);
 
 		// DB 저장 로직 자리
@@ -184,9 +182,10 @@ public class ModifyUserInfoEvt extends WindowAdapter implements ActionListener {
 
 	}// editFlag
 
-	// 
+	//
 	/**
 	 * 카드번호 가운데 8자리 마스킹, 현재 사용 안함
+	 * 
 	 * @param cardNo
 	 * @return
 	 */
@@ -205,56 +204,52 @@ public class ModifyUserInfoEvt extends WindowAdapter implements ActionListener {
 		}
 		return cardNo;
 	}// cardMasking
-	
+
 	/**
-	 * 테스트할 때 쓸 임시 데이터.
-	 * 수정할 때 바로 덮어씌운다.
+	 * 테스트할 때 쓸 임시 데이터. 수정할 때 바로 덮어씌운다.
 	 */
 	public void setTextForTest() {
-		
+
 		mud.getJtfName().setText("asdf");
 		mud.getJtfEmail().setText("ssssss@info.com");
 		mud.getJtfTel().setText("010-5555-5555");
 		mud.getJtfCard().setText("5555-5555-5555-5555");
 		mud.getJtfAddr().setText("asdfg 서천군 종천면 희리산길 9-40 33612 한국");
-		
-		
+
 	}// loadUserInfo
 
 	// ----------DB 로직--------------------------------------------------------
 	/**
-	 * DB 데이터를 텍스트필드에 불러온다.
-	 * select one 사용
+	 * DB 데이터를 텍스트필드에 불러온다. select one 사용
 	 * 
 	 */
 	public void loadUserInfo(int user_code) {
 //		UserDTO uDTO = new UserDTO();
 		uDTO = us.searchOneUser(user_code);
-		
+
 		mud.getJtfName().setText(uDTO.getName());
 		mud.getJtfEmail().setText(uDTO.getEmail());
 		mud.getJtfTel().setText(uDTO.getTel());
 		mud.getJtfCard().setText(uDTO.getCard_num());
 		mud.getJtfAddr().setText(uDTO.getAddress());
-		
-		
+
 	}// loadUserInfo
 
 	/**
 	 * 텍스트필드의 정보를 DB에 저장한다.
 	 */
 	public void modfiyUserInfo() {
-		
-		//uDTO.getUser_code는 “SELECT로 받은 DTO의 기본키(user_code)를 그대로 써서 UPDATE해야 한다.”
-		
-		//텍스트 필드값을 DTO에 저장.
+
+		// uDTO.getUser_code는 “SELECT로 받은 DTO의 기본키(user_code)를 그대로 써서 UPDATE해야 한다.”
+
+		// 텍스트 필드값을 DTO에 저장.
 		uDTO.setName(mud.getJtfName().getText());
 		uDTO.setEmail(mud.getJtfEmail().getText());
 		uDTO.setTel(mud.getJtfTel().getText());
 		uDTO.setCard_num(mud.getJtfCard().getText());
 		uDTO.setAddress(mud.getJtfAddr().getText());
-		
-		//DB로 Update할 SQL문 set
+
+		// DB로 Update할 SQL문 set
 		int flag = us.modifyUser(uDTO);
 		String outputMsg = "문제가 발생하였습니다. 잠시 후 다시 시도해주세요";
 		switch (flag) {
@@ -272,10 +267,8 @@ public class ModifyUserInfoEvt extends WindowAdapter implements ActionListener {
 			System.err.println("파일이 잘못되었습니다.");
 			break;
 		}// end switch
-		
-		
-		
+
 		JOptionPane.showMessageDialog(mud, outputMsg);
 	}// saveUserInfo
-	
+
 }// class

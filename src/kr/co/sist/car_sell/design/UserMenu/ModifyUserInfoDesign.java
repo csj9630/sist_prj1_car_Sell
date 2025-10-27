@@ -20,14 +20,14 @@ import kr.co.sist.car_sell.event.UserMenu.ModifyUserInfoEvt;
 
 public class ModifyUserInfoDesign extends JDialog {
 
-//	private JTextField jtfName, jtfEmail, jtfTel, jtfCard, jtfAddr;
+//	private JTextField jtfName, jtfEmail, jtfTel, jtfCard, jtfAddr ;
 	private JTextField jtfName, jtfEmail, jtfAddr;
 	private JLabel jlWrnName, jlWrnEmail, jlWrnTel, jlWrnCard, jlWrnAddr;
 	private JButton jbtnModify;
 	
 	private JFormattedTextField jtfTel, jtfCard;
 
-	public ModifyUserInfoDesign(UserMenuDesign umd, boolean modal) {
+	public ModifyUserInfoDesign(UserMenuDesign umd, boolean modal, int user_code) {
 		super(umd, "내 정보 수정", modal);
 
 		// 폰트 설정
@@ -210,7 +210,7 @@ public class ModifyUserInfoDesign extends JDialog {
 		add("South", jpSouth);
 		
 		//이벤트 리스너 등록
-		ModifyUserInfoEvt muie = new ModifyUserInfoEvt(this);
+		ModifyUserInfoEvt muie = new ModifyUserInfoEvt(this, user_code);
 		jbtnModify.addActionListener(muie);
 		
 		
@@ -270,9 +270,4 @@ public class ModifyUserInfoDesign extends JDialog {
 		return jbtnModify;
 	}
 	
-	
-
-	public static void main(String[] args) {
-		new ModifyUserInfoDesign(new UserMenuDesign(), true);
-	}
 }// class
