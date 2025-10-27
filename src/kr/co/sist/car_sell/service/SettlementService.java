@@ -6,30 +6,38 @@ import java.util.List;
 import kr.co.sist.car_sell.dao.SettlementDAO;
 import kr.co.sist.car_sell.dto.SettlementDTO;
 
-//searchPeriodOption(String, String,String, String, String) : List<SettlementDTO>
-//
-//+searchSalesSettlement(String, String) : List<QuarterlySalesDTO>
-//
-//+searchTotalSummary(String, String) : TotalSummaryDTO 
-
 public class SettlementService {
-   
-   public SettlementService() {
-      
-   }//SettlementService
-   
-   public List<SettlementDTO> searchPeriodOption(String startPeriod, String endPeriod, String delevery_state, String car_name, String oil) {
-      List<SettlementDTO> list = null;
-      
-      SettlementDAO smDAO = SettlementDAO.getInstance();
-      try {
-//         System.out.println("이게 중요\n" + startPeriod +" ,"+ endPeriod +" ,"+ delevery_state +" ,"+ car_name +" ," + oil);
-         list = smDAO.searchPeriodOption(startPeriod, endPeriod, delevery_state, car_name, oil);
-      } catch (SQLException e) {
-         e.printStackTrace();
-      }
-      return list;
-   }//searchPeriodOption
-   
-   
-}//class
+
+	public SettlementService() {
+
+	}// SettlementService
+
+	// 기간 및 옵션 설정 후 사용할 select문 호출 후 list에 값 담기
+	public List<SettlementDTO> searchPeriodOption(String startPeriod, String endPeriod, String delevery_state,
+			String car_name, String oil) {
+		List<SettlementDTO> list = null;
+		SettlementDAO smDAO = SettlementDAO.getInstance();
+
+		try {
+			list = smDAO.selectPeriodOption(startPeriod, endPeriod, delevery_state, car_name, oil);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} // end catch
+		return list;
+	}// searchPeriodOption
+
+	// 분기별 판매현황용 select문 호출 후 리스트에 값 담기
+	public List<SettlementDTO> searchPeriodOptionQuarter(String qtYear, String quarter) {
+		List<SettlementDTO> list = null;
+		SettlementDAO smDAO = SettlementDAO.getInstance();
+
+		try {
+			list = smDAO.selectPeriodOptionQuarter(qtYear, quarter);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} // end catch
+		return list;
+	}// searchPeriodOptionQuarter
+
+}// class
+
