@@ -23,12 +23,13 @@ public class ModifyUserPasswordEvt extends WindowAdapter implements ActionListen
 	private String pwCurrent, pwNew, pwNewCheck;
 	private JLabel wrnPW, wrnPwNew, wrnPwCheck;
 	private String userPw;// 사용자 비번
-	private int user_code = 1;// 사용자 식별 코드
+	private int user_code;// 사용자 식별 코드
 
-	public ModifyUserPasswordEvt(ModifyUserPasswordDesign mpd) {
+	public ModifyUserPasswordEvt(ModifyUserPasswordDesign mpd,int user_code) {
 		this.mpd = mpd;
 		//this.mpf = new ModifyUserPasswordFunction(mpd);
-		loadUserPw(user_code);// 사용자 비번을 불러와서 저장.
+		this.user_code= user_code;
+		loadUserPw(this.user_code);// 사용자 비번을 불러와서 저장.
 	}// ModifyUserPasswordEvt
 
 	@Override
@@ -52,7 +53,7 @@ public class ModifyUserPasswordEvt extends WindowAdapter implements ActionListen
 			} // end if
 
 			// 수정한 비번을 DB 저장하는 파트
-			saveModifiedPW();
+			saveModifiedPW(user_code);
 
 			JOptionPane.showMessageDialog(mpd, "비밀번호가 변경되었습니다.");
 			jpfClean();// 비번 정보 삭제
@@ -202,7 +203,7 @@ public class ModifyUserPasswordEvt extends WindowAdapter implements ActionListen
 	/**
 	 * 수정한 사용자 비번을 DB에 update로 저장함.
 	 */
-	public void saveModifiedPW() {
+	public void saveModifiedPW(int user_code) {
 		System.out.println("new Password : " + pwNew); // 여기서 DB에 저장.
 
 		int flag = new UserService().modifyPassword(user_code, pwNew);

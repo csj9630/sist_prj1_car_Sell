@@ -20,6 +20,7 @@ import kr.co.sist.car_sell.event.UserMenu.UserMenuEvt;
 public class UserMenuDesign extends JFrame {
 
 	private JButton jbtnModifyInfo, jbtnModifyPw, jbtnOrderList;
+	private int user_code=1; //사용자 코드
 
 	public UserMenuDesign() {
 		super("사용자 정보");
@@ -43,6 +44,11 @@ public class UserMenuDesign extends JFrame {
 		jpCenter.add(jbtnModifyInfo);
 		jpCenter.add(jbtnModifyPw);
 		jpCenter.add(jbtnOrderList);
+		
+		//ㅁㅁㅁㅁㅁㅁ테스트용 usercode 출력 ㅁㅁㅁㅁㅁㅁㅁㅁ
+		JLabel jpUserCode = new JLabel("UserCode = "+user_code);
+		jpCenter.add(jpUserCode);
+		
 		
 		//FlowLayout으로 설정
 		jpCenter.setLayout(new FlowLayout());
@@ -104,6 +110,10 @@ public class UserMenuDesign extends JFrame {
 
 	public JButton getjbtnOrderList() {
 		return jbtnOrderList;
+	}
+
+	public int getUser_code() {
+		return user_code;
 	}
 
 
