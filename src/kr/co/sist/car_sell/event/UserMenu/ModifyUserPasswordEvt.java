@@ -4,13 +4,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.regex.Pattern;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import kr.co.sist.car_sell.design.UserMenu.ModifyUserPasswordDesign;
 import kr.co.sist.car_sell.dto.UserDTO;
-import kr.co.sist.car_sell.function.UserMenu.ModifyUserPasswordFunction;
 import kr.co.sist.car_sell.service.UserService;
 
 /**
@@ -19,17 +19,18 @@ import kr.co.sist.car_sell.service.UserService;
  */
 public class ModifyUserPasswordEvt extends WindowAdapter implements ActionListener {
 	private ModifyUserPasswordDesign mpd;
-	private ModifyUserPasswordFunction mpf;
+//	private ModifyUserPasswordFunction mpf;
 	private String pwCurrent, pwNew, pwNewCheck;
 	private JLabel wrnPW, wrnPwNew, wrnPwCheck;
 	private String userPw;// 사용자 비번
 	private int user_code;// 사용자 식별 코드
 
-	public ModifyUserPasswordEvt(ModifyUserPasswordDesign mpd,int user_code) {
+	public ModifyUserPasswordEvt(ModifyUserPasswordDesign mpd, int user_code) {
 		this.mpd = mpd;
-		//this.mpf = new ModifyUserPasswordFunction(mpd);
-		this.user_code= user_code;
+		// this.mpf = new ModifyUserPasswordFunction(mpd);
+		this.user_code = user_code;
 		loadUserPw(this.user_code);// 사용자 비번을 불러와서 저장.
+	
 	}// ModifyUserPasswordEvt
 
 	@Override
@@ -39,8 +40,8 @@ public class ModifyUserPasswordEvt extends WindowAdapter implements ActionListen
 			getPasswordField(); // 패스워드 필드의 String을 인스턴스 변수로 저장.
 			warningSet(false);// 경고 문구 전부 비활성화
 
-			// 텍스트필드 공백, 이전 비번 틀림, 새 비번 불일치 시 Early Return
-			if (!jtfEmptyWarning() || !pwCheck() || !newPwCheck()) {
+			// 텍스트필드 공백, 이전 비번 틀림, 비번 형식, 새 비번 불일치 시 Early Return
+			if (!jtfEmptyWarning() || !pwCheck() || !pwValidator(pwNew) || !newPwCheck()) {
 				return;
 			} // end if;
 
@@ -73,12 +74,12 @@ public class ModifyUserPasswordEvt extends WindowAdapter implements ActionListen
 	 * 경고 문구용 J라벨이 자주 쓰이는 관계로 같이 가져왔다.<br>
 	 */
 	public void getPasswordField() {
-		//텍스트필드 값을 인스턴스 변수에 저장.
+		// 텍스트필드 값을 인스턴스 변수에 저장.
 		pwCurrent = new String(mpd.getJpfPw().getPassword());
 		pwNew = new String(mpd.getJpfNewPw().getPassword());
 		pwNewCheck = new String(mpd.getJpfNewPwCheck().getPassword());
 
-		//경고문구용 JLabel을 인스턴스 변수로 저장.
+		// 경고문구용 JLabel을 인스턴스 변수로 저장.
 		wrnPW = mpd.getJlWrnPw();
 		wrnPwNew = mpd.getJlWrnNewPw();
 		wrnPwCheck = mpd.getJlWrnNewPwCheck();
@@ -126,6 +127,7 @@ public class ModifyUserPasswordEvt extends WindowAdapter implements ActionListen
 		mpd.getJpfNewPw().setText("");
 		mpd.getJpfNewPwCheck().setText("");
 
+		user_code=0;
 		userPw = "";
 		pwCurrent = "";
 		pwNew = "";
@@ -143,7 +145,8 @@ public class ModifyUserPasswordEvt extends WindowAdapter implements ActionListen
 		wrnPwNew.setVisible(flag);
 		wrnPwCheck.setVisible(flag);
 	}// warningSet
-	//-----------------------------------------------------------------------
+		// -----------------------------------------------------------------------
+
 	/**
 	 * 이전 패스워드와 일치하는지 체크.
 	 * 
@@ -162,6 +165,28 @@ public class ModifyUserPasswordEvt extends WindowAdapter implements ActionListen
 
 		return flag;
 	}// pwCheck
+
+	/**
+	 * 비번 형식을 체크해주는 메서드 function에 있는 static 메서드로 있는 호출한다. 영문자, 숫자, 특수문자, 8자 이상을 체크하여
+	 * 만족하면 true 리턴.
+	 * 
+	 * @return
+	 */
+	public boolean pwValidator(String password) {
+		boolean flag = false;
+		
+		String password_pattern ="(?=.*[0-9])(?=.*[a-z])(?=.*[!@#$%^&*()-+=]).{8,}$";
+		Pattern pattern = Pattern.compile(password_pattern);
+		
+		if(flag= pattern.matcher(password).matches()) {
+			wrnPwNew.setVisible(false);
+		}else {
+			wrnPwNew.setVisible(true);
+			wrnPwNew.setText("영문자, 숫자, 특수문자를 포함한 8자 이상으로 만들어주세요.");
+		} // end else
+
+		return flag;
+	}// pwValidator
 
 	/**
 	 * 새 비번, 새 비번 확인이 일치하는지 체크.
@@ -224,5 +249,5 @@ public class ModifyUserPasswordEvt extends WindowAdapter implements ActionListen
 			System.err.println("파일이 잘못되었습니다.");
 			break;
 		}// end switch
-	}//saveModifiedPW
+	}// saveModifiedPW
 }// class

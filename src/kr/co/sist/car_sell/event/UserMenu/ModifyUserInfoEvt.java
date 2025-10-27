@@ -36,9 +36,8 @@ public class ModifyUserInfoEvt extends WindowAdapter implements ActionListener {
 //		this.muf = new ModifyUserFunction(mud);
 		this.us = new UserService();
 
-		editFlag(false, UNEDITABLE);
-//		int user_code = 1;
-		this.user_code = user_code;
+		editFlag(false, UNEDITABLE); //모든 경고문 비활성화
+		this.user_code = user_code; //사용자 코드를 인스턴스로 저장.
 		loadUserInfo(this.user_code);// 이 때 uDTO에 select한 정보 저장.
 
 	}// ModifyUserInfoEvt
