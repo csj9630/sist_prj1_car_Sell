@@ -220,6 +220,93 @@ public class UserDAO {
 
 		return list;
 	}// selectAllUser
+	
+	
+	
+	public int updateDynamic (UserDTO uDTO) throws SQLException, IOException{
+		int flag = 0;
+		
+		List<Object> bindParam = new ArrayList<Object>();
+		
+		
+		GetConnection gc = GetConnection.getInstance();
+		Connection con = null;
+	    PreparedStatement pstmt = null;
+		
+		try {
+			// 1.드라이버 로딩+2.커넥션 얻기
+			con = gc.getConn();
+			
+			// 3. 쿼리문 생성 객체 얻기
+
+			// 이걸 StringBuilder로 하기
+			StringBuilder updateSQL = new StringBuilder();
+
+			//--------------------user_info 테이블 수정--------------------
+			//@formatter:off		
+			//회원번호를 사용하여 나이, 전화번호 변경
+			updateSQL
+				.append("		update	user_info set ")
+				.append("		set 	")
+				.append("		where	user_code=? ");
+			//@formatter:on
+			
+			//Dynamic SQL, uDTO에서 null이 아닌 파트만 update 한다.
+			if(uDTO.getName() != null) {
+				updateSQL.append(" name=?, ");
+				bindParam.add(uDTO.getName());
+			} //end if
+			if(uDTO.getPass() != null) {
+				updateSQL.append(" pass=?, ");
+				bindParam.add(uDTO.getPass());
+			} //end if
+			if(uDTO.getEmail() != null) {
+				updateSQL.append(" email=?, ");
+				bindParam.add(uDTO.getEmail());
+			} //end if
+			if(uDTO.getTel() != null) {
+				updateSQL.append(" tel=?, ");
+				bindParam.add(uDTO.getTel());
+			} //end if
+			if(uDTO.getAddress() != null) {
+				updateSQL.append(" address=?, ");
+				bindParam.add(uDTO.getAddress());
+			} //end if
+			if(uDTO.getStatus_activate() != 0 ) {
+				updateSQL.append(" status_activate=?, ");
+				bindParam.add(uDTO.getStatus_activate());
+			} //end if
+			
+			
+			
+			pstmt = con.prepareStatement(updateSQL.toString());
+
+			// 4. 바인드변수에 값 설정
+			pstmt.setString(1, uDTO.getName());
+			pstmt.setString(2, uDTO.getEmail());
+			pstmt.setString(3, uDTO.getTel());
+			pstmt.setString(4, uDTO.getAddress());
+			pstmt.setInt(5, uDTO.getUser_code());
+
+			System.out.println(uDTO);
+			// 5. 쿼리문 수행 후 결과 얻기
+			flag += pstmt.executeUpdate();// 변경한 행의 수가 리턴
+			
+	
+
+
+
+
+		} catch (SQLException e) {
+	        if (con != null) con.rollback(); // 하나라도 실패 시 롤백
+	        throw e;
+	    } finally {
+			// 5. 연결 끊기
+			gc.dbClose(con, pstmt, null);
+		} // end finally
+		
+			return flag;
+		}// updateUser
 
 
 //	public int deleteUser(int user_code) {
