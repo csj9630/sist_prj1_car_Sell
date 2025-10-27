@@ -15,6 +15,8 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import kr.co.sist.car_sell.event.OrderList.OrderListUserEvent;
+
 public class OrderListUserDesign extends JDialog{
 	private JLabel jlogo;
 	private JTable jOrderListUserTable;
