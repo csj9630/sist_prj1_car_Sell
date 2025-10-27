@@ -74,6 +74,13 @@ public class UserDAO {
 		return uDTO;
 	}// selectOneUser
 
+	/**
+	 * uDTO의 사용자 정보를 DB에 insert로 추가한다.
+	 * @param uDTO
+	 * @return 성공 시 1 리턴.
+	 * @throws SQLException
+	 * @throws IOException
+	 */
 	public int insertUser(UserDTO uDTO) throws SQLException, IOException {
 		int rowCnt = 0;
 
@@ -117,6 +124,14 @@ public class UserDAO {
 		return rowCnt;
 	}// insertUser
 
+	/**
+	 * user_info 테이블과 card_info 테이블을 동시에 update한다.<br>
+	 * 사용 파트 : 내정보수정<br>
+	 * @param uDTO 사용자 정보 DTO
+	 * @return 성공 시 2 리턴.
+	 * @throws SQLException
+	 * @throws IOException
+	 */
 	public int updateUser(UserDTO uDTO) throws SQLException, IOException {
 		int flag = 0;
 
