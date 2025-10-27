@@ -21,15 +21,17 @@ public class OrderListUserEvent extends WindowAdapter implements WindowListener,
 	//마우스 클릭할 때 발생하는 이벤트
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		int row=olud.getjOrderListUserTable().getSelectedRow();
-		int orderNum=(int) olud.getjOrderListUserTable().getValueAt(row, 0);
-		System.out.println(orderNum);
-		showOrderDetail(orderNum);
-	}
+		int row=olud.getjOrderListUserTable().getSelectedRow(); //선택한 행 
+		int col=olud.getjOrderListUserTable().getSelectedColumn(); //선택된 열
+		if(row!=-1 && col==0) {
+			int orderNum=(int) olud.getjOrderListUserTable().getValueAt(row, 0);
+			showOrderDetail(orderNum, row);
+		}
+	}//mouseClicked
 
-	public void showOrderDetail(int payment_code) {
+	public void showOrderDetail(int payment_code, int selectedRow) {
 		JOptionPane.showMessageDialog(olud, "주문 번호 " + payment_code + "의 상세 내역 페이지로 이동합니다.");
-		new OrderListDetailUserDesign(1);
+		new OrderListDetailUserDesign(payment_code, selectedRow);
 	}//showOrderDetail
 	
 	@Override
