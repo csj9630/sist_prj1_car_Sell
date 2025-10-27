@@ -5,24 +5,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import kr.co.sist.car_sell.dto.SettlementDTO;
 
 public class SettlementDAO {
-	// Singleton Patton 사용을 위해 private으로 설정
 	private static SettlementDAO smDAO;
-//   private int productCode;
-//   private int price;
-//   private Date carYear;
-//   private Date orderDate;
-//   private int cc;
-//   private int distance;
-//   private String registartionNumber;
-//   private String statusSold;
-//   private String carName;
-//   private String oil;
 
 	private SettlementDAO() {
 
@@ -36,69 +27,74 @@ public class SettlementDAO {
 		return smDAO;
 	}// SettlementDAO
 
-//	//분기별 판매현황 테이블에서 쓰일 데이터 DB에서 가져오기
-//	public void searchPeriodOptionQuarter(String qtYear, String quarter) throws SQLException{
-//		List<SettlementDTO> smDTOList = new ArrayList<SettlementDTO>();
-//		Connection con = null;
-//		PreparedStatement pstmt = null;
-//		GetConnection gc = GetConnection.getInsance();
-//		ResultSet rs = null;
-//		try {
-//			con = gc.getConn();
-//			
-//			String selectCarInfo = ("select to_char(oh.order_date,'yyyy-mm'),sum(ci.price)\r\n"
-//					+ "from car_info ci, order_history oh\r\n"
-//					+ "where ci.product_code = oh.product_code\r\n"
-//					+ "group by to_char(oh.order_date,'yyyy-mm')\r\n"
-//					+ "having to_char(oh.order_date,'yyyy-mm') between ? and ?");
-//			StringBuilder sbSelect = new StringBuilder(selectCarInfo);
-//			
-//			
-//			// 다이나믹 쿼리로 값 삽입. 
-//			//x분기에서 앞의 숫자값만 저장할 변수
-//						int quarterInt = 0;
-//
-//						if( !quarter.equals("1년")) {
-//							quarterInt = Integer.parseInt(quarter.substring(0,1));
-//							
-//						}
-//						
-//						if (!car_name.equals("차종")) {
-//							sbSelect.append(" and ci.car_name = ?");
-//						} // end if
-//						if (!oil.equals("유종")) {
-//							sbSelect.append(" and ci.oil = ?");
-//						} // end if
-//						sbSelect.append(" order by ci.product_code asc");
-//
-//						pstmt = con.prepareStatement(sbSelect.toString());
-//
-//						pstmt.setDate(1, java.sql.Date.valueOf(startPeriod.trim()));
-//						pstmt.setDate(2, java.sql.Date.valueOf(endPeriod.trim()));
-//						if (!delevery_state.equals("탁송 상태")) {
-//							pstmt.setString(++appendCnt, delevery_state.trim());
-//						} // end if
-//						if (!car_name.equals("차종")) {
-//							pstmt.setString(++appendCnt, car_name.trim());
-//						} // end if
-//						if (!oil.equals("유종")) {
-//							pstmt.setString(++appendCnt, oil.trim());
-//						} // end if
-//						System.out.println(sbSelect);
-//
-//						rs = pstmt.executeQuery();
-//			
-//			
-//			
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}//searchPeriodOptionQuarter
-	
-	//기간, 옵션 설정 후 DB에서 데이터 가져오기
-	public List<SettlementDTO> searchPeriodOption(String startPeriod, String endPeriod, String delevery_state,
+	// 분기별 판매현황 테이블에서 쓰일 데이터 DB에서 가져오기
+	public List<SettlementDTO> selectPeriodOptionQuarter(String qtYear, String quarter) throws SQLException {
+		List<SettlementDTO> smDTOList = new ArrayList<SettlementDTO>();
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		GetConnection gc = GetConnection.getInstance();
+		ResultSet rs = null;
+		try {
+			con = gc.getConn();
+
+			String selectCarInfo = ("select to_char(oh.order_date,'yyyy-mm') sales_month,sum(ci.price) sales_sum\r\n"
+					+ "from car_info ci, order_history oh\r\n" + "where ci.product_code = oh.product_code\r\n"
+					+ "group by to_char(oh.order_date,'yyyy-mm')\r\n"
+					+ "having to_char(oh.order_date,'yyyy-mm') between ? and ?" + "order by sales_month");
+
+			// 다이나믹 쿼리로 값 삽입.
+			// x분기에서 앞의 숫자값만 저장할 변수
+			int quarterInt = 0;
+			String startBindYear = null, endBindYear = null;
+			pstmt = con.prepareStatement(selectCarInfo);
+			// 1,2,3분기 일 경우의 로직(이 경우 월을 3월 -> 03월 이렇게 바꿔줘야 함)
+			if (quarter.equals("1분기") || quarter.equals("2분기") || quarter.equals("3분기")) {
+				quarterInt = Integer.parseInt(quarter.substring(0, 1)) * 3;
+				startBindYear = qtYear + "-" + "0" + String.valueOf(quarterInt - 2);
+				endBindYear = qtYear + "-" + "0" + String.valueOf(quarterInt);
+				pstmt.setString(1, startBindYear);
+				pstmt.setString(2, endBindYear);
+			} else if (quarter.equals("4분기")) {// 4분기의 경우는 10,11,12월이기 때문에 굳이 0을 넣을 필요가 없음.
+				quarterInt = Integer.parseInt(quarter.substring(0, 1)) * 3;
+				startBindYear = qtYear + "-" + String.valueOf(quarterInt - 2);
+				endBindYear = qtYear + "-" + String.valueOf(quarterInt);
+				pstmt.setString(1, startBindYear);
+				pstmt.setString(2, endBindYear);
+			} else if (quarter.equals("1년")) {// 분기 조건이 1년일 경우.
+				startBindYear = qtYear + "-" + "01";
+				endBindYear = qtYear + "-" + "12";
+				pstmt.setString(1, startBindYear);
+				pstmt.setString(2, endBindYear);
+			} else {// 사용자가 직접 값을 입력한 경우.
+				startBindYear = qtYear;
+				endBindYear = quarter;
+				pstmt.setString(1, startBindYear);
+				pstmt.setString(2, endBindYear);
+			}//end if
+
+
+			rs = pstmt.executeQuery();
+
+			String salesMonth = null;
+			int salesSum = 0;
+			SettlementDTO smDTO = null;
+			while (rs.next()) {
+				salesMonth = rs.getString("sales_month");
+				salesSum = rs.getInt("sales_sum");
+				smDTO = new SettlementDTO(salesMonth, salesSum);
+				smDTOList.add(smDTO);
+			} // end while
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}//end catch
+		return smDTOList;
+	}// searchPeriodOptionQuarter
+
+	// 기간, 옵션 설정 후 DB에서 데이터 가져오기
+	public List<SettlementDTO> selectPeriodOption(String startPeriod, String endPeriod, String delevery_state,
 			String car_name, String oil) throws SQLException {
 		List<SettlementDTO> smDTOList = new ArrayList<SettlementDTO>();
 		Connection con = null;
@@ -106,14 +102,10 @@ public class SettlementDAO {
 		GetConnection gc = GetConnection.getInstance();
 		ResultSet rs = null;
 		try {
-			System.out.println("년도 시작 : " + startPeriod);
-			System.out.println("년도 끝 : " + endPeriod);
+			// 입력된 날짜 값이 2025-1-1같은 경우, date형으로 바꾸면서 자동으로 2025-01-01 형식으로 바꿔줌.
+			startPeriod = String.valueOf(LocalDate.parse(startPeriod, DateTimeFormatter.ofPattern("yyyy-M-d")));
+			endPeriod = String.valueOf(LocalDate.parse(endPeriod, DateTimeFormatter.ofPattern("yyyy-M-d")));
 
-			System.out.println(startPeriod + " = " + startPeriod.equals("2025-10-1"));
-			System.out.println(endPeriod + " = " + endPeriod.equals("2025-12-10"));
-			System.out.println(delevery_state + " = " + delevery_state.equals("배송중"));
-			System.out.println(car_name + " = " + car_name.equals("K5"));
-			System.out.println(oil + " = " + oil.equals("경유"));
 			con = gc.getConn();
 			// 쿼리문을 설정하여 생성 객체 얻기
 			String selectCarInfo = ("select ci.product_code, ci.car_name, ci.oil,ci.price, "
@@ -147,21 +139,14 @@ public class SettlementDAO {
 			if (!oil.equals("유종")) {
 				pstmt.setString(++appendCnt, oil.trim());
 			} // end if
-			System.out.println(sbSelect);
 
 			rs = pstmt.executeQuery();
-//         System.out.println("rowCnt = " + rs.getString("car_name"));
 			int productCode = 0;
 			int price = 0;
 			String carName = null;
 			String tableOil = null;
 			String orderDate = null;
 			SettlementDTO smDTO = null;
-//         carYear = null;
-//           cc = 0;
-//           distance = 0;
-//           registartionNumber = null;
-//           statusSold = null;
 			int cnt = 0;
 			while (rs.next()) {
 				productCode = rs.getInt("product_code");
@@ -179,8 +164,6 @@ public class SettlementDAO {
 				cnt++;
 			} // end while
 
-			System.out.println("cnt = " + cnt);
-			System.out.println("" + productCode + ", " + price + ',' + carName + ", " + tableOil + ", " + orderDate);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -190,15 +173,5 @@ public class SettlementDAO {
 		} // end finally
 		return smDTOList;
 	}// searchPeriodOption
-
-//   public static void main(String[] args) {
-//      SettlementDAO s = new SettlementDAO();
-//      try {
-//         s.searchPeriodOption("2025-10-1", "2025-11-20", "배송중", "K5", "경유");
-//      } catch (SQLException e) {
-//         // TODO Auto-generated catch block
-//         e.printStackTrace();
-//      }
-//   }
 
 }// class

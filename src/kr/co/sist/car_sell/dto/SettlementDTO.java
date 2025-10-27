@@ -2,12 +2,16 @@ package kr.co.sist.car_sell.dto;
 
 import java.sql.Date;
 
+/**
+ * 
+ */
+/**
+ * 
+ */
 public class SettlementDTO {
    
-   private String car_name, brand, oil, delevery_state, startPeriod, endPeriod;
-   private int product_code, price, car_year;
-   private String order_date;
-//   private Date order_date;
+   private String car_name, brand, oil, delevery_state, startPeriod, endPeriod, order_date, salesMonth;
+   private int product_code, price, car_year, salesSum;
    
    public SettlementDTO() {
       super();
@@ -21,6 +25,14 @@ public class SettlementDTO {
       this.startPeriod = startPeriod;
       this.endPeriod = endPeriod;
    }//SettlementDTO
+   
+   
+
+   public SettlementDTO(String salesMonth, int salesSum) {
+	super();
+	this.salesMonth = salesMonth;
+	this.salesSum = salesSum;
+}//SettlementDTO
 
    public String getCar_name() {
       return car_name;
@@ -102,11 +114,21 @@ public class SettlementDTO {
       this.order_date = order_date;
    }
 
-   @Override
-   public String toString() {
-      return "으하하하SettlementDTO [car_name=" + car_name + ", brand=" + brand + ", oil=" + oil + ", delevery_state="
-            + delevery_state + ", startPeriod=" + startPeriod + ", endPeriod=" + endPeriod + ", product_code="
-            + product_code + ", price=" + price + ", car_year=" + car_year + ", order_date=" + order_date + "]";
+   public String getSalesMonth() {
+	return salesMonth;
    }
-      
+
+   public void setSalesMonth(String salesMonth) {
+	this.salesMonth = salesMonth;
+   }
+
+   public int getSalesSum() {
+	return salesSum;
+   }
+
+   public void setSalesSum(int salesSum) {
+	this.salesSum = salesSum;
+   }
+
+   
 }//class
