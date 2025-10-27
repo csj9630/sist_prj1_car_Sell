@@ -17,8 +17,9 @@ public class OrderListDetailUserDesign extends JDialog{
 	private JLabel jlblLogo, jlblOrderListDetail;
 	private JPanel jplHeader, jplMain, jplCarInfo, jplOrderInfo;
 	private OrderListDetailUserService oldus;
+	private int selectedRow;
 	
-	public OrderListDetailUserDesign(int payment_code) {
+	public OrderListDetailUserDesign(int payment_code, int selectedRow) {
 		setTitle("주문 상세 내역[사용자]");
 		setLayout(new BorderLayout());
 		

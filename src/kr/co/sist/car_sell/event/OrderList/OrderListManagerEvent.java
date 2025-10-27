@@ -10,12 +10,9 @@ import javax.swing.JOptionPane;
 
 import kr.co.sist.car_sell.design.OrderList.OrderListDetailManagerDesign;
 import kr.co.sist.car_sell.design.OrderList.OrderListManagerDesign;
-import kr.co.sist.car_sell.service.OrderList.OrderListManagerService;
-
 
 public class OrderListManagerEvent extends WindowAdapter implements WindowListener, MouseListener {
 	private OrderListManagerDesign olmd;
-	private OrderListManagerService olms;
 	
 	public OrderListManagerEvent(OrderListManagerDesign olmd) {
 		this.olmd=olmd;

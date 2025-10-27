@@ -1,6 +1,7 @@
 package kr.co.sist.car_sell.design.OrderList;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 
@@ -85,7 +86,8 @@ public class OrderListDetailManagerDesign extends JDialog{
         jplStatus=new JPanel(new GridLayout(2, 1, 20, 5));
         jcbStatus=new JComboBox<>(new String[] {"탁송 대기", "탁송 중", "탁송 완료"});
         jbtnChange=new JButton("변경");
-        
+        jbtnChange.setPreferredSize(new Dimension(10, 10));
+		
         jplStatus.add(jcbStatus);
         jplStatus.add(jbtnChange);
         
