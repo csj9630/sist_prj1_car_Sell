@@ -31,10 +31,10 @@ public class UserMenuEvt extends WindowAdapter implements ActionListener {
 	public void actionPerformed(ActionEvent ae) {
 
 		if (ae.getSource() == umd.getjbtnModifyInfo()) {
-			ModifyUserInfoDesign muid = new ModifyUserInfoDesign(umd, true, umd.getUser_code());
+			new ModifyUserInfoDesign(umd, true, umd.getUser_code());
 		} // end if
 		if (ae.getSource() == umd.getjbtnModifyPw()) {
-			ModifyUserPasswordDesign  mupd = new ModifyUserPasswordDesign(umd, true,umd.getUser_code());
+			new ModifyUserPasswordDesign(umd, true,umd.getUser_code());
 		} // end if
 		if (ae.getSource() == umd.getjbtnOrderList()) {
 			//주문 내역은 공사 중.
