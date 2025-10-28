@@ -270,4 +270,7 @@ public class ModifyUserInfoDesign extends JDialog {
 		return jbtnModify;
 	}
 	
+	public static void main(String[] args) {
+		new ModifyUserInfoDesign(null, true, 1);
+	}
 }// class

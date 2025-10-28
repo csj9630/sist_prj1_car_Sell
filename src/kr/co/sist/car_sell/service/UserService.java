@@ -44,7 +44,7 @@ public class UserService {
 
 	public UserDTO searchOneUser(int user_code) {
 		UserDTO uDTO = null;
-
+		
 		try {
 			UserDAO uDAO = UserDAO.getInstance();
 			uDTO = uDAO.selectOneUser(user_code);
