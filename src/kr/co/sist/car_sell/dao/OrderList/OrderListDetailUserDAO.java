@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import kr.co.sist.car_sell.dao.GetConnection;
 import kr.co.sist.car_sell.dto.OrderList.OrderListDetailUserDTO;
@@ -39,11 +41,11 @@ public class OrderListDetailUserDAO {
 			selectOneOrder
 			.append("		select o.payment_code, o.order_date, o.delivery_state,\r\n"
 					+ "			 c.price, c.car_name, c.car_year, c.distance,\r\n" 
-					+ " 		 b.brand		")
+					+ " 		 b.brand_name		")
 			.append("	from ORDER_HISTORY o\r\n"
 					+ "join car_info c on o.product_code=c.product_code\r\n"
 					+ "join user_info u on o.user_code=u.user_code\r\n"
-					+ "join brand b on b.car_name=c.car_name")
+					+ "join brand b on b.brand_name=c.brand_name")
 			.append("	where payment_code=?	");
 			pstmt=con.prepareStatement(selectOneOrder.toString());
 			//바인드 변수 값 설정
@@ -53,7 +55,7 @@ public class OrderListDetailUserDAO {
 			if(rs.next()) {
 				olduDTO=new OrderListDetailUserDTO();
 				olduDTO.setProduct_name(rs.getString("car_name"));
-				olduDTO.setBrand(rs.getString("brand"));
+				olduDTO.setBrand(rs.getString("brand_name"));
 				olduDTO.setCar_year(rs.getDate("car_year"));
 				olduDTO.setDistance(rs.getInt("distance"));
 				olduDTO.setPayment_code(rs.getInt("payment_code"));
