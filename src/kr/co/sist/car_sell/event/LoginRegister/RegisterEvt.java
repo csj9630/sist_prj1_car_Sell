@@ -1,18 +1,23 @@
-package kr.co.sist.car_sell.event.LoginRegister;
+package kr.co.sist.car_sell.event.LoginRegister; // 패키지명 확인
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+// ▼▼▼ DB 연동 및 Service 사용을 위한 import ▼▼▼
+import java.io.IOException;
+import java.sql.SQLException;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import kr.co.sist.car_sell.design.LoginRegister.RegisterDesign;
+import kr.co.sist.car_sell.design.LoginRegister.RegisterDesign; // Design 임포트
+import kr.co.sist.car_sell.dto.UserDTOnjw; // DTO 임포트
+import kr.co.sist.car_sell.service.UserServiceNjw; // Service 임포트
+// ▲▲▲
 
 public class RegisterEvt implements ActionListener {
 
-    private RegisterDesign rd; // 현재 창(회원가입)
+    private RegisterDesign rd;
 
     public RegisterEvt(RegisterDesign rd) {
         this.rd = rd;
@@ -21,88 +26,95 @@ public class RegisterEvt implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
-        
-        if (source == rd.getJbtnSubmit()) {
-            
-            //유효성 검사 로직
-            // 1. 컴포넌트 가져오기
-        	JTextField jtfId = rd.getJtfId();
-            JTextField jtfPass = rd.getJtfPass(); 
-            JPasswordField jtfPassCheck = rd.getJtfPassCheck();
-            JTextField jtfName = rd.getJtfName();
-            JTextField jtfEmail = rd.getJtfEmail();
-            JTextField jtfTel = rd.getJtfTel();
-            JTextField jtfCardNum = rd.getJtfCardNum();
-            JTextField jtfAddr = rd.getJtfAddr();
-
-            // 2. 값 가져오기
-            String id = jtfId.getText().trim();
-            String pass = jtfPass.getText().trim();
-            char[] passCheck = jtfPassCheck.getPassword();
-            String name = jtfName.getText().trim();
-            String email = jtfEmail.getText().trim();
-            String tel = jtfTel.getText().trim();
-            String cardNum = jtfCardNum.getText().trim();
-            String addr = jtfAddr.getText().trim();
-
-            // 3. 유효성 검사 (순서대로)
-            if (id.isEmpty()) {
-                showError("아이디를 입력하세요", jtfId);
-                return;
-            }
-            if (pass.isEmpty()) { // .length == 0 -> .isEmpty()로 변경
-                showError("패스워드를 입력하세요", jtfPass);
-                return;
-            }
-            if (passCheck.length == 0) {
-                showError("패스워드 확인란을 입력하세요", jtfPassCheck);
-                return;
-            }
-            
-            String passCheckStr = new String(passCheck);
-            if (!pass.equals(passCheckStr)) {
-                showError("패스워드가 일치하지 않습니다", jtfPassCheck);
-                return;
-            }
-            if (name.isEmpty()) {
-                showError("이름을 입력하세요", jtfName);
-                return;
-            }
-            if (email.isEmpty()) {
-                showError("이메일을 입력하세요", jtfEmail);
-                return;
-            }
-            if (tel.isEmpty()) {
-                showError("전화번호를 입력하세요", jtfTel);
-                return;
-            }
-            if (cardNum.isEmpty()) {
-                showError("카드번호를 입력하세요", jtfCardNum);
-                return;
-            }
-            if (addr.isEmpty()) {
-                showError("주소를 입력하세요", jtfAddr);
-                return;
-            }
-            // 유효성 검사 끝
-
-            // TODO: 실제 회원가입 로직 처리 (DAO 연동)
-            
-            System.out.println("가입완료 시도");
-            
-            // (임시) 가입이 성공했다고 가정하고
-            JOptionPane.showMessageDialog(rd, "회원가입이 완료되었습니다.");
-            rd.dispose(); // 현재 회원가입 창 닫기
+        if (e.getSource() == rd.getJbtnSubmit()) {
+            performRegister(); // 회원가입 로직 호출
         }
     }
-    
+
     /**
-     * 에러 메시지 다이얼로그를 띄우고 해당 컴포넌트에 포커스를 주는 헬퍼 메소드
+     * 회원가입 버튼 클릭 시 실행될 메소드 (DB 연동)
      */
-    private void showError(String message, JComponent field) {
-        JOptionPane.showMessageDialog(rd, message, "알림", JOptionPane.WARNING_MESSAGE);
-        field.requestFocus();
+    private void performRegister() {
+        // --- 컴포넌트 및 값 가져오기 ---
+        JTextField jtfId = rd.getJtfId();
+        JTextField jtfPass = rd.getJtfPass(); // Design 파일 확인 필요 (JTextField 인지 JPasswordField 인지)
+        JPasswordField jtfPassCheck = rd.getJtfPassCheck();
+        JTextField jtfName = rd.getJtfName();
+        JTextField jtfEmail = rd.getJtfEmail();
+        JTextField jtfTel = rd.getJtfTel();
+        JTextField jtfCardNum = rd.getJtfCardNum();
+        JTextField jtfAddr = rd.getJtfAddr();
+
+        String id = jtfId.getText().trim();
+        String pass = jtfPass.getText().trim(); // JTextField 값
+        char[] passCheck = jtfPassCheck.getPassword();
+        String name = jtfName.getText().trim();
+        String email = jtfEmail.getText().trim();
+        String tel = jtfTel.getText().trim();
+        String cardNum = jtfCardNum.getText().trim();
+        String addr = jtfAddr.getText().trim();
+
+        // --- 유효성 검사 ---
+        if (id.isEmpty()) { showError("아이디를 입력하세요", jtfId); return; }
+        if (pass.isEmpty()) { showError("패스워드를 입력하세요", jtfPass); return; }
+        if (passCheck.length == 0) { showError("패스워드 확인란을 입력하세요", jtfPassCheck); return; }
+        String passCheckStr = new String(passCheck);
+        if (!pass.equals(passCheckStr)) { showError("패스워드가 일치하지 않습니다", jtfPassCheck); return; }
+        if (name.isEmpty()) { showError("이름을 입력하세요", jtfName); return; }
+        if (email.isEmpty()) { showError("이메일을 입력하세요", jtfEmail); return; }
+        // TODO: 이메일, 전화번호, 카드번호 형식 유효성 검사 추가 (정규 표현식 등 활용)
+        if (tel.isEmpty()) { showError("전화번호를 입력하세요", jtfTel); return; }
+        if (cardNum.isEmpty()) { showError("카드번호를 입력하세요", jtfCardNum); return; }
+        if (addr.isEmpty()) { showError("주소를 입력하세요", jtfAddr); return; }
+        // --- 유효성 검사 끝 ---
+
+        // --- 실제 회원가입 로직 (DB 연동) ---
+        try {
+            // 1. DTO(바구니)에 데이터 담기
+            UserDTOnjw uDTO = new UserDTOnjw();
+            uDTO.setId(id);
+            uDTO.setPass(pass); // 비밀번호 String으로
+            uDTO.setName(name);
+            uDTO.setEmail(email);
+            uDTO.setTel(tel);
+            uDTO.setAddress(addr);
+            uDTO.setCard_num(cardNum); // DTO에 카드번호 필드 포함
+
+            // 2. Service의 회원가입 메소드 호출 (DAO 트랜잭션 포함)
+            UserServiceNjw userService = UserServiceNjw.getInstance();
+            userService.registerUser(uDTO);
+
+            // 3. 성공 처리
+            JOptionPane.showMessageDialog(rd, name + " 님, 회원가입이 완료되었습니다.", "회원가입 성공", JOptionPane.INFORMATION_MESSAGE);
+            rd.dispose(); // 회원가입 창 닫기
+
+        } catch (SQLException se) {
+            // DAO에서 던진 예외 처리
+            // ORA-00001: unique constraint (PK/UK 위반) - ID 중복
+            // (정확한 제약조건 이름은 DB 확인 필요, 예: PK_USER_INFO)
+            if (se.getErrorCode() == 1 && se.getMessage().toUpperCase().contains("PK_USER_INFO")) {
+                showError("이미 사용 중인 아이디입니다.", jtfId);
+            }
+            // 그 외 DB 오류 (예: 테이블 없음, 컬럼 불일치 등)
+            else {
+                JOptionPane.showMessageDialog(rd, "데이터베이스 오류가 발생했습니다.\n" + se.getMessage(), "DB 오류", JOptionPane.ERROR_MESSAGE);
+                se.printStackTrace(); // 개발 중 확인을 위해 콘솔에 스택 트레이스 출력
+            }
+        } catch (IOException ie) {
+            // GetConnection에서 발생한 예외 처리
+            JOptionPane.showMessageDialog(rd, "DB 설정 파일(properties)을 찾을 수 없습니다.", "파일 오류", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            // 그 외 예상치 못한 예외 처리
+            JOptionPane.showMessageDialog(rd, "알 수 없는 오류가 발생했습니다.", "오류", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
     }
 
+    /**
+     * 에러 메시지 다이얼로그 및 포커스 헬퍼 메소드
+     */
+    private void showError(String message, JComponent field) {
+        JOptionPane.showMessageDialog(rd, message, "입력 오류", JOptionPane.WARNING_MESSAGE);
+        field.requestFocus();
+    }
 }
