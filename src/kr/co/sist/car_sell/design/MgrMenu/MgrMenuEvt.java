@@ -18,9 +18,11 @@ public class MgrMenuEvt extends WindowAdapter implements ActionListener, MouseLi
 	
 	private MgrMenuDesign mmld;
 	private MgrMenuCenterPanel mmcp;
+	private MgrMenuNorthPanel mmnp;
 	
-	public MgrMenuEvt(MgrMenuDesign mmld, MgrMenuCenterPanel mmcp) {
+	public MgrMenuEvt(MgrMenuDesign mmld, MgrMenuNorthPanel mmnp, MgrMenuCenterPanel mmcp) {
 		this.mmld = mmld;
+		this.mmnp = mmnp;
 		this.mmcp = mmcp;
 	}
 	
@@ -34,7 +36,7 @@ public class MgrMenuEvt extends WindowAdapter implements ActionListener, MouseLi
 		jbtnAddCar = mmcp.getJbtnAddCar();
 		
 		if(ae.getSource() == jbtnAddCar) {
-			new CarInfoDesign();
+			JOptionPane.showMessageDialog(mmld, "차량등록 페이지에 진입합니다.");
 			return;
 		} // end if
 		
