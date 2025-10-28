@@ -27,6 +27,37 @@ public class UserDAO {
 		return pstmt_uDAO;
 	}// getInstance
 
+	/** [로그인용] ID로 사용자 기본 정보 조회 (CARD 제외) */
+	public UserDTO selectUserForLogin(String id) throws SQLException, IOException {
+		UserDTO uDTO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		GetConnection gc = GetConnection.getInstance();
+
+		try {
+			con = gc.getConn();
+			String selectSql = "select user_code, id, pass, name, status_activate from user_info where id = ?";
+			pstmt = con.prepareStatement(selectSql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				uDTO = new UserDTO();
+				uDTO.setUser_code(rs.getInt("USER_CODE"));
+				uDTO.setId(rs.getString("ID"));
+				uDTO.setPass(rs.getString("PASS"));
+				uDTO.setName(rs.getString("NAME"));
+				uDTO.setStatus_activate(rs.getString("STATUS_ACTIVATE"));
+			} // end if
+		} finally {
+			gc.dbClose(con, pstmt, rs);
+		} // end finally
+		return uDTO;
+
+	}// selectUserForLogin
+
+	/** [마이페이지/구매용] user_code로 사용자 상세 정보 조회 (CARD 포함) */
 	public UserDTO selectOneUser(int user_code) throws SQLException, IOException {
 		UserDTO uDTO = null;
 
@@ -75,21 +106,37 @@ public class UserDAO {
 	}// selectOneUser
 
 	/**
-	 * uDTO의 사용자 정보를 DB에 insert로 추가한다.
+	 * [회원가입용]<br>
+	 * uDTO의 사용자 정보를 DB에 insert로 넣는다.<br>
+	 * USER_INFO와 CARD_INFO에 트랜잭션으로 동시 삽입<br>
+	 * 
 	 * @param uDTO
 	 * @return 성공 시 1 리턴.
 	 * @throws SQLException
 	 * @throws IOException
 	 */
 	public int insertUser(UserDTO uDTO) throws SQLException, IOException {
-		int rowCnt = 0;
-
+		int rowCntUser, rowCntCard = 0;
+		int nextUserCode = 0;
 		Connection con = null;
-		PreparedStatement pstmt = null;
+		PreparedStatement pstmtUser = null, pstmtCard = null;
+
 		GetConnection gc = GetConnection.getInstance();
 
 		try {
 			con = gc.getConn();
+			con.setAutoCommit(false); // 트랜잭션 시작, 오토커밋 해제
+
+			// ㅁ 시퀀스 가져오기 (try-with-resources)
+			try (PreparedStatement psSeq = con.prepareStatement("SELECT SEQ_USER_INFO.NEXTVAL FROM DUAL");
+					ResultSet rsSeq = psSeq.executeQuery()) {
+				if (rsSeq.next()) {
+					nextUserCode = rsSeq.getInt(1);
+				} else {
+					con.rollback();
+					throw new SQLException("시퀀스 오류");
+				} // end else
+			} // end try
 
 			// ㅁ 쿼리문 객체 생성
 			StringBuilder insertUser = new StringBuilder();
@@ -97,43 +144,83 @@ public class UserDAO {
 			insertUser
 				.append(" insert into user_info ")
 				.append(" (user_code, id, pass, name, email, tel, address, generate_date, status_activate) ")
-				.append(" values(seq_user_info.nextval,?,?,?,")
-				.append("?,?,?,sysdate,'y')")
+				.append(" values(?,?,?,?,")
+				.append("?,?,?,sysdate,'Y')")
 				;			
 //@formatter:on
-			
-			// PreparedStatement 세팅
-			pstmt = con.prepareStatement(insertUser.toString());
 
-			// 4. 바인드 변수 값을 설정함.
-			pstmt.setString(1, uDTO.getPass());
-			pstmt.setString(2, uDTO.getName());
-			pstmt.setString(3, uDTO.getEmail());
-			pstmt.setString(4, uDTO.getTel());
-			pstmt.setString(5, uDTO.getCard_num());
-			pstmt.setString(6, uDTO.getAddress());
+			// USER_INFO:PreparedStatement 세팅
+			pstmtUser = con.prepareStatement(insertUser.toString());
 
-			// 5.쿼리문 수행 후 결과 얻기
+			// ㅁ 바인드 변수 값을 설정함.
+			pstmtUser.setInt(1, nextUserCode);
+			pstmtUser.setString(2, uDTO.getId());
+			pstmtUser.setString(3, uDTO.getPass());
+			pstmtUser.setString(4, uDTO.getName());
+			pstmtUser.setString(5, uDTO.getEmail());
+			pstmtUser.setString(6, uDTO.getTel());
+			pstmtUser.setString(7, uDTO.getAddress());
 
-			rowCnt = pstmt.executeUpdate();
+			// ㅁ쿼리문 수행 후 결과 얻기 : 추가한 행 수를 리턴 받는다.
+			rowCntUser = pstmtUser.executeUpdate();// 성공하면 1
+
+			// -------------------------------------------------------------
+			// CARD_INFO:PreparedStatement 세팅
+
+			// ㅁ 쿼리문 객체 생성
+			StringBuilder insertCard = new StringBuilder();
+//@formatter:off
+			insertCard
+				.append(" insert into card_info ")
+				.append(" (user_code, credit_card, registration_date )  ")
+				.append(" values (?, ?, sysdate) ")
+				;			
+//@formatter:on
+			System.out.println(insertCard.toString());
+
+			pstmtCard = con.prepareStatement(insertCard.toString());
+
+			// ㅁ 바인드 변수 값을 설정함.
+			pstmtCard.setInt(1, nextUserCode);
+			pstmtCard.setString(2, uDTO.getCard_num());
+
+			// ㅁ 쿼리문 수행 후 결과 얻기 : 추가한 행 수를 리턴 받는다.
+			rowCntCard = pstmtCard.executeUpdate();// 성공하면 1
+
+			if (rowCntUser == 1 && rowCntCard == 1) {
+				con.commit();
+			} // 성공
+			else {
+				con.rollback();// 하나라도 실패 시 롤백
+				throw new SQLException("삽입 실패");
+			} // 실패
+
+		} catch (SQLException e) {
+			if (con != null)
+				con.rollback();
+			throw e;
 
 		} finally {
-			gc.dbClose(con, pstmt, null);
+			gc.dbClose(con, pstmtUser, null);
+			gc.dbClose(con, pstmtCard, null);
+
 		} // end finally
 
-		return rowCnt;
+		return rowCntUser + rowCntCard;
 	}// insertUser
 
 	/**
 	 * user_info 테이블과 card_info 테이블을 동시에 update한다.<br>
 	 * 사용 파트 : 내정보수정<br>
+	 * outer join에서 변경<br>
+	 * 
 	 * @param uDTO 사용자 정보 DTO
 	 * @return 성공 시 2 리턴.
 	 * @throws SQLException
 	 * @throws IOException
 	 */
 	public int updateUser(UserDTO uDTO) throws SQLException, IOException {
-		int flag = 0;
+		int rowCntUser, rowCntCard = 0;
 
 		GetConnection gc = GetConnection.getInstance();
 		Connection con = null;
@@ -168,9 +255,8 @@ public class UserDAO {
 			pstmtUser.setString(4, uDTO.getAddress());
 			pstmtUser.setInt(5, uDTO.getUser_code());
 
-			System.out.println(uDTO);
 			// 5. 쿼리문 수행 후 결과 얻기
-			flag += pstmtUser.executeUpdate();// 변경한 행의 수가 리턴
+			rowCntUser = pstmtUser.executeUpdate();// 변경한 행의 수가 리턴
 
 			// -----------------card_info 테이블 수정--------------------
 			StringBuilder updateCard = new StringBuilder();
@@ -180,21 +266,37 @@ public class UserDAO {
 			pstmtCard.setString(1, uDTO.getCard_num());
 			pstmtCard.setInt(2, uDTO.getUser_code());
 
-			flag += pstmtCard.executeUpdate();
+			rowCntCard = pstmtCard.executeUpdate();
 
 			con.commit(); // 모든 UPDATE 성공 시 커밋
 
+			// 리턴된 행 수 합이 2면 성공.
+			// 하나라도 실패 시 롤백 & 어디가 실패했는데 에러 throw
+			if (rowCntUser == 1 && rowCntCard == 1) {
+				con.commit();
+			} // 성공
+			else if (rowCntUser == 0 && rowCntCard == 1) {
+				con.rollback();//
+				throw new SQLException("UserInfo 수정에 실패했습니다.");
+			} else if (rowCntUser == 1 && rowCntCard == 0) {
+				con.rollback();//
+				throw new SQLException("CardInfo 수정에 실패했습니다.");
+			} else {
+				con.rollback();// 하나라도 실패 시 롤백
+				throw new SQLException("UserInfo,CardInfo 수정에 실패했습니다.");
+			} // 실패
 		} catch (SQLException e) {
 			if (con != null)
 				con.rollback(); // 하나라도 실패 시 롤백
 			throw e;
+
 		} finally {
 			// 5. 연결 끊기
 			gc.dbClose(con, pstmtUser, null);
 			gc.dbClose(null, pstmtCard, null);
 		} // end finally
 
-		return flag;
+		return rowCntUser + rowCntCard;
 	}// updateUser
 
 	/**
@@ -244,6 +346,14 @@ public class UserDAO {
 		return list;
 	}// selectAllUser
 
+	/**
+	 * 테스트 중인 동적 쿼리문
+	 * 
+	 * @param uDTO
+	 * @return
+	 * @throws SQLException
+	 * @throws IOException
+	 */
 	public int updateDynamic(UserDTO uDTO) throws SQLException, IOException {
 		int flag = 0;
 
@@ -292,7 +402,7 @@ public class UserDAO {
 				updateSQL.append(" address=?, ");
 				bindParam.add(uDTO.getAddress());
 			} // end if
-			if (uDTO.getStatus_activate() != 0) {
+			if (uDTO.getStatus_activate() != null) {
 				updateSQL.append(" status_activate=?, ");
 				bindParam.add(uDTO.getStatus_activate());
 			} // end if

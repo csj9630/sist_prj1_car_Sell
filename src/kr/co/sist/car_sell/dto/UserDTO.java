@@ -5,9 +5,8 @@ import java.sql.Date;
 public class UserDTO {
 
 	private int user_code;
-	private String id, pass, name, email, tel, address, card_num;
+	private String id, pass, name, email, tel, address, card_num, status_activate;
 	private Date generate_date;
-	private char status_activate;
 
 	@Override
 	public String toString() {
@@ -25,8 +24,9 @@ public class UserDTO {
 
 
 
-	public UserDTO(String id, String pass, String name, String email, String tel, String address, String card_num) {
+	public UserDTO(int user_code, String id, String pass, String name, String email, String tel, String address, String card_num) {
 		super();
+		this.user_code=user_code;
 		this.id = id;
 		this.pass = pass;
 		this.name = name;
@@ -102,11 +102,11 @@ public class UserDTO {
 		this.generate_date = generate_date;
 	}
 
-	public char getStatus_activate() {
+	public String getStatus_activate() {
 		return status_activate;
 	}
 
-	public void setStatus_activate(char status_activate) {
+	public void setStatus_activate(String status_activate) {
 		this.status_activate = status_activate;
 	}
 
