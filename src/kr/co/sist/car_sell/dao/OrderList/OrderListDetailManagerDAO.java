@@ -65,14 +65,14 @@ public class OrderListDetailManagerDAO {
 			con=gc.getConn();
 			StringBuilder selectOneOrder=new StringBuilder();
 			selectOneOrder
-			.append("		select u.user_name, u.email, u.tel, u.address,\r\n"
+			.append("		select u.name, u.email, u.tel, u.address,\r\n"
 					+ "			 o.payment_code, o.order_date, o.delivery_state,\r\n"
 					+ "			 c.price, c.car_name, c.car_year, c.distance,\r\n" 
-					+ " 		 b.brand		")
+					+ " 		 b.brand_name		")
 			.append("	from ORDER_HISTORY o\r\n"
 					+ "join car_info c on o.product_code=c.product_code\r\n"
 					+ "join user_info u on o.user_code=u.user_code\r\n"
-					+ "join brand b on b.car_name=c.car_name")
+					+ "join brand b on b.brand_name=c.brand_name")
 			.append("	where payment_code=?	");
 			pstmt=con.prepareStatement(selectOneOrder.toString());
 			
@@ -82,12 +82,12 @@ public class OrderListDetailManagerDAO {
 			
 			while(rs.next()) {
 				oldmDTO=new OrderListDetailManagerDTO();
-				oldmDTO.setName(rs.getString("user_name"));
+				oldmDTO.setName(rs.getString("name"));
 				oldmDTO.setEmail(rs.getString("email"));
 				oldmDTO.setTel(rs.getString("tel"));
 				oldmDTO.setAddress(rs.getString("address"));
 				oldmDTO.setProduct_name(rs.getString("car_name"));
-				oldmDTO.setBrand(rs.getString("brand"));
+				oldmDTO.setBrand(rs.getString("brand_name"));
 				oldmDTO.setCar_year(rs.getDate("order_date"));
 				oldmDTO.setDistance(rs.getInt("distance"));
 				oldmDTO.setPayment_code(rs.getInt("payment_code"));
