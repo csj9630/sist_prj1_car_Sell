@@ -2,58 +2,28 @@ package kr.co.sist.car_sell.service;
 
 import java.io.IOException;
 import java.sql.SQLException;
-
 import kr.co.sist.car_sell.dao.AdminDAO;
 import kr.co.sist.car_sell.dto.AdminDTO;
 
 public class AdminService {
-	public AdminService() {
-	} // AdminService
+    private static AdminService adminService;
 
-//	public boolean addAdmin(AdminDTO uDTO) {
-//		boolean flag = false;// 기본은 실패 상태
-//
-//		return flag;
-//	}// addAdmin
+    private AdminService() { }
 
-//	public List<AdminDTO> searchAllAdmin() {
-//		List<AdminDTO> list = null;
-//
-//		return list;
-//
-//	}// searchAllAdmin
+    public static AdminService getInstance() {
+        if (adminService == null) { adminService = new AdminService(); }
+        return adminService;
+    }
 
-	/**
-	 * 관리자 로그인을 위한 DB searchOne.
-	 * @param admin_id 관리자 아이디
-	 * @return 관리자 정보 DTO
-	 */
-	public AdminDTO searchOneAdmin(String admin_id) {
-		AdminDTO aDTO = null;
-		
-		AdminDAO aDAO = AdminDAO.getInstance();
-		try {
-			aDTO = aDAO.selectOneAdmin(admin_id);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}// end catch
-		
-		return aDTO;
-	}// searchOneAdmin
+    /** [로그인용] 관리자 로그인 로직 */
+    public AdminDTO loginAdmin(String id, String passStr) throws SQLException, IOException {
+        AdminDAO aDAO = AdminDAO.getInstance();
+        AdminDTO aDTO = aDAO.selectAdminById(id);
 
-//	public int modifyAdmin(AdminDTO uDTO) {
-//		int flag = 0;
-//
-//		return flag;
-//	}// modifyAdmin
-//
-//	public int removeAdmin(int AdminNum) {
-//		int flag = 0;
-//
-//		return flag;
-//	}// removeAdmin
+        if (aDTO != null && aDTO.getAdminPass().equals(passStr)) {
+            return aDTO; // 성공
+        }
+        return null; // 실패
+    }
+    // (다른 관리자 기능 Service 메소드들...)
 }
