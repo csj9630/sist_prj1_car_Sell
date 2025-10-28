@@ -8,6 +8,7 @@ public class UserDTO {
 	private String id, pass, name, email, tel, address, card_num, status_activate;
 	private Date generate_date;
 
+
 	@Override
 	public String toString() {
 		return "UserDTO [user_code=" + user_code + ", id=" + id + ", pass=" + pass + ", name=" + name + ", email="

@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,7 +13,6 @@ import javax.swing.JOptionPane;
 
 import kr.co.sist.car_sell.design.UserMenu.ModifyUserInfoDesign;
 import kr.co.sist.car_sell.dto.UserDTO;
-import kr.co.sist.car_sell.function.UserMenu.ModifyUserFunction;
 import kr.co.sist.car_sell.service.UserService;
 
 /**
@@ -22,7 +20,6 @@ import kr.co.sist.car_sell.service.UserService;
  */
 public class ModifyUserInfoEvt extends WindowAdapter implements ActionListener {
 	private ModifyUserInfoDesign mud;
-	private ModifyUserFunction muf;
 	private UserService us;
 	private UserDTO uDTO;
 
@@ -34,7 +31,6 @@ public class ModifyUserInfoEvt extends WindowAdapter implements ActionListener {
 
 	public ModifyUserInfoEvt(ModifyUserInfoDesign mud, int user_code) {
 		this.mud = mud;
-//		this.muf = new ModifyUserFunction(mud);
 		this.us = new UserService();
 
 		editFlag(false, UNEDITABLE); // 모든 경고문 비활성화
@@ -226,7 +222,6 @@ public class ModifyUserInfoEvt extends WindowAdapter implements ActionListener {
 	 * 
 	 */
 	public void loadUserInfo(int user_code) {
-//		UserDTO uDTO = new UserDTO();
 		try {
 			uDTO = us.searchOneUser(user_code);
 		} catch (NullPointerException e) {// 사용자 정보가 없을 경우
