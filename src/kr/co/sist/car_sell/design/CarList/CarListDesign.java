@@ -3,11 +3,14 @@ package kr.co.sist.car_sell.design.CarList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import kr.co.sist.car_sell.event.CarListEvt;
+
 public class CarListDesign extends JFrame{
 	
 	private CarListNorthPanel clnp;
 	private CarListLeftPanel cllp;
 	private CarListRightPanel clrp;
+	private CarListEvt cle;
 	
 	public CarListDesign() {
 		super("쌍용중고차");
@@ -19,6 +22,14 @@ public class CarListDesign extends JFrame{
 		JPanel jpNorth = CarListNorthPanel.getJpNorth();
 		JPanel jpRight = CarListRightPanel.getJpRight();
 		JPanel jpLeft = CarListLeftPanel.getJpLeft();
+		
+		cle = new CarListEvt(this, clnp, cllp, clrp);
+		
+		clnp.getJbtnMgrMenu().addActionListener(cle);
+		clnp.getJbtnUserMenu().addActionListener(cle);
+		clnp.getJbtnLogout().addActionListener(cle);
+		
+		clrp.getJbtnImage().addActionListener(cle);
 		
 		setLayout(null);
 		
@@ -50,4 +61,7 @@ public class CarListDesign extends JFrame{
 		return clrp;
 	}
 	
+	public static void main(String[] args) {
+		new CarListDesign();
+	}
 }

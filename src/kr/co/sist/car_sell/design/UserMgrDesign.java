@@ -146,10 +146,10 @@ public class UserMgrDesign extends JDialog {
 	}
 
 	
-	public static void main(String[] args) {
-		UserMgrDesign umd = new UserMgrDesign(null);
-		new UserMgrEvt(umd);
-	}//main
+//	public static void main(String[] args) {
+//		UserMgrDesign umd = new UserMgrDesign(null);
+//		new UserMgrEvt(umd);
+//	}//main
 	
 }
 //class

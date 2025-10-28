@@ -32,9 +32,6 @@ public class CarListRightPanel extends JFrame {
 	public CarListRightPanel(CarListDesign cld) {
 		
 		this.cld = cld;
-		clnp = cld.getClnp();
-		cllp = cld.getCllp();
-		cle = new CarListEvt(cld, clnp, cllp, this);
 		
 		jpRight = new JPanel(null);
 		jpScroll = new JPanel();
@@ -81,7 +78,6 @@ public class CarListRightPanel extends JFrame {
 			
 			jbtnImage.setBounds(0, 3, 284, 160);
 			jbtnImage.setBackground(new Color(0x808080));
-			jbtnImage.addActionListener(cle);
 			
 			jtfBrand.setBounds(289, 4, 356, 54);
 			jtfBrand.setFont(new Font("맑은 고딕", Font.BOLD, 25));

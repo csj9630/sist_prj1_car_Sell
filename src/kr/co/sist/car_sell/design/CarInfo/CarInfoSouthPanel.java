@@ -11,11 +11,14 @@ import javax.swing.JPanel;
 
 public class CarInfoSouthPanel extends JDialog{
 	
+	private CarInfoDesign cid;
+	
 	private JButton jbtnModify, jbtnDelete;
 	private static JPanel jpSouth; 
-	
-	
-	public CarInfoSouthPanel() {
+		
+	public CarInfoSouthPanel(CarInfoDesign cid) {
+		
+		this.cid = cid;
 		
 		jpSouth = new JPanel();
 		
@@ -39,6 +42,14 @@ public class CarInfoSouthPanel extends JDialog{
 		
 		jpSouth.add(jbtnModify);
 		jpSouth.add(jbtnDelete);
+	}
+	
+	public JButton getJbtnModify() {
+		return jbtnModify;
+	}
+	
+	public JButton getJbtnDelete() {
+		return jbtnDelete;
 	}
 	
 	public static JPanel getJpSouth() {

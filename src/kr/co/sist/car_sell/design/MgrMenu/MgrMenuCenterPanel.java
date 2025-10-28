@@ -16,8 +16,6 @@ public class MgrMenuCenterPanel extends JFrame {
 	
 	private static JPanel jpCenter;
 	
-	private MgrMenuEvt mme;
-	
 	public MgrMenuCenterPanel() {
 		
 		jpCenter = new JPanel();
@@ -39,7 +37,6 @@ public class MgrMenuCenterPanel extends JFrame {
 		jbtnAddCar.setBackground(new Color(0xC0C0C0));
 		jbtnAddCar.setForeground(new Color(0x000000));
 		jbtnAddCar.setBorder(BorderFactory.createLineBorder(new Color(0x808080), 5));
-		jbtnAddCar.addActionListener(null);
 		jbtnAddCar.setBounds(220, 226, 360, 140);
 		jpCenter.add(jbtnAddCar);
 		
@@ -48,7 +45,6 @@ public class MgrMenuCenterPanel extends JFrame {
 		jbtnManageMember.setBackground(new Color(0xC0C0C0));
 		jbtnManageMember.setForeground(new Color(0x000000));
 		jbtnManageMember.setBorder(BorderFactory.createLineBorder(new Color(0x808080), 5));
-		jbtnManageMember.addActionListener(null);
 		jbtnManageMember.setBounds(620, 226, 360, 140);
 		jpCenter.add(jbtnManageMember);
 		
@@ -57,7 +53,6 @@ public class MgrMenuCenterPanel extends JFrame {
 		jbtnManageSettlement.setBackground(new Color(0xC0C0C0));
 		jbtnManageSettlement.setForeground(new Color(0x000000));
 		jbtnManageSettlement.setBorder(BorderFactory.createLineBorder(new Color(0x808080), 5));
-		jbtnManageSettlement.addActionListener(null);
 		jbtnManageSettlement.setBounds(220, 408, 360, 140);
 		jpCenter.add(jbtnManageSettlement);
 		
@@ -66,7 +61,6 @@ public class MgrMenuCenterPanel extends JFrame {
 		jbtnOrderList.setBackground(new Color(0xC0C0C0));
 		jbtnOrderList.setForeground(new Color(0x000000));
 		jbtnOrderList.setBorder(BorderFactory.createLineBorder(new Color(0x808080), 5));
-		jbtnOrderList.addActionListener(null);
 		jbtnOrderList.setBounds(620, 408, 360, 140);
 		jpCenter.add(jbtnOrderList);
 		

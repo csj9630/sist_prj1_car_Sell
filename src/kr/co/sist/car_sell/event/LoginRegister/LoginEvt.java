@@ -5,15 +5,19 @@ import java.awt.event.ActionListener;
 // ▼▼▼ DB 연동 및 Service 사용을 위한 import ▼▼▼
 import java.io.IOException;
 import java.sql.SQLException;
+
+// ▲▲▲
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import kr.co.sist.car_sell.design.CarList.CarListDesign;
+import kr.co.sist.car_sell.design.LoginRegister.LoginDesign;
+import kr.co.sist.car_sell.design.LoginRegister.RegisterDesign;
+import kr.co.sist.car_sell.design.MgrMenu.MgrMenuDesign;
 import kr.co.sist.car_sell.dto.AdminDTO;
 import kr.co.sist.car_sell.dto.UserDTOnjw;
 import kr.co.sist.car_sell.service.AdminService;
 import kr.co.sist.car_sell.service.UserServiceNjw;
-// ▲▲▲
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import kr.co.sist.car_sell.design.LoginRegister.LoginDesign;
-import kr.co.sist.car_sell.design.LoginRegister.RegisterDesign;
 // import kr.co.sist.car_sell.design.MainScreenDesign; // (예시) 메인 화면 import 필요
 
 public class LoginEvt implements ActionListener {
@@ -73,6 +77,8 @@ public class LoginEvt implements ActionListener {
                     JOptionPane.showMessageDialog(ld, "관리자로 로그인 되었습니다.");
                     ld.dispose(); // 로그인 창 닫기
                     // TODO: 관리자 메인 창 열기 (예: new AdminDesign() 또는 new MgrMenuDesign())
+                    
+                    new MgrMenuDesign();
 
                 } else { // 로그인 실패
                     JOptionPane.showMessageDialog(ld, "아이디 또는 비밀번호를 확인해주세요.", "로그인 실패", JOptionPane.ERROR_MESSAGE);
@@ -97,7 +103,9 @@ public class LoginEvt implements ActionListener {
                     // TODO: 사용자 메인 창(차량 목록 화면) 열기
                     // 예시: new CarListDesign(); // 로그인 후 보여줄 메인 화면
                     //       (CarListDesign 생성자가 UserDTOnjw를 받도록 수정 필요)
-
+                    
+                    new CarListDesign(); //차량 리스트 디자인 화면 실행
+                    
                 } else { // 로그인 실패
                     JOptionPane.showMessageDialog(ld, "아이디 또는 비밀번호를 확인해주세요.", "로그인 실패", JOptionPane.ERROR_MESSAGE);
                     ld.getJpfPass().setText(""); // 비밀번호 필드 비우기
