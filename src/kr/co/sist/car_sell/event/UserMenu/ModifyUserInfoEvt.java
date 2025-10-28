@@ -67,7 +67,7 @@ public class ModifyUserInfoEvt extends WindowAdapter implements ActionListener {
 	@Override
 	public void windowClosing(WindowEvent e) {
 		// TODO Auto-generated method stub
-		super.windowClosing(e);
+		windowClosing(e);
 	}// windowClosing
 
 	// ------------------------------------------------------------

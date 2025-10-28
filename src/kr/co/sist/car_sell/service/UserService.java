@@ -32,11 +32,12 @@ public class UserService {
 	public UserDTO loginUser(String id, String passStr) throws SQLException, IOException {
 		UserDAO uDAO = UserDAO.getInstance();
 		UserDTO uDTO = uDAO.selectUserForLogin(id);
-
+		System.out.println(uDTO.getStatus_activate());
 		if (uDTO == null || !uDTO.getPass().equals(passStr)) {
 			return null;
 		} // ID 없거나 비번 불일치
-		if (uDTO.getStatus_activate() != "Y") {
+//		if (uDTO.getStatus_activate() != "Y") {
+		if (uDTO.getStatus_activate().equals("Y")) {
 			throw new SQLException("비활성화된 계정입니다.");
 		} // 비활성 계정
 		return uDTO; // 성공

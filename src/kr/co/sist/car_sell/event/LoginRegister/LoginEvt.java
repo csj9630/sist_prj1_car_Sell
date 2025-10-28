@@ -102,7 +102,7 @@ public class LoginEvt implements ActionListener {
 //				UserDTO uDTO = userService.loginUser(id, passStr);
 				//☆☆☆☆☆수정파트☆☆☆☆☆☆☆☆
 				UserDTO uDTO = us.loginUser(id, passStr);
-
+				
 				if (uDTO != null) { // 로그인 성공
 					JOptionPane.showMessageDialog(ld, uDTO.getName() + " 님, 환영합니다!");
 					ld.dispose(); // 로그인 창 닫기

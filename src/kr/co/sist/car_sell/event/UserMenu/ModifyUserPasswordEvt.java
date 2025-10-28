@@ -19,7 +19,6 @@ import kr.co.sist.car_sell.service.UserService;
  */
 public class ModifyUserPasswordEvt extends WindowAdapter implements ActionListener {
 	private ModifyUserPasswordDesign mpd;
-//	private ModifyUserPasswordFunction mpf;
 	private String pwCurrent, pwNew, pwNewCheck;
 	private JLabel wrnPW, wrnPwNew, wrnPwCheck;
 	private String userPw;// 사용자 비번
@@ -65,7 +64,7 @@ public class ModifyUserPasswordEvt extends WindowAdapter implements ActionListen
 	@Override
 	public void windowClosing(WindowEvent e) {
 		// TODO Auto-generated method stub
-		super.windowClosing(e);
+		windowClosing(e);
 	}// windowClosing
 
 //-----------------------------------------------------------------------	
