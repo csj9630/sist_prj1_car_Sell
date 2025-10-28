@@ -10,7 +10,10 @@ import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
-import kr.co.sist.car_sell.design.CarInfo.CarInfoDesign;
+import kr.co.sist.car_sell.design.SettlementDesign;
+import kr.co.sist.car_sell.design.UserMgrDesign;
+import kr.co.sist.car_sell.design.OrderList.OrderListManagerDesign;
+import kr.co.sist.car_sell.event.UserMgrEvt;
 
 public class MgrMenuEvt extends WindowAdapter implements ActionListener, MouseListener {
 	
@@ -44,6 +47,8 @@ public class MgrMenuEvt extends WindowAdapter implements ActionListener, MouseLi
 		
 		if(ae.getSource() == jbtnManageMember) {
 			JOptionPane.showMessageDialog(mmld, "회원관리 페이지에 진입합니다.");
+			UserMgrDesign umd=new UserMgrDesign(null);
+			new UserMgrEvt(umd);
 			return;
 		} // end if
 		
@@ -51,6 +56,7 @@ public class MgrMenuEvt extends WindowAdapter implements ActionListener, MouseLi
 		
 		if(ae.getSource() == jbtnManageSettlement) {
 			JOptionPane.showMessageDialog(mmld, "정산관리 페이지에 진입합니다.");
+			new SettlementDesign(null);
 			return;
 		} // end if
 		
@@ -58,6 +64,7 @@ public class MgrMenuEvt extends WindowAdapter implements ActionListener, MouseLi
 		
 		if(ae.getSource() == jbtnOrderList) {
 			JOptionPane.showMessageDialog(mmld, "주문내역 페이지에 진입합니다.");
+			new OrderListManagerDesign();
 			return;
 		} // end if
 		

@@ -47,7 +47,8 @@ public class SettlementDesign extends JDialog {
 	private Font logoFont, boldFont;
 	private TitledBorder jpSelectOptionBorder, jpTotalSummaryBorder;
 	private JSpinner yearSpinner;
-
+	
+	
 	/**
 	 * 월별 판매 화면 테이블(향후 db 사용해서 데이터 변경되는 식으로 바꿀 예정)
 	 * 

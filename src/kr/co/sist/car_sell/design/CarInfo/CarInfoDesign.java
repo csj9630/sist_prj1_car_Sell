@@ -4,19 +4,37 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import kr.co.sist.car_sell.event.CarInfoEvt;
+
 public class CarInfoDesign extends JDialog {
+	
+	private CarInfoNorthPanel cinp;
+	private CarInfoCenterPanel cicp;
+	private CarInfoSouthPanel cisp;
+	private CarInfoEvt cie;
 	
 	private static JPanel jpNorth, jpCenter, jpSouth; 
 	
 	public CarInfoDesign() {
 		
-		new CarInfoNorthPanel();
-		new CarInfoCenterPanel();
-		new CarInfoSouthPanel();
+		cinp = new CarInfoNorthPanel(this);
+		cicp = new CarInfoCenterPanel(this);
+		cisp = new CarInfoSouthPanel(this);
 		
 		jpNorth = CarInfoNorthPanel.getJpNorth();
 		jpCenter = CarInfoCenterPanel.getJpCenter();
 		jpSouth = CarInfoSouthPanel.getJpSouth();
+		
+		cie = new CarInfoEvt(this, cinp, cicp, cisp);
+		
+		cicp.getJbtnImage1().addActionListener(cie);
+		cicp.getJbtnImage2().addActionListener(cie);
+		cicp.getJbtnImage3().addActionListener(cie);
+		cicp.getJbtnImage4().addActionListener(cie);
+		cicp.getJbtnPurchase().addActionListener(cie);
+		
+		cisp.getJbtnModify().addActionListener(cie);
+		cisp.getJbtnDelete().addActionListener(cie);
 		
 		jpNorth.setBounds(-5, -5, 1195, 125);
 		jpCenter.setBounds(0, 120, 1200, 666);

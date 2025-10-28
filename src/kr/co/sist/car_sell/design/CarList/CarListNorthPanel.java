@@ -18,16 +18,10 @@ public class CarListNorthPanel extends JFrame {
 	private static JPanel jpNorth;
 	
 	private CarListDesign cld;
-	private CarListLeftPanel cllp;
-	private CarListRightPanel clrp;
-	private CarListEvt cle;
 	
 	public CarListNorthPanel(CarListDesign cld) {
 		
 		this.cld = cld;
-		cllp = cld.getCllp();
-		clrp = cld.getClrp();
-		cle = new CarListEvt(cld, this, cllp, clrp);
 		
 		jpNorth = new JPanel();
 		
@@ -49,7 +43,6 @@ public class CarListNorthPanel extends JFrame {
 		jbtnMgrMenu.setBackground(new Color(0xC0C0C0));
 		jbtnMgrMenu.setForeground(new Color(0x000000));
 		jbtnMgrMenu.setBorder(BorderFactory.createLineBorder(new Color(0x808080), 5));
-		jbtnMgrMenu.addActionListener(cle);
 		
 		// 우측 상단 내정보 버튼
 		jbtnUserMenu.setBounds(874, 35, 130, 60);
@@ -57,7 +50,6 @@ public class CarListNorthPanel extends JFrame {
 		jbtnUserMenu.setBackground(new Color(0xC0C0C0));
 		jbtnUserMenu.setForeground(new Color(0x000000));
 		jbtnUserMenu.setBorder(BorderFactory.createLineBorder(new Color(0x808080), 5));
-		jbtnUserMenu.addActionListener(cle);
 		
 		// 우측 상단 로그아웃 버튼
 		jbtnLogout.setBounds(1014, 35, 130, 60);
@@ -65,7 +57,6 @@ public class CarListNorthPanel extends JFrame {
 		jbtnLogout.setBackground(new Color(0xC0C0C0));
 		jbtnLogout.setForeground(new Color(0x000000));
 		jbtnLogout.setBorder(BorderFactory.createLineBorder(new Color(0x808080), 5));
-		jbtnLogout.addActionListener(cle);
 		
 		jpNorth.setLayout(null);
 		jpNorth.setBorder(BorderFactory.createLineBorder(new Color(0x808080), 5));
