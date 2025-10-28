@@ -40,7 +40,7 @@ public class OrderListManagerDAO {
 		try {
 			con=gc.getConn();
 			String selectOrderAll="select o.payment_code, o.order_date, o.delivery_state,\r\n"
-					+ "			 u.user_name,\r\n"
+					+ "			 u.name,\r\n"
 					+ "			 c.product_code, c.car_name, c.price\r\n"
 					+ "from ORDER_HISTORY o\r\n"
 					+ "join car_info c on o.product_code=c.product_code\r\n"
@@ -60,7 +60,7 @@ public class OrderListManagerDAO {
 			while(rs.next()) {
 				payment_code=rs.getInt("payment_code");
 				order_date=rs.getDate("order_date");
-				user_name=rs.getString("user_name");
+				user_name=rs.getString("name");
 				product_code=rs.getInt("product_code");
 				car_name=rs.getString("car_name");
 				price=rs.getInt("price");

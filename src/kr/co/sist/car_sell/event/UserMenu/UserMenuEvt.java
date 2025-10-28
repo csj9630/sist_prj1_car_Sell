@@ -8,6 +8,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
 
 import kr.co.sist.car_sell.design.LoginRegister.RegisterDesign;
+import kr.co.sist.car_sell.design.OrderList.OrderListUserDesign;
 import kr.co.sist.car_sell.design.UserMenu.ModifyUserInfoDesign;
 import kr.co.sist.car_sell.design.UserMenu.ModifyUserPasswordDesign;
 import kr.co.sist.car_sell.design.UserMenu.UserMenuDesign;
@@ -41,6 +42,7 @@ public class UserMenuEvt extends WindowAdapter implements ActionListener {
 			//주문 내역은 공사 중.
 			//민병조 영역
 			JOptionPane.showMessageDialog(umd, "주문 내역 영역");
+			new OrderListUserDesign(umd.getUser_code());// 유저 코드 넘김 완료
 		} // end if
 
 	}// actionPerformed

@@ -28,14 +28,15 @@ public class CarInfoCenterPanel extends JDialog {
 	private JScrollPane jspCenter, jspOption, jspDefect, jspAccident, jspRepair;
 	private JPanel jpCenterScrollCover, jpImage, jpDetail;
 	private CardLayout cl;
-	
+
+	private CarInfoDesign cid;
 	private CarInfoEvt cie;
 	
 	private static JPanel jpCenter;
 	
-	public CarInfoCenterPanel() {
+	public CarInfoCenterPanel(CarInfoDesign cid) {
 		
-		cie = new CarInfoEvt(this);
+		this.cid = cid;
 		
 		// 차량 정보 구역
 		jpCenter = new JPanel(null);
@@ -106,11 +107,6 @@ public class CarInfoCenterPanel extends JDialog {
 		jbtnImage2.setBackground(new Color(0xC0C0C0));
 		jbtnImage3.setBackground(new Color(0xC0C0C0));
 		jbtnImage4.setBackground(new Color(0xC0C0C0));
-		
-		jbtnImage1.addActionListener(cie);
-		jbtnImage2.addActionListener(cie);
-		jbtnImage3.addActionListener(cie);
-		jbtnImage4.addActionListener(cie);
 		
 		jbtnImage1.setBounds(5, 370, 160, 90);
 		jbtnImage2.setBounds(165, 370, 160, 90);
