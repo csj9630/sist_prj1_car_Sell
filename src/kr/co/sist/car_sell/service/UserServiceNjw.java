@@ -41,6 +41,18 @@ public class UserServiceNjw {
         int result = uDAO.insertUser(uDTO); // DAO에서 트랜잭션 처리
         if (result < 2) { throw new SQLException("회원가입 DB 처리 오류"); }
     }
+    
+    /**
+     * [신규 추가] 아이디 중복 여부를 확인하는 메소드 (회원가입 전 체크용)
+     * @param id 확인할 아이디
+     * @return 중복이면 true, 아니면 false
+     */
+    public boolean isIdDuplicate(String id) throws SQLException, IOException {
+        UserDAOnjw uDAO = UserDAOnjw.getInstance();
+        // 로그인용 메소드를 재활용하여 ID 존재 여부만 확인
+        UserDTOnjw existingUser = uDAO.selectUserForLogin(id);
+        return existingUser != null; // 조회된 사용자가 있으면 중복(true)
+    }
 
  // ▼▼▼ 주석 해제 및 클래스/패키지명 확인 ▼▼▼
     /** [구매페이지용] 차량 상세 정보 조회 */

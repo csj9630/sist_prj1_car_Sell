@@ -12,6 +12,8 @@ import kr.co.sist.car_sell.service.UserServiceNjw;
 // ▲▲▲
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
+import kr.co.sist.car_sell.design.CarList.CarListDesign;
 import kr.co.sist.car_sell.design.LoginRegister.LoginDesign;
 import kr.co.sist.car_sell.design.LoginRegister.RegisterDesign;
 // import kr.co.sist.car_sell.design.MainScreenDesign; // (예시) 메인 화면 import 필요
@@ -20,7 +22,8 @@ public class LoginEvt implements ActionListener {
 
     private LoginDesign ld;
     private JFrame owner; // FirstSelectDesign (부모 프레임)
-
+    private UserDTOnjw uDTO;
+    
     public LoginEvt(LoginDesign ld, JFrame owner) {
         this.ld = ld;
         this.owner = owner;
@@ -88,7 +91,7 @@ public class LoginEvt implements ActionListener {
             try {
                 // UserServiceNjw 호출
                 UserServiceNjw userService = UserServiceNjw.getInstance();
-                UserDTOnjw uDTO = userService.loginUser(id, passStr);
+                uDTO = userService.loginUser(id, passStr);
 
                 if (uDTO != null) { // 로그인 성공
                     JOptionPane.showMessageDialog(ld, uDTO.getName() + " 님, 환영합니다!");
@@ -97,7 +100,8 @@ public class LoginEvt implements ActionListener {
                     // TODO: 사용자 메인 창(차량 목록 화면) 열기
                     // 예시: new CarListDesign(); // 로그인 후 보여줄 메인 화면
                     //       (CarListDesign 생성자가 UserDTOnjw를 받도록 수정 필요)
-
+                    new CarListDesign(uDTO.getUser_code());
+                    
                 } else { // 로그인 실패
                     JOptionPane.showMessageDialog(ld, "아이디 또는 비밀번호를 확인해주세요.", "로그인 실패", JOptionPane.ERROR_MESSAGE);
                     ld.getJpfPass().setText(""); // 비밀번호 필드 비우기

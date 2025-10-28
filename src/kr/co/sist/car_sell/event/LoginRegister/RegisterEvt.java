@@ -1,5 +1,6 @@
 package kr.co.sist.car_sell.event.LoginRegister; // 패키지명 확인
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 // ▼▼▼ DB 연동 및 Service 사용을 위한 import ▼▼▼
@@ -9,6 +10,9 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import java.util.regex.Pattern;
+import java.awt.event.FocusAdapter; // FocusListener 대신 FocusAdapter 사용
+import java.awt.event.FocusEvent; // FocusEvent 임포트 추가
 
 import kr.co.sist.car_sell.design.LoginRegister.RegisterDesign; // Design 임포트
 import kr.co.sist.car_sell.dto.UserDTOnjw; // DTO 임포트
@@ -18,10 +22,58 @@ import kr.co.sist.car_sell.service.UserServiceNjw; // Service 임포트
 public class RegisterEvt implements ActionListener {
 
     private RegisterDesign rd;
+    private static final String PHONE_PLACEHOLDER = "010-xxxx-xxxx"; // 상수 추가
+    private static final String EMAIL_PLACEHOLDER = "@를 추가하세요"; // '@를 넣으세요' 보다 구체적인 예시
+    private static final String CARD_PLACEHOLDER = "xxxx-xxxx-xxxx-xxxx";
+    
+    // 이름: 한글 또는 영문자만
+    private static final String NAME_REGEX = "^[a-zA-Z가-힣]+$";
+    // 이메일: 기본적인 형식 (@ 포함, . 포함)
+    private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
+    // 전화번호: xxx-xxxx-xxxx 형식 (하이픈 필수)
+    private static final String PHONE_REGEX = "^\\d{3}-\\d{4}-\\d{4}$";
+    // 카드번호: xxxx-xxxx-xxxx-xxxx 형식 (하이픈 필수)
+    private static final String CARD_REGEX = "^\\d{4}-\\d{4}-\\d{4}-\\d{4}$";
 
     public RegisterEvt(RegisterDesign rd) {
         this.rd = rd;
         rd.getJbtnSubmit().addActionListener(this);
+        
+     // --- 플레이스홀더 설정 ---
+        setPlaceholder(rd.getJtfTel(), PHONE_PLACEHOLDER);
+        setPlaceholder(rd.getJtfEmail(), EMAIL_PLACEHOLDER);
+        setPlaceholder(rd.getJtfCardNum(), CARD_PLACEHOLDER);
+    }
+
+    /**
+     * JTextField에 플레이스홀더 기능을 추가하는 헬퍼 메소드
+     * @param textField 대상 JTextField
+     * @param placeholder 힌트 문자열
+     */
+    private void setPlaceholder(JTextField textField, String placeholder) {
+        // 1. 초기 상태 설정
+        textField.setText(placeholder);
+        textField.setForeground(Color.GRAY);
+
+        // 2. FocusListener 추가
+        textField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                // 포커스 얻었을 때, 플레이스홀더면 지우고 검정색으로
+                if (textField.getForeground() == Color.GRAY) { // 색상으로 구분하는 것이 더 안전
+                    textField.setText("");
+                    textField.setForeground(Color.BLACK);
+                }
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+                // 포커스 잃었을 때, 비어있으면 플레이스홀더 다시 설정
+                if (textField.getText().trim().isEmpty()) {
+                    textField.setForeground(Color.GRAY);
+                    textField.setText(placeholder);
+                }
+            }
+        });
     }
 
     @Override
@@ -66,6 +118,40 @@ public class RegisterEvt implements ActionListener {
         if (tel.isEmpty()) { showError("전화번호를 입력하세요", jtfTel); return; }
         if (cardNum.isEmpty()) { showError("카드번호를 입력하세요", jtfCardNum); return; }
         if (addr.isEmpty()) { showError("주소를 입력하세요", jtfAddr); return; }
+        
+     // 3-1. 아이디 중복 확인 (DB 조회 필요)
+        try {
+            UserServiceNjw userService = UserServiceNjw.getInstance();
+            if (userService.isIdDuplicate(id)) {
+                showError("이미 사용 중인 아이디입니다.", jtfId);
+                return;
+            }
+        } catch (SQLException | IOException dbEx) {
+             // 아이디 중복 확인 중 DB 오류 발생 시, 일단 진행 중단
+            JOptionPane.showMessageDialog(rd, "아이디 중복 확인 중 오류 발생\n" + dbEx.getMessage(), "DB 오류", JOptionPane.ERROR_MESSAGE);
+            dbEx.printStackTrace();
+            return;
+        }
+
+        // 3-2. 이메일 형식 확인
+        if (!Pattern.matches(EMAIL_REGEX, email)) {
+            showError("이메일을 정확히 입력해주세요. (@ 포함)", jtfEmail);
+            return;
+        }
+
+        // 3-3. 전화번호 형식 확인 (xxx-xxxx-xxxx)
+        if (!Pattern.matches(PHONE_REGEX, tel)) {
+            showError("전화번호 형식을 확인해주세요 (010-xxxx-xxxx)", jtfTel);
+            return;
+        }
+
+        // 3-4. 카드번호 형식 확인 (xxxx-xxxx-xxxx-xxxx)
+        if (!Pattern.matches(CARD_REGEX, cardNum)) {
+            showError("카드번호 형식을 확인해주세요 (xxxx-xxxx-xxxx-xxxx)", jtfCardNum);
+            return;
+        }
+        
+        
         // --- 유효성 검사 끝 ---
 
         // --- 실제 회원가입 로직 (DB 연동) ---
@@ -115,6 +201,8 @@ public class RegisterEvt implements ActionListener {
      */
     private void showError(String message, JComponent field) {
         JOptionPane.showMessageDialog(rd, message, "입력 오류", JOptionPane.WARNING_MESSAGE);
-        field.requestFocus();
+        if (field != null && field.isRequestFocusEnabled()) { // 포커스 가능한 컴포넌트일 때만
+             field.requestFocus();
+        }
     }
 }

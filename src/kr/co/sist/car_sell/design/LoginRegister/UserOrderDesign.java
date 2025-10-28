@@ -53,15 +53,15 @@ public class UserOrderDesign extends JDialog {
     private UserDTOnjw uDTO;      // 로그인한 사용자 정보
     private CarDTO cDTO;          // 조회된 차량 정보
     private int productCode;    // 구매할 차량 코드
+    private int user_code;
 
     /**
      * 생성자: 부모 프레임, 로그인 사용자 정보(uDTO), 구매할 상품 코드(productCode)를 받음
      */
-    public UserOrderDesign(JFrame owner, UserDTOnjw uDTO, int productCode) {
+    public UserOrderDesign(JDialog owner, int user_code, int productCode) {
         super(owner, "차량 주문 페이지", true); // 모달 다이얼로그
-
-        this.uDTO = uDTO;
         this.productCode = productCode;
+        this.user_code=user_code;
 
         // --- DB 조회 및 컴포넌트 초기화 ---
         try {
@@ -249,67 +249,6 @@ public class UserOrderDesign extends JDialog {
                                      "오류", JOptionPane.ERROR_MESSAGE);
     }
     
- // --- 임시 테스트를 위한 main 메소드 추가 : 테스트 후 삭제.---
- // --- 테스트 후 삭제 혹은 주석!!!!!---
-    // --- 테스트 후 삭제 혹은 주석!!!!!---
-    // --- 테스트 후 삭제 혹은 주석!!!!!---
-    // --- 테스트 후 삭제 혹은 주석!!!!!---
-    // --- 테스트 후 삭제 혹은 주석!!!!!---
-    // --- 테스트 후 삭제 혹은 주석!!!!!---
-    // --- 테스트 후 삭제 혹은 주석!!!!!---
-    // --- 테스트 후 삭제 혹은 주석!!!!!---
-    // --- 테스트 후 삭제 혹은 주석!!!!!---
-    // --- 테스트 후 삭제 혹은 주석!!!!!---
-    // --- 테스트 후 삭제 혹은 주석!!!!!---
-    // --- 테스트 후 삭제 혹은 주석!!!!!---
-    
-//    public static void main(String[] args) {
-//        // 1. JDialog는 부모 프레임이 필요해서 임시로 만듦
-//        JFrame dummyOwner = new JFrame();
-//
-//        // 2. 가짜 UserDTOnjw 객체 생성 (로그인된 사용자 흉내)
-//        //    (F5 스크립트의 testId 사용자 데이터 사용)
-//        UserDTOnjw dummyUser = new UserDTOnjw();
-//        dummyUser.setUser_code(1); // 시퀀스로 생성된 코드
-//        dummyUser.setId("testId");
-//        dummyUser.setName("이정우");
-//        dummyUser.setEmail("lee@test.com");
-//        dummyUser.setTel("010-1111-2222");
-//        dummyUser.setAddress("서울시 강남구");
-//        dummyUser.setCard_num("xxx-xxxx-xxxx"); // CARD_INFO 데이터
-//
-//        // 3. 테스트할 상품 코드 선택 (예: CAR_INFO의 1번 상품)
-//        int testProductCode = 1; // 또는 DB에 있는 다른 유효한 product_code
-//
-//        // 4. UserOrderDesign 다이얼로그 생성 및 표시
-//        //    임시 프레임, 가짜 사용자 정보, 테스트 상품 코드를 전달
-//        UserOrderDesign uod = new UserOrderDesign(dummyOwner, dummyUser, testProductCode);
-//
-//        // 5. "주문하기" 버튼 이벤트 리스너 연결
-//        //    (UserOrderEvt 클래스가 올바른 패키지에 있다고 가정)
-//        new UserOrderEvt(uod);
-//
-//        // 6. 다이얼로그 보이게 설정
-//        uod.setVisible(true);
-//
-//        // 7. 프로그램 바로 종료 방지 (선택 사항)
-//        // dummyOwner.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // 또는 그냥 다이얼로그 닫기
-//    }
-    
-    // --- main 메소드 끝 ---
-    // --- 테스트 후 삭제 혹은 주석!!!!!---
-    // --- 테스트 후 삭제 혹은 주석!!!!!---
-    // --- 테스트 후 삭제 혹은 주석!!!!!---
-    // --- 테스트 후 삭제 혹은 주석!!!!!---
-    // --- 테스트 후 삭제 혹은 주석!!!!!---
-    // --- 테스트 후 삭제 혹은 주석!!!!!---
-    // --- 테스트 후 삭제 혹은 주석!!!!!---
-    // --- 테스트 후 삭제 혹은 주석!!!!!---
-    // --- 테스트 후 삭제 혹은 주석!!!!!---
-    // --- 테스트 후 삭제 혹은 주석!!!!!---
-    
-    
-
     // --- Evt 클래스용 Getter 메소드 ---
     public JButton getJbtnOrder() { return jbtnOrder; }
     public UserDTOnjw getUserDTO() { return uDTO; }

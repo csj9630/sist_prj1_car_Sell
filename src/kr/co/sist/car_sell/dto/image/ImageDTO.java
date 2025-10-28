@@ -9,8 +9,13 @@ public class ImageDTO {
 
     // 기본 생성자
     public ImageDTO() {}
+    
+    @Override
+	public String toString() {
+		return "ImageDTO [image_name=" + image_name + "]";
+	}
 
-    // --- Getters and Setters ---
+	// --- Getters and Setters ---
     public int getImage_code() { return image_code; }
     public void setImage_code(int image_code) { this.image_code = image_code; }
     public String getImage_name() { return image_name; }
