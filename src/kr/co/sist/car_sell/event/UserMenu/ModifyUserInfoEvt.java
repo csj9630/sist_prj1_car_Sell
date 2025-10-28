@@ -37,15 +37,11 @@ public class ModifyUserInfoEvt extends WindowAdapter implements ActionListener {
 //		this.muf = new ModifyUserFunction(mud);
 		this.us = new UserService();
 
-		editFlag(false, UNEDITABLE); //모든 경고문 비활성화
-		this.user_code = user_code; //사용자 코드를 인스턴스로 저장.
-		try {//사용자 정보가 없을 경우
+		editFlag(false, UNEDITABLE); // 모든 경고문 비활성화
+		this.user_code = user_code; // 사용자 코드를 인스턴스로 저장.
+
 		loadUserInfo(this.user_code);// 이 때 uDTO에 select한 정보 저장.
-		}catch(NullPointerException e) {
-			JOptionPane.showConfirmDialog(mud, "나중에 다시 시도해주세요");
-			System.err.println(e);
-			return;
-		}//end catch
+
 	}// ModifyUserInfoEvt
 
 	@Override
@@ -231,7 +227,13 @@ public class ModifyUserInfoEvt extends WindowAdapter implements ActionListener {
 	 */
 	public void loadUserInfo(int user_code) {
 //		UserDTO uDTO = new UserDTO();
-		uDTO = us.searchOneUser(user_code);
+		try {
+			uDTO = us.searchOneUser(user_code);
+		} catch (NullPointerException e) {// 사용자 정보가 없을 경우
+			JOptionPane.showConfirmDialog(mud, "나중에 다시 시도해주세요");
+			System.err.println(e);
+			return;
+		} // end catch
 
 		mud.getJtfName().setText(uDTO.getName());
 		mud.getJtfEmail().setText(uDTO.getEmail());
@@ -256,25 +258,13 @@ public class ModifyUserInfoEvt extends WindowAdapter implements ActionListener {
 		uDTO.setAddress(mud.getJtfAddr().getText());
 
 		// DB로 Update할 SQL문 set
-		int flag = us.modifyUser(uDTO);
+		boolean flag = us.modifyUser(uDTO);
 		String outputMsg = "문제가 발생하였습니다. 잠시 후 다시 시도해주세요";
-		switch (flag) {
-		case 0:
-			System.err.println("업데이트가 취소되었습니다.");
-			break;
-		// 일단 num은 사용자 시점에서 변경이 안되니 현 상황에선 나오기 어렵다.
-		case 2:
+		if (flag) {
 			outputMsg = uDTO.getName() + "님의 회원정보를 변경하였습니다.";
-			break;
-		case 3:
-			System.err.println("SQL문이 잘못되었습니다.");
-			break;
-		case 4:
-			System.err.println("파일이 잘못되었습니다.");
-			break;
-		}// end switch
-
+		}
 		JOptionPane.showMessageDialog(mud, outputMsg);
+
 	}// saveUserInfo
 
 }// class
