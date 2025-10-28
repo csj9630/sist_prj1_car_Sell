@@ -7,6 +7,7 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JOptionPane;
 
+import kr.co.sist.car_sell.design.LoginRegister.RegisterDesign;
 import kr.co.sist.car_sell.design.UserMenu.ModifyUserInfoDesign;
 import kr.co.sist.car_sell.design.UserMenu.ModifyUserPasswordDesign;
 import kr.co.sist.car_sell.design.UserMenu.UserMenuDesign;
