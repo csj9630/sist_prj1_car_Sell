@@ -12,8 +12,25 @@ public class UserService {
 		super();
 	} // UserService
 
+	/**
+	 * DB insert로 사용자 추가<br>
+	 * 사용 기능 : 사용자 회원가입<br>
+	 * @param uDTO
+	 * @return 성공 시 true
+	 */
 	public boolean addUser(UserDTO uDTO) {
 		boolean flag = false;// 기본은 실패 상태
+
+		UserDAO uDAO = UserDAO.getInstance();
+		try {
+			flag = (uDAO.insertUser(uDTO) == 1); //1이 나오면 true 리턴.
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}//end catch
 
 		return flag;
 	}// addUser
@@ -27,7 +44,7 @@ public class UserService {
 
 	public UserDTO searchOneUser(int user_code) {
 		UserDTO uDTO = null;
-
+		
 		try {
 			UserDAO uDAO = UserDAO.getInstance();
 			uDTO = uDAO.selectOneUser(user_code);
