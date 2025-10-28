@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,8 +39,13 @@ public class ModifyUserInfoEvt extends WindowAdapter implements ActionListener {
 
 		editFlag(false, UNEDITABLE); //모든 경고문 비활성화
 		this.user_code = user_code; //사용자 코드를 인스턴스로 저장.
+		try {//사용자 정보가 없을 경우
 		loadUserInfo(this.user_code);// 이 때 uDTO에 select한 정보 저장.
-
+		}catch(NullPointerException e) {
+			JOptionPane.showConfirmDialog(mud, "나중에 다시 시도해주세요");
+			System.err.println(e);
+			return;
+		}//end catch
 	}// ModifyUserInfoEvt
 
 	@Override

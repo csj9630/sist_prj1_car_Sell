@@ -1,11 +1,12 @@
 package kr.co.sist.car_sell.run;
 
-import kr.co.sist.car_sell.design.OrderList.OrderListUserDesign;
+import kr.co.sist.car_sell.design.OrderList.OrderListManagerDesign;
 
 public class RunTest {
 	
 	public static void main(String[] args) {
-//		OrderListManagerDesign olmd=new OrderListManagerDesign();
-		OrderListUserDesign olud=new OrderListUserDesign(2);
+		System.out.println("asdf");
+		OrderListManagerDesign olmd=new OrderListManagerDesign();
+//		OrderListUserDesign olud=new OrderListUserDesign(1);
 	}
 }

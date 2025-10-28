@@ -21,6 +21,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import kr.co.sist.car_sell.event.UserMgrEvt;
+
 
 public class UserMgrDesign extends JDialog {
 	private JLabel jlbTotalUsers,jltitle,jlbSearch;
@@ -144,10 +146,10 @@ public class UserMgrDesign extends JDialog {
 	}
 
 	
-//	public static void main(String[] args) {
-//		UserMgrDesign umd = new UserMgrDesign(null);
-//		new UserMgrEvt(umd);
-//	}//main
+	public static void main(String[] args) {
+		UserMgrDesign umd = new UserMgrDesign(null);
+		new UserMgrEvt(umd);
+	}//main
 	
 }
 //class

@@ -20,10 +20,14 @@ import kr.co.sist.car_sell.event.UserMenu.UserMenuEvt;
 public class UserMenuDesign extends JFrame {
 
 	private JButton jbtnModifyInfo, jbtnModifyPw, jbtnOrderList;
-	private int user_code = 1; // 사용자 코드
+	private int user_code; // 사용자 코드(임시), 차후 다른 페이지를 통해서 사용
 
-	public UserMenuDesign() {
+	public UserMenuDesign(int user_code) {
+		
 		super("사용자 정보");
+		this.user_code = user_code;//사용자 코드 받음.
+		
+		
 		JLabel jlTitle = new JLabel("내 정보");
 
 		JPanel jpCenter = new JPanel();

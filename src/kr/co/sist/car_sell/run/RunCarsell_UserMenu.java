@@ -5,7 +5,8 @@ import kr.co.sist.car_sell.design.UserMenu.UserMenuDesign;
 public class RunCarsell_UserMenu {
 
 	public static void main(String[] args) {
-		new UserMenuDesign();
+		int user_code = 2;
+		new UserMenuDesign(user_code);
 	}
 
 }

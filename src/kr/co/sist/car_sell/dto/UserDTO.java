@@ -16,6 +16,28 @@ public class UserDTO {
 				+ generate_date + ", status_activate=" + status_activate + "]";
 	}
 
+	
+	
+	public UserDTO() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+
+
+	public UserDTO(String id, String pass, String name, String email, String tel, String address, String card_num) {
+		super();
+		this.id = id;
+		this.pass = pass;
+		this.name = name;
+		this.email = email;
+		this.tel = tel;
+		this.address = address;
+		this.card_num = card_num;
+	}
+
+
+
 	public int getUser_code() {
 		return user_code;
 	}
