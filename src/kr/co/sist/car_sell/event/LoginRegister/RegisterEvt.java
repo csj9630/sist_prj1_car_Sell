@@ -20,7 +20,8 @@ public class RegisterEvt implements ActionListener {
 
 	private RegisterDesign rd;
 	private UserService us; // 추가분☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆
-
+	
+	
 	public RegisterEvt(RegisterDesign rd) {
 		this.rd = rd;
 		rd.getJbtnSubmit().addActionListener(this);
@@ -38,6 +39,8 @@ public class RegisterEvt implements ActionListener {
 	 * 회원가입 버튼 클릭 시 실행될 메소드 (DB 연동)
 	 */
 	private void performRegister() {
+
+		
 		// --- 컴포넌트 및 값 가져오기 ---
 		JTextField jtfId = rd.getJtfId();
 		JTextField jtfPass = rd.getJtfPass(); // Design 파일 확인 필요 (JTextField 인지 JPasswordField 인지)
@@ -91,14 +94,26 @@ public class RegisterEvt implements ActionListener {
 			return;
 		}
 		// TODO: 이메일, 전화번호, 카드번호 형식 유효성 검사 추가 (정규 표현식 등 활용)
-		if (tel.isEmpty()) {
+		
+		
+		// ☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆추가분☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆
+		//포맷 마스크에서 숫자만 추출해서 비어있는지 체크
+		if (tel.replaceAll("[^0-9]", "").isEmpty()) {
 			showError("전화번호를 입력하세요", jtfTel);
 			return;
 		}
-		if (cardNum.isEmpty()) {
+		if (cardNum.replaceAll("[^0-9]", "").isEmpty()) {
 			showError("카드번호를 입력하세요", jtfCardNum);
 			return;
 		}
+//		if (tel.isEmpty()) {
+//			showError("전화번호를 입력하세요", jtfTel);
+//			return;
+//		}
+//		if (cardNum.isEmpty()) {
+//			showError("카드번호를 입력하세요", jtfCardNum);
+//			return;
+//		}
 		if (addr.isEmpty()) {
 			showError("주소를 입력하세요", jtfAddr);
 			return;

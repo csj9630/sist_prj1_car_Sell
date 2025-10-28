@@ -118,7 +118,7 @@ public class ModifyUserInfoEvt extends WindowAdapter implements ActionListener {
 		} // end else
 
 //		if (mud.getJtfTel().getText().isEmpty()) {
-		if (mud.getJtfTel().getText().equals("   -    -    ")) {
+		if (mud.getJtfTel().getText().replaceAll("[^0-9]", "").isEmpty()) {
 			mud.getJlWrngTel().setVisible(true);
 			flag = false;
 		} else {
@@ -126,7 +126,7 @@ public class ModifyUserInfoEvt extends WindowAdapter implements ActionListener {
 		} // end else
 
 //		if (mud.getJtfCard().getText().isEmpty()) {
-		if (mud.getJtfCard().getText().equals("    -    -    -    ")) {
+		if (mud.getJtfCard().getText().replaceAll("[^0-9]", "").isEmpty()) {
 			mud.getJlWrnCard().setVisible(true);
 			flag = false;
 		} else {
