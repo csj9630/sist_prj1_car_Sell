@@ -4,13 +4,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.regex.Pattern;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import kr.co.sist.car_sell.design.UserMenu.ModifyUserPasswordDesign;
 import kr.co.sist.car_sell.dto.UserDTO;
+import kr.co.sist.car_sell.function.PasswordValidator;
 import kr.co.sist.car_sell.service.UserService;
 
 /**
@@ -174,10 +174,18 @@ public class ModifyUserPasswordEvt extends WindowAdapter implements ActionListen
 	public boolean pwValidator(String password) {
 		boolean flag = false;
 		
-		String password_pattern ="(?=.*[0-9])(?=.*[a-z])(?=.*[!@#$%^&*()-+=]).{8,}$";
-		Pattern pattern = Pattern.compile(password_pattern);
+//		String password_pattern ="(?=.*[0-9])(?=.*[a-z])(?=.*[!@#$%^&*()-+=]).{8,}$";
+//		Pattern pattern = Pattern.compile(password_pattern);
+//		
+//		if(flag= pattern.matcher(password).matches()) {
+//			wrnPwNew.setVisible(false);
+//		}else {
+//			wrnPwNew.setVisible(true);
+//			wrnPwNew.setText("영문자, 숫자, 특수문자를 포함한 8자 이상으로 만들어주세요.");
+//		} // end else
 		
-		if(flag= pattern.matcher(password).matches()) {
+		
+		if(flag= PasswordValidator.isValid(password)) {
 			wrnPwNew.setVisible(false);
 		}else {
 			wrnPwNew.setVisible(true);

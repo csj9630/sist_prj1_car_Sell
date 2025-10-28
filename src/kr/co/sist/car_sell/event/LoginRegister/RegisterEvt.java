@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 
 import kr.co.sist.car_sell.design.LoginRegister.RegisterDesign; // Design 임포트
 import kr.co.sist.car_sell.dto.UserDTO;
+import kr.co.sist.car_sell.function.PasswordValidator;
 import kr.co.sist.car_sell.service.UserService;
 
 public class RegisterEvt implements ActionListener {
@@ -65,6 +66,13 @@ public class RegisterEvt implements ActionListener {
 			showError("패스워드를 입력하세요", jtfPass);
 			return;
 		}
+		
+		//☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆추가분☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆
+		//비번 형식 체크.
+		if(PasswordValidator.isValid(pass)) {
+			showError("영문자, 숫자, 특수문자를 포함한 8자 이상으로 만들어주세요.", jtfPass);
+		}
+		
 		if (passCheck.length == 0) {
 			showError("패스워드 확인란을 입력하세요", jtfPassCheck);
 			return;
