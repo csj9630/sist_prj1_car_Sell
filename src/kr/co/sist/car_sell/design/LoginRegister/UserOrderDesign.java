@@ -54,15 +54,15 @@ public class UserOrderDesign extends JDialog {
     private UserDTO uDTO;      // 로그인한 사용자 정보
     private CarDTO cDTO;          // 조회된 차량 정보
     private int productCode;    // 구매할 차량 코드
+    private int user_code;
 
     /**
      * 생성자: 부모 프레임, 로그인 사용자 정보(uDTO), 구매할 상품 코드(productCode)를 받음
      */
     public UserOrderDesign(JFrame owner, UserDTO uDTO, int productCode) {
         super(owner, "차량 주문 페이지", true); // 모달 다이얼로그
-
-        this.uDTO = uDTO;
         this.productCode = productCode;
+        this.user_code=user_code;
 
         // --- DB 조회 및 컴포넌트 초기화 ---
         try {

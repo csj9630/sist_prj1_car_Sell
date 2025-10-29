@@ -7,7 +7,9 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
-import javax.swing.JTextField; 
+import javax.swing.JTextField;
+
+import kr.co.sist.car_sell.event.LoginRegister.FirstSelectEvt; 
 
 public class LoginDesign extends JDialog { 
 
@@ -16,6 +18,7 @@ public class LoginDesign extends JDialog {
 	private JButton jbtnLogin;
 	private JButton jbtnRegister;
 	private String type;
+
 
 	public LoginDesign(JFrame owner, String type) {
 		super(owner, ("u".equals(type) ? "사용자 로그인" : "관리자 로그인"), true);
@@ -69,6 +72,7 @@ public class LoginDesign extends JDialog {
 		add(jpfPass);
 		add(jbtnLogin);
 
+			
 		setSize(500, 320);
 		setResizable(false);
 		setLocationRelativeTo(owner); 

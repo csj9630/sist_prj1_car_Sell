@@ -105,13 +105,9 @@ public class LoginEvt implements ActionListener {
 					JOptionPane.showMessageDialog(ld, uDTO.getName() + " 님, 환영합니다!");
 					ld.dispose(); // 로그인 창 닫기
 
-					// TODO: 사용자 메인 창(차량 목록 화면) 열기
-					// 예시: new CarListDesign(); // 로그인 후 보여줄 메인 화면
-					// (CarListDesign 생성자가 UserDTOnjw를 받도록 수정 필요)
-
 			//☆★☆★☆★☆★☆★☆★페이지호출☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★
-					new CarListDesign(); // 차량 리스트 디자인 화면 실행
-//					new CarListDesign(uDTO.getUser_code()); // 차량 리스트 디자인 화면 실행
+//					new CarListDesign(); // 차량 리스트 디자인 화면 실행
+					new CarListDesign(uDTO.getUser_code()); // 차량 리스트 디자인 화면 실행
 					//CarListDesign 매개변수 수정 후 바꿀 내용.
 			//☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★
 

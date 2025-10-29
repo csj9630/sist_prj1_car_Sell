@@ -176,7 +176,6 @@ public class UserDAO {
 				.append(" values (?, ?, sysdate) ")
 				;			
 //@formatter:on
-			System.out.println(insertCard.toString());
 
 			pstmtCard = con.prepareStatement(insertCard.toString());
 
@@ -340,11 +339,11 @@ public class UserDAO {
 		return flag;
 	}// updateUser
 
-	public List<UserDTO> selectAllUser() {
-		List<UserDTO> list = new ArrayList<UserDTO>();
-
-		return list;
-	}// selectAllUser
+//	public List<UserDTO> selectAllUser() {
+//		List<UserDTO> list = new ArrayList<UserDTO>();
+//
+//		return list;
+//	}// selectAllUser
 
 	/**
 	 * 테스트 중인 동적 쿼리문
