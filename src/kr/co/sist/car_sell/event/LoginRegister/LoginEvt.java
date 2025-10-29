@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import kr.co.sist.car_sell.dao.AdminDAO;
 import kr.co.sist.car_sell.design.CarList.CarListDesign;
 import kr.co.sist.car_sell.design.LoginRegister.LoginDesign;
 import kr.co.sist.car_sell.design.LoginRegister.RegisterDesign;
@@ -109,8 +110,8 @@ public class LoginEvt implements ActionListener {
 					// (CarListDesign 생성자가 UserDTOnjw를 받도록 수정 필요)
 
 			//☆★☆★☆★☆★☆★☆★페이지호출☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★
-					new CarListDesign(); // 차량 리스트 디자인 화면 실행
-//					new CarListDesign(uDTO.getUser_code()); // 차량 리스트 디자인 화면 실행
+//					new CarListDesign(); // 차량 리스트 디자인 화면 실행
+					new CarListDesign(uDTO.getUser_code()); // 차량 리스트 디자인 화면 실행
 					//CarListDesign 매개변수 수정 후 바꿀 내용.
 			//☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★
 

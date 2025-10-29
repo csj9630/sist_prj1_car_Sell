@@ -28,12 +28,12 @@ public class CarListEvt extends WindowAdapter implements ActionListener, MouseLi
 	private CarListRightPanel clrp;
 	private int user_code;
 	
-	public CarListEvt(CarListDesign cld, CarListNorthPanel clnp, CarListLeftPanel cllp, CarListRightPanel clrp) {
+	public CarListEvt(CarListDesign cld, int user_code, CarListNorthPanel clnp, CarListLeftPanel cllp, CarListRightPanel clrp) {
 		this.cld = cld;
 		this.clnp = clnp;
 		this.cllp = cllp;
 		this.clrp = clrp;
-		this.user_code=1; // 추후 로그인 페이지의 user_code를 받아올 것.
+		this.user_code=user_code; // 추후 로그인 페이지의 user_code를 받아올 것.
 	}
 	
 	public void windowClosing(WindowEvent we) {

@@ -176,7 +176,6 @@ public class UserDAO {
 				.append(" values (?, ?, sysdate) ")
 				;			
 //@formatter:on
-			System.out.println(insertCard.toString());
 
 			pstmtCard = con.prepareStatement(insertCard.toString());
 
