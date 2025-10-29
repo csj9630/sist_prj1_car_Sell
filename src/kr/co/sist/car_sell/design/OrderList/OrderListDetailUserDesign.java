@@ -69,6 +69,7 @@ public class OrderListDetailUserDesign extends JDialog{
 		add(jplMain, BorderLayout.CENTER);
 		
 		setBounds(500, 400, 500, 300);
+		setLocationRelativeTo(null);
 		setModal(true);
 		setVisible(true);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
