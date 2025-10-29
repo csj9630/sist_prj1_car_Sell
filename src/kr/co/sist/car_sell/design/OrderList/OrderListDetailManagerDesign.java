@@ -17,6 +17,9 @@ import kr.co.sist.car_sell.dto.OrderList.OrderListDetailManagerDTO;
 import kr.co.sist.car_sell.event.OrderList.OrderListDetailManagerEvent;
 import kr.co.sist.car_sell.service.OrderList.OrderListDetailManagerService;
 
+/**
+ * 수정
+ */
 public class OrderListDetailManagerDesign extends JDialog{
 	private JLabel jlblLogo, jlblOrderListDetail, jlblstatus;
 	private JPanel jplHeader, jplMain, jplUserInfo, jplCarInfo, jplOrderInfo, jplStatus;
