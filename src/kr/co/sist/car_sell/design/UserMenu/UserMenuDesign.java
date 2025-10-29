@@ -44,7 +44,7 @@ public class UserMenuDesign extends JFrame {
 		JLabel jpUserCode = new JLabel("UserCode = " + user_code);
 		jpUserCode.setFont(new Font("맑은고딕", Font.BOLD, 20));
 		add("South", jpUserCode);
-//aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+		//ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ
 		
 		// 센터 패널에 버튼 추가
 		jpCenter.add(jbtnModifyInfo);

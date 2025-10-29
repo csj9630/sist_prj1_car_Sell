@@ -32,7 +32,6 @@ public class UserService {
 	public UserDTO loginUser(String id, String passStr) throws SQLException, IOException {
 		UserDAO uDAO = UserDAO.getInstance();
 		UserDTO uDTO = uDAO.selectUserForLogin(id);
-		System.out.println(uDTO.getStatus_activate());
 		if (uDTO == null || !uDTO.getPass().equals(passStr)) {
 			return null;
 		} // ID 없거나 비번 불일치
