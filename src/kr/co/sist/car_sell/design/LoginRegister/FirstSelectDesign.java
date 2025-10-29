@@ -55,7 +55,7 @@ public class FirstSelectDesign extends JFrame {
 
 		add(jpTitle, BorderLayout.NORTH);
 		add(jpButtonContainer, BorderLayout.CENTER);
-		
+				
 		setSize(500, 400);
 		setResizable(false);
 		setLocationRelativeTo(null);
