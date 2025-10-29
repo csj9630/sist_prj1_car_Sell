@@ -11,19 +11,25 @@ public class CarListDesign extends JFrame{
 	private CarListLeftPanel cllp;
 	private CarListRightPanel clrp;
 	private CarListEvt cle;
+	private int user_code;
 	
-	public CarListDesign() {
+	public int getUser_code() {
+		return user_code;
+	}
+
+	public CarListDesign(int user_code) {
 		super("쌍용중고차");
 		
 		clnp = new CarListNorthPanel(this);
 		cllp = new CarListLeftPanel(this);
 		clrp = new CarListRightPanel(this);
+		this.user_code=user_code;
 		
 		JPanel jpNorth = CarListNorthPanel.getJpNorth();
 		JPanel jpRight = CarListRightPanel.getJpRight();
 		JPanel jpLeft = CarListLeftPanel.getJpLeft();
 		
-		cle = new CarListEvt(this, clnp, cllp, clrp);
+		cle = new CarListEvt(this, user_code, clnp, cllp, clrp);
 		
 		clnp.getJbtnMgrMenu().addActionListener(cle);
 		clnp.getJbtnUserMenu().addActionListener(cle);
@@ -61,7 +67,4 @@ public class CarListDesign extends JFrame{
 		return clrp;
 	}
 	
-	public static void main(String[] args) {
-		new CarListDesign();
-	}
 }

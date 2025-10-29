@@ -106,8 +106,8 @@ public class LoginEvt implements ActionListener {
 					ld.dispose(); // 로그인 창 닫기
 
 			//☆★☆★☆★☆★☆★☆★페이지호출☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★
-					new CarListDesign(); // 차량 리스트 디자인 화면 실행
-//					new CarListDesign(uDTO.getUser_code()); // 차량 리스트 디자인 화면 실행
+//					new CarListDesign(); // 차량 리스트 디자인 화면 실행
+					new CarListDesign(uDTO.getUser_code()); // 차량 리스트 디자인 화면 실행
 					//CarListDesign 매개변수 수정 후 바꿀 내용.
 			//☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★
 

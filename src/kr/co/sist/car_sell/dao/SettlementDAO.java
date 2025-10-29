@@ -27,7 +27,41 @@ public class SettlementDAO {
 		} // end if
 		return smDAO;
 	}// SettlementDAO
+	
+	// 옵션의 차종을 실시간으로 업데이트 하기 위한 메소드
+		public List<SettlementDTO> selectCarName() throws SQLException {
+			List<SettlementDTO> smDTOList = new ArrayList<SettlementDTO>();
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			GetConnection gc = GetConnection.getInstance();
+			ResultSet rs = null;
 
+			try {
+				con = gc.getConn();
+				// 쿼리문을 설정하여 생성 객체 얻기
+				String selectCarInfo = ("select distinct car_name from car_info");
+
+
+				pstmt = con.prepareStatement(selectCarInfo);
+				rs = pstmt.executeQuery();
+				String carNameOption = null;
+				SettlementDTO smDTO = null;
+				while (rs.next()) {
+					carNameOption = rs.getString("car_name");
+					smDTO = new SettlementDTO(carNameOption);
+					System.out.println("자동차 이름 : " + carNameOption);
+					smDTOList.add(smDTO);
+				} // end while
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				gc.dbClose(con, pstmt, null);
+			} // end finally
+			return smDTOList;
+		}// selectCarName
+	
 	// 분기별 판매현황 테이블에서 쓰일 데이터 DB에서 가져오기
 	public List<SettlementDTO> selectPeriodOptionQuarter(String qtYear, String quarter) throws SQLException {
 		List<SettlementDTO> smDTOList = new ArrayList<SettlementDTO>();

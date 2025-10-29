@@ -39,12 +39,13 @@ public class OrderListManagerDAO {
 		
 		try {
 			con=gc.getConn();
-			String selectOrderAll="select o.payment_code, o.order_date, o.delivery_state,\r\n"
-					+ "			 u.name,\r\n"
-					+ "			 c.product_code, c.car_name, c.price\r\n"
-					+ "from ORDER_HISTORY o\r\n"
-					+ "join car_info c on o.product_code=c.product_code\r\n"
-					+ "join user_info u on o.user_code=u.user_code";
+			String selectOrderAll="select o.payment_code, o.order_date, o.delivery_state,\r\n	"
+					+ "			 		  u.name,\r\n											"
+					+ "			 		  c.product_code, c.car_name, c.price\r\n				"
+					+ "			   from ORDER_HISTORY o\r\n										"
+					+ "			   join car_info c on o.product_code=c.product_code\r\n			"
+					+ "			   join user_info u on o.user_code=u.user_code\r\n				"
+					+ "			   order by payment_code 										";
 			pstmt=con.prepareStatement(selectOrderAll);
 			rs=pstmt.executeQuery();
 			

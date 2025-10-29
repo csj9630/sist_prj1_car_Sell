@@ -24,8 +24,7 @@ public class RegisterEvt implements ActionListener {
 
 	private RegisterDesign rd;
 	private UserService us; // 추가분☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆
-	
-	
+
 	public RegisterEvt(RegisterDesign rd) {
 		this.rd = rd;
 		rd.getJbtnSubmit().addActionListener(this);
@@ -44,7 +43,6 @@ public class RegisterEvt implements ActionListener {
 	 */
 	private void performRegister() {
 
-		
 		// --- 컴포넌트 및 값 가져오기 ---
 		JTextField jtfId = rd.getJtfId();
 		JTextField jtfPass = rd.getJtfPass(); // Design 파일 확인 필요 (JTextField 인지 JPasswordField 인지)
@@ -73,13 +71,14 @@ public class RegisterEvt implements ActionListener {
 			showError("패스워드를 입력하세요", jtfPass);
 			return;
 		}
-		
-		//☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆추가분☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆
-		//비번 형식 체크.
-		if(PasswordValidator.isValid(pass)) {
-			showError("영문자, 숫자, 특수문자를 포함한 8자 이상으로 만들어주세요.", jtfPass);
-		}
-		
+
+		// ☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆추가분☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆
+//		//비번 형식 체크.
+//		if(!PasswordValidator.isValid(pass)) {
+//			showError("영문자, 숫자, 특수문자를 포함한 8자 이상으로 만들어주세요.", jtfPass);
+//			return;
+//		}
+
 		if (passCheck.length == 0) {
 			showError("패스워드 확인란을 입력하세요", jtfPassCheck);
 			return;
@@ -98,10 +97,9 @@ public class RegisterEvt implements ActionListener {
 			return;
 		}
 		// TODO: 이메일, 전화번호, 카드번호 형식 유효성 검사 추가 (정규 표현식 등 활용)
-		
-		
+
 		// ☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆추가분☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆
-		//포맷 마스크에서 숫자만 추출해서 비어있는지 체크
+		// 포맷 마스크에서 숫자만 추출해서 비어있는지 체크
 		if (tel.replaceAll("[^0-9]", "").isEmpty()) {
 			showError("전화번호를 입력하세요", jtfTel);
 			return;
@@ -124,6 +122,11 @@ public class RegisterEvt implements ActionListener {
 		}
 		// --- 유효성 검사 끝 ---
 
+		// 유효검사가 끝나고 확인창에서 ok 외를 누르면 리턴.
+		if (!(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(rd, "회원가입하시겠습니까?"))) {
+			return;
+		} // end if
+
 		// --- 실제 회원가입 로직 (DB 연동) ---
 		try {
 			// 1. DTO(바구니)에 데이터 담기
@@ -137,7 +140,7 @@ public class RegisterEvt implements ActionListener {
 			uDTO.setCard_num(cardNum); // DTO에 카드번호 필드 포함
 
 			// ☆☆☆☆☆☆☆☆☆☆수정파트☆☆☆☆☆☆☆☆☆☆☆)
-			
+
 			// 2. Service의 회원가입 메소드 호출 (DAO 트랜잭션 포함)
 //            UserServiceNjw userService = UserServiceNjw.getInstance();
 //            userService.registerUser(uDTO);
@@ -152,8 +155,7 @@ public class RegisterEvt implements ActionListener {
 			// ORA-00001: unique constraint (PK/UK 위반) - ID 중복
 			// (정확한 제약조건 이름은 DB 확인 필요, 예: PK_USER_INFO)
 			if (se.getErrorCode() == 1 && se.getMessage().toUpperCase().contains("PK_USER_INFO")) {
-				showError("이미 사용 중인 아이디입니다.", jtfId);
-			}
+			} 
 			// 그 외 DB 오류 (예: 테이블 없음, 컬럼 불일치 등)
 			else {
 				JOptionPane.showMessageDialog(rd, "데이터베이스 오류가 발생했습니다.\n" + se.getMessage(), "DB 오류",

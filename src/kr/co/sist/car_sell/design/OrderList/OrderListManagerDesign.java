@@ -104,6 +104,7 @@ public class OrderListManagerDesign extends JDialog{
 		
 		setBounds(100, 100, 600, 400);
 		setLocationRelativeTo(null);
+		setModal(true);
 		setVisible(true);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}//orderlistuserdesign

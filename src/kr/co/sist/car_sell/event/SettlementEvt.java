@@ -22,14 +22,31 @@ public class SettlementEvt extends WindowAdapter implements ActionListener {
 	private int totalSell, totalCount;
 	private double totalProfit;
 	private DefaultTableModel dtmSettlement, dtmMonthlyInfo;
-
+	
+	public SettlementEvt() {
+		
+	}//SettlementEvt
+	
 	public SettlementEvt(SettlementDesign smd) {
 		this.smd = smd;
 	}// SettlementEvt
 
+	public String[] searchCarName() {
+		SettlementService sms = new SettlementService();
+		List<SettlementDTO> listStDTO = sms.searchCarName();
+		String[] carNameArr = new String[listStDTO.size()+1];
+		carNameArr[0]="차종";
+		//배열의 순서를 표시하기 위한 변수
+		int i = 1;
+		for(SettlementDTO smDTO : listStDTO) {
+			carNameArr[i] = String.valueOf(smDTO.getCar_name_option());
+			i++;
+		}//end for
+		return carNameArr;
+	}//searchCarName
+	
 	// 실적 증감률에 쓰일 직전 월의 값 저장 변수
 	double preMonthSales = 0, nowMonthSales = 0;
-
 	public void searchPeriodOptionQuarter(String qtYear, String quarter) {
 		dtmMonthlyInfo = smd.getDtmMonthlyInfo();
 		SettlementService sms = new SettlementService();
