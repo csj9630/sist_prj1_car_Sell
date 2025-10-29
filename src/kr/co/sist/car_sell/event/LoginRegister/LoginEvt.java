@@ -25,13 +25,11 @@ public class LoginEvt implements ActionListener {
 	private LoginDesign ld;
 	private JFrame owner; // FirstSelectDesign (부모 프레임)
 	private UserService us; // ☆☆☆☆추가분
-	private AdminService as; //☆☆☆☆추가분)
 
 	public LoginEvt(LoginDesign ld, JFrame owner) {
 		this.ld = ld;
 		this.owner = owner;
 		this.us = new UserService();// ☆☆☆☆추가분)UserService 객체 생성 후 저장.
-//		this.as = new AdminService();// ☆☆☆☆추가분)AdminService 객체 생성 후 저장.
 
 		ld.getJbtnLogin().addActionListener(this);
 		if (ld.getJbtnRegister() != null) {
