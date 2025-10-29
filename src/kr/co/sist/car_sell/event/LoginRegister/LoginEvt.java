@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import kr.co.sist.car_sell.dao.AdminDAO;
 import kr.co.sist.car_sell.design.CarList.CarListDesign;
 import kr.co.sist.car_sell.design.LoginRegister.LoginDesign;
 import kr.co.sist.car_sell.design.LoginRegister.RegisterDesign;
