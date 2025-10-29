@@ -104,6 +104,7 @@ public class OrderListDetailManagerDesign extends JDialog{
 		add(jplStatus, BorderLayout.SOUTH);
 		
 		setBounds(500, 400, 550, 400);
+		setLocationRelativeTo(null);
 		setModal(true);
 		setVisible(true);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
