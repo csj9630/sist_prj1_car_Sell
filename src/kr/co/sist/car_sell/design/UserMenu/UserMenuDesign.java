@@ -23,11 +23,10 @@ public class UserMenuDesign extends JFrame {
 	private int user_code; // 사용자 코드(임시), 차후 다른 페이지를 통해서 사용
 
 	public UserMenuDesign(int user_code) {
-		
+
 		super("사용자 정보");
-		this.user_code = user_code;//사용자 코드 받음.
-		
-		
+		this.user_code = user_code;// 사용자 코드 받음.
+
 		JLabel jlTitle = new JLabel("내 정보");
 
 		JPanel jpCenter = new JPanel();
@@ -38,15 +37,15 @@ public class UserMenuDesign extends JFrame {
 		jbtnModifyPw = new JButton("비밀번호 수정");
 		jbtnOrderList = new JButton("주문 내역 ");
 
-
 		// 상단 패널에 타이틀 추가
 		jpNorth.add(jlTitle);
 
 		// ㅁㅁㅁㅁㅁㅁ테스트용 usercode 출력 ㅁㅁㅁㅁㅁㅁㅁㅁ
-		JLabel jpUserCode = new JLabel("UserCode = "+user_code);
+		JLabel jpUserCode = new JLabel("UserCode = " + user_code);
 		jpUserCode.setFont(new Font("맑은고딕", Font.BOLD, 20));
-		add("South",jpUserCode);
-
+		add("South", jpUserCode);
+		//ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ
+		
 		// 센터 패널에 버튼 추가
 		jpCenter.add(jbtnModifyInfo);
 		jpCenter.add(jbtnModifyPw);
@@ -91,7 +90,7 @@ public class UserMenuDesign extends JFrame {
 		setBounds(600, 250, 600, 500);
 		setLocationRelativeTo(this); // 윈도우 창을 화면 가운데에 띄우는 역할을 함
 		setVisible(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 	}// UserMenuDesign
 

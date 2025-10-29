@@ -18,7 +18,15 @@ public class CarDTO {
     // 기본 생성자
     public CarDTO() {}
 
-    // --- Getters and Setters ---
+    @Override
+	public String toString() {
+		return "CarDTO [product_code=" + product_code + ", product_name=" + product_name + ", price=" + price
+				+ ", car_year=" + car_year + ", cc=" + cc + ", distance=" + distance + ", registration_number="
+				+ registration_number + ", status_sold=" + status_sold + ", car_name=" + car_name + ", oil=" + oil
+				+ ", brand_name=" + brand_name + "]";
+	}
+
+	// --- Getters and Setters ---
     public int getProduct_code() { return product_code; }
     public void setProduct_code(int product_code) { this.product_code = product_code; }
     public String getProduct_name() { return product_name; }

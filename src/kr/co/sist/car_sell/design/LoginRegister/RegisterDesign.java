@@ -1,21 +1,31 @@
 package kr.co.sist.car_sell.design.LoginRegister;
 
 
-import javax.swing.JFrame;
 import java.awt.Font;
+import java.text.ParseException;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.text.MaskFormatter;
  
+/**
+ * 전화번호,카드번호에 형식 추가. 별표 있는 주석 참고할 것.
+ */
 public class RegisterDesign extends JDialog{ 
    
 	private JLabel jlblTitle, jlblId, jlblPass, jlblPassCheck, jlblName, jlblEmail, jlblTel, jlblCardNum,jlblAddr;
 	private JPasswordField jtfPassCheck; 
-    private JTextField jtfId, jtfPass, jtfName, jtfEmail, jtfTel, jtfCardNum, jtfAddr; 
+    private JTextField jtfId, jtfPass, jtfName, jtfEmail,/* jtfTel, jtfCardNum,*/ jtfAddr; 
     private JButton jbtnSubmit;
-   
+
+ // ☆☆☆☆☆☆☆☆☆☆수정파트☆☆☆☆☆☆☆☆☆☆☆)
+    private JFormattedTextField jtfTel, jtfCardNum;//텍스트필드 형식 지정
+    
      public RegisterDesign(JFrame owner) { 
          
           super(owner, "회원가입", true);
@@ -58,9 +68,28 @@ public class RegisterDesign extends JDialog{
           jtfPassCheck = new JPasswordField(20);
           jtfName= new JTextField(20);
           jtfEmail = new JTextField(20);
-          jtfTel = new JTextField(20);
-          jtfCardNum = new JTextField(20);
+//          jtfTel = new JTextField(20);
+//          jtfCardNum = new JTextField(20);
           jtfAddr = new JTextField(20);
+          
+          
+          
+  		// ☆☆☆☆☆☆☆☆☆☆수정파트☆☆☆☆☆☆☆☆☆☆☆)
+  		//텍스트필드에 숫자 입력만 가능하게 제한
+  		
+  		//텍스트필드 입력 마스크
+  		try {
+  			MaskFormatter formatTel = new MaskFormatter("###-####-####");
+  			MaskFormatter formatCard = new MaskFormatter("####-####-####-####");
+  			jtfTel = new JFormattedTextField(formatTel);
+  			jtfTel.setColumns(20);
+  			jtfCardNum = new JFormattedTextField(formatCard);
+  			jtfCardNum.setColumns(20);
+  		}catch(ParseException e1) {
+  			e1.printStackTrace();
+  		}//end catch
+  		
+		// ☆☆☆☆☆☆☆☆☆☆수정파트☆☆☆☆☆☆☆☆☆☆☆)
          
           jtfId.setBounds(125, 50, 200, 30);
           jtfPass.setBounds(125, 85, 200, 30);
@@ -118,13 +147,21 @@ public class RegisterDesign extends JDialog{
      public JTextField getJtfEmail() {
          return jtfEmail;
      }
-
-     public JTextField getJtfTel() {
-         return jtfTel;
+     
+     // ☆☆☆☆☆☆☆☆☆☆수정파트☆☆☆☆☆☆☆☆☆☆☆)
+//     public JTextField getJtfTel() {
+//         return jtfTel;
+//     }
+//
+//     public JTextField getJtfCardNum() {
+//         return jtfCardNum;
+//     }
+     public JFormattedTextField getJtfTel() {
+    	 return jtfTel;
      }
-
-     public JTextField getJtfCardNum() {
-         return jtfCardNum;
+     
+     public JFormattedTextField getJtfCardNum() {
+    	 return jtfCardNum;
      }
 
      public JTextField getJtfAddr() {

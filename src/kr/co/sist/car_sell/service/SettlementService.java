@@ -12,6 +12,18 @@ public class SettlementService {
 
 	}// SettlementService
 
+	// 옵션의 차종 부분 실시간 업데이트
+		public List<SettlementDTO> searchCarName() {
+			List<SettlementDTO> list = null;
+			SettlementDAO smDAO = SettlementDAO.getInstance();
+			try {
+				list = smDAO.selectCarName();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} // end catch
+			return list;
+		}// searchCarName
+	
 	// 기간 및 옵션 설정 후 사용할 select문 호출 후 list에 값 담기
 	public List<SettlementDTO> searchPeriodOption(String startPeriod, String endPeriod, String delevery_state,
 			String car_name, String oil) {

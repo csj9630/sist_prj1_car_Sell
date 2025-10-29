@@ -17,6 +17,9 @@ import kr.co.sist.car_sell.dto.OrderList.OrderListDetailManagerDTO;
 import kr.co.sist.car_sell.event.OrderList.OrderListDetailManagerEvent;
 import kr.co.sist.car_sell.service.OrderList.OrderListDetailManagerService;
 
+/**
+ * 수정1
+ */
 public class OrderListDetailManagerDesign extends JDialog{
 	private JLabel jlblLogo, jlblOrderListDetail, jlblstatus;
 	private JPanel jplHeader, jplMain, jplUserInfo, jplCarInfo, jplOrderInfo, jplStatus;
@@ -104,6 +107,8 @@ public class OrderListDetailManagerDesign extends JDialog{
 		add(jplStatus, BorderLayout.SOUTH);
 		
 		setBounds(500, 400, 550, 400);
+		setLocationRelativeTo(null);
+		setModal(true);
 		setVisible(true);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}//orderlistdetailmanagerdesign

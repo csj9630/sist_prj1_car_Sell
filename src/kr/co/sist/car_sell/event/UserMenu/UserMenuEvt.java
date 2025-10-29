@@ -50,7 +50,8 @@ public class UserMenuEvt extends WindowAdapter implements ActionListener {
 	@Override
 	public void windowClosing(WindowEvent e) {
 		// TODO Auto-generated method stub
-		super.windowClosing(e);
+//		this.windowClosing(e);
+		umd.dispose();
 	}
 
 }

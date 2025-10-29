@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.DecimalFormat; // 가격 포맷용
 import java.util.List;          // 이미지 목록용
+
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;     // 이미지 표시용
@@ -26,12 +27,12 @@ import javax.swing.JOptionPane;   // 오류 메시지용
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+
 // --- 올바른 패키지 경로로 수정 ---
 import kr.co.sist.car_sell.dao.image.ImageDAO;     // image 패키지 DAO
+import kr.co.sist.car_sell.dto.UserDTO;       // dto 패키지 (njw 버전)
 import kr.co.sist.car_sell.dto.car.CarDTO;       // car 패키지 DTO
-import kr.co.sist.car_sell.event.LoginRegister.UserOrderEvt;
-import kr.co.sist.car_sell.dto.UserDTOnjw;       // dto 패키지 (njw 버전)
-import kr.co.sist.car_sell.service.UserServiceNjw; // service 패키지 (njw 버전)
+import kr.co.sist.car_sell.service.UserService; // service 패키지 (njw 버전)
 // ▲▲▲
 
 public class UserOrderDesign extends JDialog {
@@ -50,23 +51,24 @@ public class UserOrderDesign extends JDialog {
     private JButton jbtnOrder;
 
     // --- DB 데이터를 저장할 멤버 변수 ---
-    private UserDTOnjw uDTO;      // 로그인한 사용자 정보
+    private UserDTO uDTO;      // 로그인한 사용자 정보
     private CarDTO cDTO;          // 조회된 차량 정보
     private int productCode;    // 구매할 차량 코드
+    private int user_code;
 
     /**
      * 생성자: 부모 프레임, 로그인 사용자 정보(uDTO), 구매할 상품 코드(productCode)를 받음
      */
-    public UserOrderDesign(JFrame owner, UserDTOnjw uDTO, int productCode) {
+    public UserOrderDesign(JFrame owner, UserDTO uDTO, int productCode) {
         super(owner, "차량 주문 페이지", true); // 모달 다이얼로그
-
-        this.uDTO = uDTO;
         this.productCode = productCode;
+        this.user_code=user_code;
 
         // --- DB 조회 및 컴포넌트 초기화 ---
         try {
             // Service & DAO 인스턴스
-            UserServiceNjw userService = UserServiceNjw.getInstance();
+//            UserService userService = UserService.getInstance();
+            UserService userService = new UserService();//☆☆☆☆수정파트)☆☆☆☆
             ImageDAO imgDAO = ImageDAO.getInstance(); // ImageDAO 사용
 
             // 1. 차량 상세 정보 조회
@@ -267,9 +269,9 @@ public class UserOrderDesign extends JDialog {
 //        // 1. JDialog는 부모 프레임이 필요해서 임시로 만듦
 //        JFrame dummyOwner = new JFrame();
 //
-//        // 2. 가짜 UserDTOnjw 객체 생성 (로그인된 사용자 흉내)
+//        // 2. 가짜 UserDTO 객체 생성 (로그인된 사용자 흉내)
 //        //    (F5 스크립트의 testId 사용자 데이터 사용)
-//        UserDTOnjw dummyUser = new UserDTOnjw();
+//        UserDTO dummyUser = new UserDTO();
 //        dummyUser.setUser_code(1); // 시퀀스로 생성된 코드
 //        dummyUser.setId("testId");
 //        dummyUser.setName("이정우");
@@ -312,7 +314,7 @@ public class UserOrderDesign extends JDialog {
 
     // --- Evt 클래스용 Getter 메소드 ---
     public JButton getJbtnOrder() { return jbtnOrder; }
-    public UserDTOnjw getUserDTO() { return uDTO; }
+    public UserDTO getUserDTO() { return uDTO; }
     public int getProductCode() { return productCode; }
    
     // --- Getter 끝 ---

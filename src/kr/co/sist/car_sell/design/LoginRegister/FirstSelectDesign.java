@@ -11,6 +11,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import kr.co.sist.car_sell.event.LoginRegister.FirstSelectEvt;
+
 public class FirstSelectDesign extends JFrame {
 
 	private JButton jbtnUser;
@@ -55,6 +57,9 @@ public class FirstSelectDesign extends JFrame {
 
 		add(jpTitle, BorderLayout.NORTH);
 		add(jpButtonContainer, BorderLayout.CENTER);
+		
+		new FirstSelectEvt(this);
+		
 		
 		setSize(500, 400);
 		setResizable(false);

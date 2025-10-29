@@ -44,7 +44,7 @@ public class OrderListUserDAO {
 					+ "			join CAR_info c on o.product_code=c.product_code\r\n"
 					+ "			join user_info u on o.user_code=u.user_code\r\n"
 					+ "			where u.user_code=?						   \r\n"
-					+ "		    order by user_code desc						   ";
+					+ "		    order by payment_code 						   ";
 			pstmt=con.prepareStatement(selectOrder);
 			pstmt.setInt(1, userCode);
 			rs=pstmt.executeQuery(); 

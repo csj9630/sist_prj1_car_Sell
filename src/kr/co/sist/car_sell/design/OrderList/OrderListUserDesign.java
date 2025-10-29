@@ -15,6 +15,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import kr.co.sist.car_sell.design.UserMenu.UserMenuDesign;
 import kr.co.sist.car_sell.dto.OrderList.OrderListUserDTO;
 import kr.co.sist.car_sell.event.OrderList.OrderListUserEvent;
 import kr.co.sist.car_sell.service.OrderList.OrderListUserService;
@@ -102,6 +103,7 @@ public class OrderListUserDesign extends JDialog{
 		
 		setBounds(500, 300, 600, 400);
 		setLocationRelativeTo(null);
+		setModal(true);
 		setVisible(true);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}//orderlistuserdesign

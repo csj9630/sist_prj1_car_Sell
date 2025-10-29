@@ -26,12 +26,14 @@ public class CarListEvt extends WindowAdapter implements ActionListener, MouseLi
 	private CarListNorthPanel clnp;
 	private CarListLeftPanel cllp;
 	private CarListRightPanel clrp;
+	private int user_code;
 	
-	public CarListEvt(CarListDesign cld, CarListNorthPanel clnp, CarListLeftPanel cllp, CarListRightPanel clrp) {
+	public CarListEvt(CarListDesign cld, int user_code, CarListNorthPanel clnp, CarListLeftPanel cllp, CarListRightPanel clrp) {
 		this.cld = cld;
 		this.clnp = clnp;
 		this.cllp = cllp;
 		this.clrp = clrp;
+		this.user_code=user_code; // 추후 로그인 페이지의 user_code를 받아올 것.
 	}
 	
 	public void windowClosing(WindowEvent we) {
@@ -52,7 +54,7 @@ public class CarListEvt extends WindowAdapter implements ActionListener, MouseLi
 		
 		if(ae.getSource() == jbtnMgrMenu) {
 			JOptionPane.showMessageDialog(cld, "내 정보 페이지에 진입합니다.");
-			new UserMenuDesign(1); //내 정보 메뉴 페이지 진입
+			new UserMenuDesign(user_code); //내 정보 메뉴 페이지 진입
 			// 나중에 매개변수 user code로 수정할 것.
 			
 			return;

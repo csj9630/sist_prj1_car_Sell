@@ -7,8 +7,9 @@ public class Run_Main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		FirstSelectDesign fsd = new FirstSelectDesign();
-		new FirstSelectEvt(fsd);
+		new FirstSelectDesign();
+		//FirstSelectDesign fsd = new FirstSelectDesign();
+//		new FirstSelectEvt(fsd);
 	}
 
 }
