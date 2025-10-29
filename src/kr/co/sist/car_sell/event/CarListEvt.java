@@ -17,6 +17,7 @@ import kr.co.sist.car_sell.design.CarListNorthPanel;
 import kr.co.sist.car_sell.design.CarListRightPanel;
 import kr.co.sist.car_sell.design.MgrMenuDesign;
 import kr.co.sist.car_sell.design.UserMenuDesign;
+import kr.co.sist.car_sell.service.CarListService;
 
 public class CarListEvt extends WindowAdapter implements ActionListener, MouseListener {
 	
@@ -26,15 +27,17 @@ public class CarListEvt extends WindowAdapter implements ActionListener, MouseLi
 	private CarListNorthPanel clnp;
 	private CarListLeftPanel cllp;
 	private CarListRightPanel clrp;
-	private int user_code;
+	private CarListService cls;
+	private int userCode;
 	
-	public CarListEvt(CarListDesign cld, int user_code, CarListNorthPanel clnp, CarListLeftPanel cllp, CarListRightPanel clrp) {
+	public CarListEvt(CarListDesign cld, int userCode, CarListNorthPanel clnp, CarListLeftPanel cllp, CarListRightPanel clrp, CarListService cls) {
 		this.cld = cld;
 		this.clnp = clnp;
 		this.cllp = cllp;
 		this.clrp = clrp;
-		this.user_code=user_code; // 추후 로그인 페이지의 user_code를 받아올 것.
-	}
+		this.cls = cls;
+		this.userCode =  userCode; // 추후 로그인 페이지의 user_code를 받아올 것.
+	} // CarListEvt
 	
 	public void windowClosing(WindowEvent we) {
 		cld.dispose();
@@ -44,33 +47,23 @@ public class CarListEvt extends WindowAdapter implements ActionListener, MouseLi
 	public void actionPerformed(ActionEvent ae) {
 		
 		jbtnMgrMenu = clnp.getJbtnMgrMenu();
+		jbtnUserMenu = clnp.getJbtnUserMenu();
+		jbtnLogout = clnp.getJbtnLogout();
 		
 		if(ae.getSource() == jbtnMgrMenu) {
 			new MgrMenuDesign();
 			return;
 		} // end if
 		
-		jbtnMgrMenu = clnp.getJbtnUserMenu();
-		
-		if(ae.getSource() == jbtnMgrMenu) {
+		if(ae.getSource() == jbtnUserMenu) {
 			JOptionPane.showMessageDialog(cld, "내 정보 페이지에 진입합니다.");
-			new UserMenuDesign(user_code); //내 정보 메뉴 페이지 진입
-			// 나중에 매개변수 user code로 수정할 것.
-			
+			new UserMenuDesign(userCode); //내 정보 메뉴 페이지 진입
+			// 나중에 매개변수 userCode로 수정할 것.
 			return;
 		} // end if
-		
-		jbtnLogout = clnp.getJbtnLogout();
 		
 		if(ae.getSource() == jbtnLogout) {
 			JOptionPane.showMessageDialog(cld, "최초 로그인 선택 페이지에 진입합니다.");
-			return;
-		} // end if
-		
-		jbtnImage = clrp.getJbtnImage();
-		
-		if(ae.getSource() == jbtnImage) {
-			new CarInfoDesign();
 			return;
 		} // end if
 		
