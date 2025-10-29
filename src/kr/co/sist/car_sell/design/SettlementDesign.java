@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -205,7 +206,7 @@ public class SettlementDesign extends JDialog {
 	 * 
 	 * @param dt
 	 */
-	public SettlementDesign(dialogTest dt) {
+	public SettlementDesign(JFrame dt) {
 		super(dt, "다이아로그");
 
 		this.setLayout(new BorderLayout()); // JFrame Layout
@@ -404,8 +405,9 @@ public class SettlementDesign extends JDialog {
 		jpSelectOption.add(jlbOption, gbc);
 		// 옵션 행의 탁송 상태, 차종, 유종에 해당하는 콤보박스
 		String[] deleveryStateArr = { "탁송 상태", "탁송 준비", "탁송 중", "탁송 완료" };
-		String[] carNameArr = { "차종", "K5", "제네시스", "레토나" };
-		String[] oilArr = { "유종", "LPG", "경유", "휘발유" };
+		SettlementEvt sme = new SettlementEvt();
+		String[] carNameArr = sme.searchCarName(); 
+		String[] oilArr = { "유종", "LPG", "가솔린", "디젤","전기","하이브리드", };
 
 		jcbdeleveryState = new JComboBox<String>(deleveryStateArr);
 		gbAdd(1, 1, 0.0);

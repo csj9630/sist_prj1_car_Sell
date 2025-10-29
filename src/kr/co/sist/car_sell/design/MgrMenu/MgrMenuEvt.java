@@ -49,6 +49,8 @@ public class MgrMenuEvt extends WindowAdapter implements ActionListener, MouseLi
 			JOptionPane.showMessageDialog(mmld, "회원관리 페이지에 진입합니다.");
 			UserMgrDesign umd=new UserMgrDesign(null);
 			new UserMgrEvt(umd);
+			umd.setModal(true);
+			umd.setVisible(true);
 			return;
 		} // end if
 		
