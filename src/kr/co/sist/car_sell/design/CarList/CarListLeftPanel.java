@@ -18,17 +18,11 @@ public class CarListLeftPanel extends JFrame {
 	private static JPanel jpLeft;
 	
 	private CarListDesign cld;
-	private CarListNorthPanel clnp;
-	private CarListRightPanel clrp;
-	private CarListEvt cle;
 	
 	public CarListLeftPanel(CarListDesign cld) {
 			super("쌍용중고차");
 			
 			this.cld = cld;
-			clnp = cld.getClnp();
-			clrp = cld.getClrp();
-			cle = new CarListEvt(cld, clnp, this, clrp);
 			
 			// 사이트명 선언
 			jpLeft = new JPanel();

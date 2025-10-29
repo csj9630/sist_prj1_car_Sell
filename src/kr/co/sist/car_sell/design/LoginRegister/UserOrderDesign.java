@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.DecimalFormat; // 가격 포맷용
 import java.util.List;          // 이미지 목록용
+
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;     // 이미지 표시용
@@ -26,12 +27,12 @@ import javax.swing.JOptionPane;   // 오류 메시지용
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+
 // --- 올바른 패키지 경로로 수정 ---
 import kr.co.sist.car_sell.dao.image.ImageDAO;     // image 패키지 DAO
+import kr.co.sist.car_sell.dto.UserDTO;       // dto 패키지 (njw 버전)
 import kr.co.sist.car_sell.dto.car.CarDTO;       // car 패키지 DTO
-import kr.co.sist.car_sell.event.LoginRegister.UserOrderEvt;
-import kr.co.sist.car_sell.dto.UserDTOnjw;       // dto 패키지 (njw 버전)
-import kr.co.sist.car_sell.service.UserServiceNjw; // service 패키지 (njw 버전)
+import kr.co.sist.car_sell.service.UserService; // service 패키지 (njw 버전)
 // ▲▲▲
 
 public class UserOrderDesign extends JDialog {
@@ -50,7 +51,7 @@ public class UserOrderDesign extends JDialog {
     private JButton jbtnOrder;
 
     // --- DB 데이터를 저장할 멤버 변수 ---
-    private UserDTOnjw uDTO;      // 로그인한 사용자 정보
+    private UserDTO uDTO;      // 로그인한 사용자 정보
     private CarDTO cDTO;          // 조회된 차량 정보
     private int productCode;    // 구매할 차량 코드
     private int user_code;
@@ -58,7 +59,7 @@ public class UserOrderDesign extends JDialog {
     /**
      * 생성자: 부모 프레임, 로그인 사용자 정보(uDTO), 구매할 상품 코드(productCode)를 받음
      */
-    public UserOrderDesign(JDialog owner, int user_code, int productCode) {
+    public UserOrderDesign(JFrame owner, UserDTO uDTO, int productCode) {
         super(owner, "차량 주문 페이지", true); // 모달 다이얼로그
         this.productCode = productCode;
         this.user_code=user_code;
@@ -66,7 +67,8 @@ public class UserOrderDesign extends JDialog {
         // --- DB 조회 및 컴포넌트 초기화 ---
         try {
             // Service & DAO 인스턴스
-            UserServiceNjw userService = UserServiceNjw.getInstance();
+//            UserService userService = UserService.getInstance();
+            UserService userService = new UserService();//☆☆☆☆수정파트)☆☆☆☆
             ImageDAO imgDAO = ImageDAO.getInstance(); // ImageDAO 사용
 
             // 1. 차량 상세 정보 조회
@@ -249,9 +251,70 @@ public class UserOrderDesign extends JDialog {
                                      "오류", JOptionPane.ERROR_MESSAGE);
     }
     
+ // --- 임시 테스트를 위한 main 메소드 추가 : 테스트 후 삭제.---
+ // --- 테스트 후 삭제 혹은 주석!!!!!---
+    // --- 테스트 후 삭제 혹은 주석!!!!!---
+    // --- 테스트 후 삭제 혹은 주석!!!!!---
+    // --- 테스트 후 삭제 혹은 주석!!!!!---
+    // --- 테스트 후 삭제 혹은 주석!!!!!---
+    // --- 테스트 후 삭제 혹은 주석!!!!!---
+    // --- 테스트 후 삭제 혹은 주석!!!!!---
+    // --- 테스트 후 삭제 혹은 주석!!!!!---
+    // --- 테스트 후 삭제 혹은 주석!!!!!---
+    // --- 테스트 후 삭제 혹은 주석!!!!!---
+    // --- 테스트 후 삭제 혹은 주석!!!!!---
+    // --- 테스트 후 삭제 혹은 주석!!!!!---
+    
+//    public static void main(String[] args) {
+//        // 1. JDialog는 부모 프레임이 필요해서 임시로 만듦
+//        JFrame dummyOwner = new JFrame();
+//
+//        // 2. 가짜 UserDTO 객체 생성 (로그인된 사용자 흉내)
+//        //    (F5 스크립트의 testId 사용자 데이터 사용)
+//        UserDTO dummyUser = new UserDTO();
+//        dummyUser.setUser_code(1); // 시퀀스로 생성된 코드
+//        dummyUser.setId("testId");
+//        dummyUser.setName("이정우");
+//        dummyUser.setEmail("lee@test.com");
+//        dummyUser.setTel("010-1111-2222");
+//        dummyUser.setAddress("서울시 강남구");
+//        dummyUser.setCard_num("xxx-xxxx-xxxx"); // CARD_INFO 데이터
+//
+//        // 3. 테스트할 상품 코드 선택 (예: CAR_INFO의 1번 상품)
+//        int testProductCode = 1; // 또는 DB에 있는 다른 유효한 product_code
+//
+//        // 4. UserOrderDesign 다이얼로그 생성 및 표시
+//        //    임시 프레임, 가짜 사용자 정보, 테스트 상품 코드를 전달
+//        UserOrderDesign uod = new UserOrderDesign(dummyOwner, dummyUser, testProductCode);
+//
+//        // 5. "주문하기" 버튼 이벤트 리스너 연결
+//        //    (UserOrderEvt 클래스가 올바른 패키지에 있다고 가정)
+//        new UserOrderEvt(uod);
+//
+//        // 6. 다이얼로그 보이게 설정
+//        uod.setVisible(true);
+//
+//        // 7. 프로그램 바로 종료 방지 (선택 사항)
+//        // dummyOwner.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // 또는 그냥 다이얼로그 닫기
+//    }
+    
+    // --- main 메소드 끝 ---
+    // --- 테스트 후 삭제 혹은 주석!!!!!---
+    // --- 테스트 후 삭제 혹은 주석!!!!!---
+    // --- 테스트 후 삭제 혹은 주석!!!!!---
+    // --- 테스트 후 삭제 혹은 주석!!!!!---
+    // --- 테스트 후 삭제 혹은 주석!!!!!---
+    // --- 테스트 후 삭제 혹은 주석!!!!!---
+    // --- 테스트 후 삭제 혹은 주석!!!!!---
+    // --- 테스트 후 삭제 혹은 주석!!!!!---
+    // --- 테스트 후 삭제 혹은 주석!!!!!---
+    // --- 테스트 후 삭제 혹은 주석!!!!!---
+    
+    
+
     // --- Evt 클래스용 Getter 메소드 ---
     public JButton getJbtnOrder() { return jbtnOrder; }
-    public UserDTOnjw getUserDTO() { return uDTO; }
+    public UserDTO getUserDTO() { return uDTO; }
     public int getProductCode() { return productCode; }
    
     // --- Getter 끝 ---

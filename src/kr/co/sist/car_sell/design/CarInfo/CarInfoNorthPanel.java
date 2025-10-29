@@ -10,10 +10,14 @@ import javax.swing.JPanel;
 
 public class CarInfoNorthPanel extends JFrame {
 	
+	private CarInfoDesign cid;
+	
 	private JLabel jlblTitle;
 	private static JPanel jpNorth;
 	
-	public CarInfoNorthPanel() {
+	public CarInfoNorthPanel(CarInfoDesign cid) {
+		
+		this.cid = cid;
 		
 		jpNorth = new JPanel();
 		

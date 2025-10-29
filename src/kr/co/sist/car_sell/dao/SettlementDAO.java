@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -101,16 +102,20 @@ public class SettlementDAO {
 		PreparedStatement pstmt = null;
 		GetConnection gc = GetConnection.getInstance();
 		ResultSet rs = null;
+		LocalDate startLDate = LocalDate.parse(startPeriod.trim(), DateTimeFormatter.ofPattern("yyyy-M-d"));
+	    LocalDate endLDate = LocalDate.parse(endPeriod.trim(), DateTimeFormatter.ofPattern("yyyy-M-d"));
+
 		try {
 			// 입력된 날짜 값이 2025-1-1같은 경우, date형으로 바꾸면서 자동으로 2025-01-01 형식으로 바꿔줌.
-			startPeriod = String.valueOf(LocalDate.parse(startPeriod, DateTimeFormatter.ofPattern("yyyy-M-d")));
-			endPeriod = String.valueOf(LocalDate.parse(endPeriod, DateTimeFormatter.ofPattern("yyyy-M-d")));
+			startPeriod = String.valueOf(startLDate);
+	        endPeriod = String.valueOf(endLDate);
+
 
 			con = gc.getConn();
 			// 쿼리문을 설정하여 생성 객체 얻기
 			String selectCarInfo = ("select ci.product_code, ci.car_name, ci.oil,ci.price, "
-					+ "to_char(oh.order_date,'yyyy-mm-dd') to_order_date " + "from car_info ci, order_history oh "
-					+ "where ci.product_code = oh.product_code and oh.order_date between ? and ?");
+		               + "to_char(oh.order_date,'yyyy-mm-dd') to_order_date " + "from car_info ci, order_history oh "
+		               + "where ci.product_code = oh.product_code and oh.order_date >= ? and oh.order_date < ?");
 			StringBuilder sbSelect = new StringBuilder(selectCarInfo);
 			// 다이나믹 쿼리로 값을 넣을 때, append 위치 기억 용도
 			int appendCnt = 2;
@@ -128,8 +133,8 @@ public class SettlementDAO {
 
 			pstmt = con.prepareStatement(sbSelect.toString());
 
-			pstmt.setDate(1, java.sql.Date.valueOf(startPeriod.trim()));
-			pstmt.setDate(2, java.sql.Date.valueOf(endPeriod.trim()));
+			 pstmt.setTimestamp(1, Timestamp.valueOf(startLDate.atStartOfDay()));
+	         pstmt.setTimestamp(2, Timestamp.valueOf(endLDate.plusDays(1).atStartOfDay()));
 			if (!delevery_state.equals("탁송 상태")) {
 				pstmt.setString(++appendCnt, delevery_state.trim());
 			} // end if

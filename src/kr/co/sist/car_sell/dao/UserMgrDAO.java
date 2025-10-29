@@ -25,48 +25,7 @@ public class UserMgrDAO {
 		}
 
 		/**
-		 * [추가] 더미 데이터를 DB에 삽입하기 위한 메서드
-		 * @param umDTO
-		 * @return
-		 * @throws SQLException
-		 */
-		public int insertUser(UserMgrDTO umDTO) throws SQLException {
-			int rowsAffected = 0;
-			
-			Connection con=null;
-			PreparedStatement pstmt=null;
-			GetConnection getCon=GetConnection.getInstance();
-			
-			try {
-				con=getCon.getConn();
-				// [가정] user_code는 DTO의 값을 그대로 사용, status_activate는 'Y'로 고정
-				String insertSql = "insert into TEST_USER_INFO(user_code, id, pass, name, email, tel, address, generate_date, status_activate) "
-                        + "values (SEQ_USER_INFO.nextval, ?, ?, ?, ?, ?, ?, sysdate, 'Y')";
-				
-				pstmt=con.prepareStatement(insertSql);
-				
-				pstmt.setString(1, umDTO.getId());
-		        pstmt.setString(2, umDTO.getPass());
-		        pstmt.setString(3, umDTO.getName());
-		        pstmt.setString(4, umDTO.getEmail());
-		        pstmt.setString(5, umDTO.getTel());
-		        pstmt.setString(6, umDTO.getAddress());
-				
-				rowsAffected = pstmt.executeUpdate();
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				getCon.dbClose(con, pstmt, null);
-			}
-			
-			return rowsAffected;
-		}
-
-
-		/**
 		 * [수정] 동적 쿼리를 사용하여 이름 검색 기능 병합
-		 * (이하 코드는 이전과 동일)
 		 */
 		public List<UserMgrDTO> searchAllUserInfo(String name) throws SQLException {
 			List<UserMgrDTO> list=new ArrayList<UserMgrDTO>();
@@ -81,7 +40,7 @@ public class UserMgrDAO {
 				
 				StringBuilder selectQuery=new StringBuilder();
 				selectQuery.append("select id,generate_date,pass,user_code, name, email, tel, address, status_activate ")
-						 .append("from TEST_USER_INFO where status_activate = 'Y' ");
+						 .append("from USER_INFO where status_activate = 'Y' ");
 				
 				if(name != null && !name.isEmpty()) {
 					selectQuery.append("and name LIKE ? ");
@@ -132,7 +91,7 @@ public class UserMgrDAO {
 			
 			try {
 				con=getCon.getConn();
-				String selectCount="select count(*) from TEST_USER_INFO where status_activate = 'Y'";
+				String selectCount="select count(*) from USER_INFO where status_activate = 'Y'";
 				pstmt=con.prepareStatement(selectCount);
 				rs=pstmt.executeQuery();
 				
@@ -158,7 +117,7 @@ public class UserMgrDAO {
 			
 			try {
 				con=getCon.getConn();
-				String deleteUser="update TEST_USER_INFO set status_activate = 'N' where user_code = ?";
+				String deleteUser="update USER_INFO set status_activate = 'N' where user_code = ?";
 				pstmt=con.prepareStatement(deleteUser);
 				pstmt.setInt(1, userCode);
 				
