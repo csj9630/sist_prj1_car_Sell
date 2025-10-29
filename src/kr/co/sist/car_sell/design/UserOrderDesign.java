@@ -10,9 +10,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image; // 이미지 크기 조절 시 필요
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.text.DecimalFormat; // 가격 포맷용
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -22,20 +21,15 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-import kr.co.sist.car_sell.dao.ImageDAO;
 import kr.co.sist.car_sell.dto.CarDTO;
 import kr.co.sist.car_sell.dto.UserDTO; // dto 패키지 (njw 버전)
 import kr.co.sist.car_sell.event.UserOrderEvt;
-import kr.co.sist.car_sell.service.UserService;
 
 public class UserOrderDesign extends JDialog {
-
-
 
 	// --- 컴포넌트 변수 선언 ---
 	private JLabel jlblTitle, jlblSubTitle;
@@ -53,28 +47,31 @@ public class UserOrderDesign extends JDialog {
 	// --- DB 데이터를 저장할 멤버 변수 ---
 	private UserDTO uDTO; // 로그인한 사용자 정보
 	private CarDTO cDTO; // 조회된 차량 정보
-	private List<String> imagePathList;//조회된 이미지경로들
-	
-	private int productCode; // 구매할 차량 코드
-	private int user_code;
+	private List<String> imagePathList;// 조회된 이미지경로들
 
 	/**
 	 * 생성자: 부모 프레임, 로그인 사용자 정보(uDTO), 구매할 상품 코드(productCode)를 받음
 	 */
 	public UserOrderDesign(JFrame owner, int user_code, int productCode) {
 		super(owner, "차량 주문 페이지", true); // 모달 다이얼로그
-		this.productCode = productCode;
-		this.user_code = user_code;
-		
+
 		// --- 이벤트 클래스 등록 ---
-		UserOrderEvt uoe=new UserOrderEvt(this);
-		
-		//이벤트 클래스 생성 때 로딩한 정보를 가져오기.
+		UserOrderEvt uoe = new UserOrderEvt(this, user_code, productCode);
+
+		// 이벤트 클래스 생성 때 로딩한 정보를 가져오기.
 		this.uDTO = uoe.getuDTO();
 		this.cDTO = uoe.getcDTO();
-		this.imagePathList = uoe.getImagePathList();
+//		this.imagePathList = uoe.getImagePathList();
 		
-	
+		//비어 있는 list를 주고 빈 이미지 나오는지테스트.
+		this.imagePathList = new ArrayList<String>();
+		
+		
+		//DB 데이터 테스트.
+		System.out.println(uDTO);
+		System.out.println(cDTO);
+		System.out.println(imagePathList);
+
 		// --- DB 조회 및 컴포넌트 초기화 ---
 
 		// --- Swing 컴포넌트 생성 및 설정 ---
@@ -91,9 +88,8 @@ public class UserOrderDesign extends JDialog {
 		jpCardImages = new JPanel(cardLayout);
 		jpCardImages.setPreferredSize(new Dimension(350, 250)); // 패널 크기 지정
 
-		//--- 이미지 삽입 ----
+		// --- 이미지 삽입 ----
 		buildCarImg(imagePathList);
-		
 
 		// --- 이미지 네비게이션 버튼 ---
 		jbtnPrev = new JButton("◀ 이전");
@@ -147,21 +143,21 @@ public class UserOrderDesign extends JDialog {
 
 		// --- 레이아웃 구성 ---
 		buildLayout(); // 레이아웃 구성 코드를 별도 메소드로 분리
-		
 
-
-		
 		// 버튼에 리스너 등록
 		getJbtnOrder().addActionListener(uoe);
 		// (참고: 이미지 넘김 버튼(jbtnPrev, jbtnNext) 이벤트는
 		// UserOrderDesign 생성자 내부에서 이미 자체적으로 처리되었습니다.)
 
 		// --- 다이얼로그 기본 설정 ---
-		setSize(1250, 700);
-		setResizable(false);
-		setLocationRelativeTo(owner);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		
+//		setSize(1250, 700);
+//		setLocationRelativeTo(owner);
+		setBounds(owner.getX() + 30, owner.getY() + 30, owner.getWidth() - 50, owner.getHeight() -50); // 부모좌표를 가져올 수 있음.		
+		setVisible(true);
+		setResizable(false);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
 	}// UserOrderDesign
 
 	/**
@@ -223,9 +219,6 @@ public class UserOrderDesign extends JDialog {
 		add(jpTop, BorderLayout.NORTH);
 		add(jpMain, BorderLayout.CENTER);
 	}// buildLayout
-	
-	
-
 
 	/**
 	 * DB에서 로딩한 이미지가 없을 때 불러낼 이미지.
@@ -268,23 +261,11 @@ public class UserOrderDesign extends JDialog {
 			} // end for
 		} // end else
 	}// buildCarImg
-	
 
 	// --- Evt 클래스용 Getter 메소드 ---
 	public JButton getJbtnOrder() {
 		return jbtnOrder;
 	}
 
-	public UserDTO getUserDTO() {
-		return uDTO;
-	}
-
-	public int getProductCode() {
-		return productCode;
-	}
-
-	public int getUser_code() {
-		return user_code;
-	}
 	// --- Getter 끝 ---
 }

@@ -46,12 +46,12 @@ public class UserOrderEvt implements ActionListener {
 	private UserService userService;
 
 
-	public UserOrderEvt(UserOrderDesign uod) {
+	public UserOrderEvt(UserOrderDesign uod, int user_code, int productCode) {
 		this.uod = uod;
-		this.user_code=uod.getUser_code();
-		this.productCode=uod.getProductCode();
+		this.user_code=user_code;
+		this.productCode=productCode;
 		this.userService = new UserService();
-		loadDatas();
+		loadDatas(); //DB 데이터 로드
 
 	}// UserOrderEvt
 
@@ -116,7 +116,6 @@ public class UserOrderEvt implements ActionListener {
 			return;
 		} // end catch
 
-//		return imagePathList;
 
 	}// dataLoad
 	/**
