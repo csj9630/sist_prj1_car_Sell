@@ -112,13 +112,13 @@ public class ImageDAO {
             // 스트림 닫기
             if (fis != null) fis.close();
             // DB 리소스 닫기
-            if (rsSeq != null) rsSeq.close();
-            if (pstmtSeq != null) pstmtSeq.close();
+//            if (rsSeq != null) rsSeq.close();
+//            if (pstmtSeq != null) pstmtSeq.close();
+            gc.dbClose(con, pstmtSeq, rsSeq); // Connection 닫기
             if (pstmtInsert != null) pstmtInsert.close();
-            gc.dbClose(con, null, null); // Connection 닫기
-        }
+        }//end finally
         return generatedImageCode; // 성공 시 생성된 image_code, 실패 시 0 반환
-    }
+    }//insertImageBlob
 
 
     /** [구매/상세용] 이미지 코드로 BLOB 데이터를 ImageIcon으로 반환 */
@@ -130,7 +130,7 @@ public class ImageDAO {
         ResultSet rs = null;
         GetConnection gc = GetConnection.getInstance();
         InputStream is = null;
-        ByteArrayOutputStream baos = null;
+        ByteArrayOutputStream baos = null; //출력 데이터를 메모리(RAM) 상의 바이트 배열에 저장
 
         String sql = "SELECT image_blob FROM IMAGE WHERE image_code = ?"; // BLOB 컬럼명 확인
 
@@ -162,7 +162,7 @@ public class ImageDAO {
             gc.dbClose(con, pstmt, rs);
         }
         return icon;
-    }
+    }//getImageIconFromBlob
 
     /** [구매/상세용] 차량 코드로 '이미지 정보(DTO)' 목록 조회 (BLOB 제외) */
     public List<ImageDTO> selectCarImages(int productCode) throws SQLException, IOException {
