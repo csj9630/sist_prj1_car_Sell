@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import kr.co.sist.car_sell.event.CarListEvt;
+import kr.co.sist.car_sell.service.CarListService;
 
 public class CarListDesign extends JFrame{
 	
@@ -11,31 +12,33 @@ public class CarListDesign extends JFrame{
 	private CarListLeftPanel cllp;
 	private CarListRightPanel clrp;
 	private CarListEvt cle;
-	private int user_code;
+	private CarListService cls;
+	private String userType;
+	private int userCode;
 	
-	public int getUser_code() {
-		return user_code;
-	}
-
-	public CarListDesign(int user_code) {
+	public CarListDesign(String userType, int userCode) {
 		super("쌍용중고차");
 		
-		clnp = new CarListNorthPanel(this);
+		this.userType = userType;
+		this.userCode = userCode;
+		
+		cls = new CarListService();
 		cllp = new CarListLeftPanel(this);
-		clrp = new CarListRightPanel(this);
-		this.user_code=user_code;
+		clnp = new CarListNorthPanel(this, userType);
+		clrp = new CarListRightPanel(this, userType, userCode);
 		
 		JPanel jpNorth = CarListNorthPanel.getJpNorth();
 		JPanel jpRight = CarListRightPanel.getJpRight();
 		JPanel jpLeft = CarListLeftPanel.getJpLeft();
 		
-		cle = new CarListEvt(this, user_code, clnp, cllp, clrp);
+		cle = new CarListEvt(this, userCode, clnp, cllp, clrp, cls);
 		
-		clnp.getJbtnMgrMenu().addActionListener(cle);
 		clnp.getJbtnUserMenu().addActionListener(cle);
 		clnp.getJbtnLogout().addActionListener(cle);
 		
-		clrp.getJbtnImage().addActionListener(cle);
+		if(userType.equals("a")) {
+			clnp.getJbtnMgrMenu().addActionListener(cle);
+		} // end if
 		
 		setLayout(null);
 		
@@ -67,4 +70,11 @@ public class CarListDesign extends JFrame{
 		return clrp;
 	}
 	
+	public CarListService getCls() {
+		return cls;
+	}
+	
+	public int getUserCode() {
+		return userCode;
+	}
 }
