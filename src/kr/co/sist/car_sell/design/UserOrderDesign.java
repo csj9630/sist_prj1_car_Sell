@@ -61,10 +61,10 @@ public class UserOrderDesign extends JDialog {
 		// 이벤트 클래스 생성 때 로딩한 정보를 가져오기.
 		this.uDTO = uoe.getuDTO();
 		this.cDTO = uoe.getcDTO();
-//		this.imagePathList = uoe.getImagePathList();
+		this.imagePathList = uoe.getImagePathList();
 		
 		//비어 있는 list를 주고 빈 이미지 나오는지테스트.
-		this.imagePathList = new ArrayList<String>();
+//		this.imagePathList = new ArrayList<String>();
 		
 		
 		//DB 데이터 테스트.
@@ -235,13 +235,15 @@ public class UserOrderDesign extends JDialog {
 	}// setBlankImg
 
 	private void buildCarImg(List<String> imagePathList) {
+		String localPath = "src/";
+		
 		if (imagePathList.isEmpty()) { // 이미지 없을 때
 			buildBlankImg();
 		} else { // 이미지 있을 때
 			int cardIndex = 1;
 			for (String imagePath : imagePathList) {
 				// ★ 경로로 ImageIcon 생성 (파일 존재 및 경로 확인 필수!) ★
-				ImageIcon icon = new ImageIcon(imagePath);
+				ImageIcon icon = new ImageIcon(localPath+imagePath);
 				JLabel lblImg;
 
 				// 이미지 로딩 상태 확인 (선택 사항)
