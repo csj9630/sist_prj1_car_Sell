@@ -256,6 +256,7 @@ public class SettlementDesign extends JDialog {
 		addWindowListener(sme);
 		setFont();
 		setBounds(100, 100, 800, 800);
+		setLocationRelativeTo(null);
 		setModal(true);
 		setVisible(true);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
