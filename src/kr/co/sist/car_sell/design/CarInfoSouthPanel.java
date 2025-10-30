@@ -73,16 +73,16 @@ public class CarInfoSouthPanel extends JDialog{
 		
 	}
 	
+	public JPanel getJpSouth() {
+		return jpSouth;
+	}
+	
 	public JButton getJbtnModify() {
 		return jbtnModify;
 	}
 	
 	public JButton getJbtnDelete() {
 		return jbtnDelete;
-	}
-	
-	public JPanel getJpSouth() {
-		return jpSouth;
 	}
 	
 }

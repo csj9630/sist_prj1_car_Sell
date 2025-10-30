@@ -367,17 +367,17 @@ public class CarDAO {
 
             if(rs.next()) {
                 car = new CarDTO();
-                car.setProduct_code(rs.getInt("PRODUCT_CODE"));
-                car.setProduct_name(rs.getString("PRODUCT_NAME"));
+                car.setProdCode(rs.getInt("PRODUCT_CODE"));
+                car.setProdName(rs.getString("PRODUCT_NAME"));
                 car.setPrice(rs.getInt("PRICE"));
-                car.setCar_year(rs.getDate("CAR_YEAR"));
+                car.setCarYear(rs.getDate("CAR_YEAR"));
                 car.setCc(rs.getInt("CC"));
                 car.setDistance(rs.getInt("DISTANCE"));
-                car.setRegistration_number(rs.getString("REGISTRATION_NUMBER"));
-                car.setStatus_sold(rs.getString("STATUS_SOLD"));
-                car.setCar_name(rs.getString("CAR_NAME"));
+                car.setRegNum(rs.getString("REGISTRATION_NUMBER"));
+                car.setSoldStat(rs.getString("STATUS_SOLD"));
+                car.setCarName(rs.getString("CAR_NAME"));
                 car.setOil(rs.getString("OIL"));
-                car.setBrand_name(rs.getString("BRAND_NAME"));
+                car.setBrandName(rs.getString("BRAND_NAME"));
             } // end if
         } finally {
             gc.dbClose(con, pstmt, rs);
@@ -408,14 +408,14 @@ public class CarDAO {
 			
 			try {
 	            pstmtBrand = con.prepareStatement(insertBrand);
-	            pstmtBrand.setString(1, cDTO.getBrand_name()); // "쉐보레"
+	            pstmtBrand.setString(1, cDTO.getBrandName()); // "쉐보레"
 	            pstmtBrand.executeUpdate();
 	            
-	            System.out.println("신규 브랜드 '" + cDTO.getBrand_name() + "' 등록 성공");
+	            System.out.println("신규 브랜드 '" + cDTO.getBrandName() + "' 등록 성공");
 
 	        } catch (SQLException e) {
 	            if (e.getErrorCode() == 1) {
-	                System.out.println("'" + cDTO.getBrand_name() + "'는 이미 존재하는 브랜드입니다.");
+	                System.out.println("'" + cDTO.getBrandName() + "'는 이미 존재하는 브랜드입니다.");
 	            } else {
 	                throw e; 
 	            }
@@ -425,16 +425,16 @@ public class CarDAO {
 			
 			pstmtCar = con.prepareStatement(insertCar);
 			
-			pstmtCar.setString(1, cDTO.getProduct_name());
+			pstmtCar.setString(1, cDTO.getProdName());
 			pstmtCar.setInt(2, cDTO.getPrice());
-			pstmtCar.setDate(3, cDTO.getCar_year());
+			pstmtCar.setDate(3, cDTO.getCarYear());
 			pstmtCar.setInt(4, cDTO.getCc());
 			pstmtCar.setInt(5, cDTO.getDistance());
-			pstmtCar.setString(6, cDTO.getRegistration_number());
-			pstmtCar.setString(7, cDTO.getStatus_sold());
-			pstmtCar.setString(8, cDTO.getCar_name());
+			pstmtCar.setString(6, cDTO.getRegNum());
+			pstmtCar.setString(7, cDTO.getSoldStat());
+			pstmtCar.setString(8, cDTO.getCarName());
 			pstmtCar.setString(9, cDTO.getOil());
-			pstmtCar.setString(10, cDTO.getBrand_name());
+			pstmtCar.setString(10, cDTO.getBrandName());
 			
 			pstmtCar.executeUpdate();
 			
@@ -463,16 +463,16 @@ public class CarDAO {
 			
 			pstmtCar = con.prepareStatement(updateCar);
 			
-			pstmtCar.setString(1, cDTO.getProduct_name());
-			pstmtCar.setInt(2, cDTO.getPrice());
-			pstmtCar.setDate(3, cDTO.getCar_year());
+			pstmtCar.setString(1, cDTO.getProdName());
+			pstmtCar.setInt(2, cDTO.getPrice ());
+			pstmtCar.setDate(3, cDTO.getCarYear());
 			pstmtCar.setInt(4, cDTO.getCc());
 			pstmtCar.setInt(5, cDTO.getDistance());
-			pstmtCar.setString(6, cDTO.getRegistration_number());
-			pstmtCar.setString(7, cDTO.getStatus_sold());
-			pstmtCar.setString(8, cDTO.getCar_name());
+			pstmtCar.setString(6, cDTO.getRegNum());
+			pstmtCar.setString(7, cDTO.getSoldStat());
+			pstmtCar.setString(8, cDTO.getCarName());
 			pstmtCar.setString(9, cDTO.getOil());
-			pstmtCar.setString(10, cDTO.getBrand_name());
+			pstmtCar.setString(10, cDTO.getBrandName());
 			
 			pstmtCar.executeUpdate();
 			
@@ -480,6 +480,28 @@ public class CarDAO {
 			gc.dbClose(con, pstmtCar, null);	// 연결을 끊을 때는 commit을 수행하고 끊는다.
 		} // end try ~ finally
 	} // updateCarsMgr
+	
+	// 차량 정보 삭제(숨기기)
+	public void deleteCarsMgr(int prodCode) throws SQLException, IOException {
+		
+		Connection con = null;
+		PreparedStatement pstmtCar = null;
+		
+		GetConnection gc = GetConnection.getInstance();
+		
+		String deleteCar
+		= "UPDATE car_info "
+				+ "SET status_sold = '판매완료'"
+				+ "WHERE product_code = " + String.valueOf(prodCode);
+		
+		try {
+			con = gc.getConn();
+			pstmtCar = con.prepareStatement(deleteCar);
+			pstmtCar.executeUpdate();
+		} finally {
+			gc.dbClose(con, pstmtCar, null);	// 연결을 끊을 때는 commit을 수행하고 끊는다.
+		} // end try ~ finally
+	} // deleteCarsMgr
 	
 	public CarDTO selectCar(int prodCode) throws SQLException, IOException {
 		CarDTO cDTO = null;
@@ -508,17 +530,17 @@ public class CarDAO {
 			
 			if(rs.next()) {
 				cDTO = new CarDTO();
-				cDTO.setProduct_code(prodCode);
+				cDTO.setProdCode(prodCode);
 				// 입력된 번호 할당
 				// DBMS table에서 조회된 결과를 설정
-				cDTO.setProduct_name(rs.getString("product_name"));
+				cDTO.setProdName(rs.getString("product_name"));
 				cDTO.setPrice(rs.getInt("price"));
-				cDTO.setCar_year(rs.getDate("car_year"));
+				cDTO.setCarYear(rs.getDate("car_year"));
 				cDTO.setCc(rs.getInt("cc"));
 				cDTO.setDistance(rs.getInt("distance"));
-				cDTO.setRegistration_number(rs.getString("registration_number"));
-				cDTO.setStatus_sold(rs.getString("status_sold"));
-				cDTO.setBrand_name(rs.getString("brand_name"));
+				cDTO.setRegNum(rs.getString("registration_number"));
+				cDTO.setSoldStat(rs.getString("status_sold"));
+				cDTO.setBrandName(rs.getString("brand_name"));
 				cDTO.setOil(rs.getString("oil"));
 			} // end if
 		} finally {

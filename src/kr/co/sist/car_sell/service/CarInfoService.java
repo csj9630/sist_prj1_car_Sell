@@ -40,8 +40,9 @@ public class CarInfoService {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
+		
 		return flag;
-	} // addCar
+	} // addFriends
 	
 	public boolean updateCar(int prodCode, CarDTO cDTO) {
 		boolean flag = false;
@@ -58,6 +59,22 @@ public class CarInfoService {
 		}
 		return flag;
 	} // updateCar
+	
+	public boolean deleteCar(int prodCode) {
+		boolean flag = false;
+		
+		CarDAO cDAO = CarDAO.getInstance();
+		
+		try {
+			cDAO.deleteCarsMgr(prodCode);
+			flag = true;
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		return flag;
+	} // deleteCar
 	
 	public String[] getAvailableOils() throws SQLException, IOException {
 		

@@ -104,7 +104,7 @@ public class UserOrderDesign extends JDialog {
 		jbtnNext.addActionListener(cardNavListener);
 
 		// --- 차량명 (DB 데이터 적용) ---
-		jtfCarName = new JTextField(cDTO.getProduct_name()); // getProduct_name() 사용
+		jtfCarName = new JTextField(cDTO.getProdName()); // getProduct_name() 사용
 		jtfCarName.setEditable(false);
 		jtfCarName.setHorizontalAlignment(JTextField.CENTER);
 		jtfCarName.setFont(new Font("맑은 고딕", Font.PLAIN, 14));

@@ -9,6 +9,7 @@ import kr.co.sist.car_sell.service.CarInfoService;
 
 public class CarInfoDesign extends JDialog {
 	
+	private CarListDesign cld;
 	private CarInfoNorthPanel cinp;
 	private CarInfoCenterPanel cicp;
 	private CarInfoSouthPanel cisp;
@@ -20,8 +21,9 @@ public class CarInfoDesign extends JDialog {
 	
 	private static JPanel jpNorth, jpCenter, jpSouth; 
 	
-	public CarInfoDesign(int prodCode, String userType, int userCode) {
+	public CarInfoDesign(CarListDesign cld, int prodCode, String userType, int userCode) {
 		
+		this.cld = cld;
 		this.prodCode = prodCode;
 		this.userType = userType;
 		this.userCode = userCode;
@@ -31,7 +33,7 @@ public class CarInfoDesign extends JDialog {
 		cicp = new CarInfoCenterPanel(this, prodCode, userType, userCode);
 		cisp = new CarInfoSouthPanel(this, prodCode, userType, userCode);
 		
-		cie = new CarInfoEvt(this, prodCode, userCode, cinp, cicp, cisp);
+		cie = new CarInfoEvt(this, cld, prodCode, userCode, cinp, cicp, cisp);
 		
 		cicp.getJbtnImage1().addActionListener(cie);
 		cicp.getJbtnImage2().addActionListener(cie);

@@ -7,7 +7,7 @@ import kr.co.sist.car_sell.event.CarListEvt;
 import kr.co.sist.car_sell.service.CarListService;
 
 public class CarListDesign extends JFrame{
-
+	
 	private CarListNorthPanel clnp;
 	private CarListLeftPanel cllp;
 	private CarListRightPanel clrp;
@@ -77,5 +77,4 @@ public class CarListDesign extends JFrame{
 	public int getUserCode() {
 		return userCode;
 	}
-	
 }

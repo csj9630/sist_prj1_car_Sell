@@ -73,8 +73,8 @@ public class CarListRightPanel extends JFrame {
             jbtnImage = new JButton(ii);
             
             jlblList = new JLabel("라벨");
-            jtfBrand = new JTextField(" " + cDTO.getBrand_name());
-            jtfCarName = new JTextField(" " + cDTO.getCar_name());
+            jtfBrand = new JTextField(" " + cDTO.getBrandName());
+            jtfCarName = new JTextField(" " + cDTO.getCarName());
             jtfOilType = new JTextField(" " + cDTO.getOil());
             jtfPrice = new JTextField(cDTO.getPrice() + "만원 ");
 			
@@ -90,7 +90,7 @@ public class CarListRightPanel extends JFrame {
 			jbtnImage.setBounds(0, 3, 284, 160);
 			jbtnImage.setBackground(new Color(0x808080));
 			jbtnImage.addActionListener(ae -> {
-				new CarInfoDesign(productCode, userType, userCode);
+				new CarInfoDesign(cld, productCode, userType, userCode).setVisible(true);
 			});
 			
 			jlblList.add(jbtnImage);

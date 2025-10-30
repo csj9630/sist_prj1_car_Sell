@@ -62,7 +62,7 @@ public class CarInfoCenterPanel extends JDialog {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		
 		// 차량 정보 구역
 		jpCenter = new JPanel(null);
 		
@@ -155,7 +155,7 @@ public class CarInfoCenterPanel extends JDialog {
 		jlblCenterScroll.add(jlblProductName);
 		
 		// 차량명 - 브랜드 수정
-		carBrand = cDTO.getBrand_name();
+		carBrand = cDTO.getBrandName();
 		jtfBrand = new JTextField(carBrand);
 		jtfBrand.setFont(new Font("맑은 고딕", Font.BOLD, 40));
 		jtfBrand.setForeground(new Color(0x000000));
@@ -164,7 +164,7 @@ public class CarInfoCenterPanel extends JDialog {
 		jtfBrand.setBounds(15, 8, 620, 62);
 		
 		// 차량명 - 차종 수정
-		carName = cDTO.getProduct_name();
+		carName = cDTO.getProdName();
 		jtfCarName = new JTextField(carName);
 		jtfCarName.setFont(new Font("맑은 고딕", Font.BOLD, 25));
 		jtfCarName.setForeground(new Color(0x000000));
@@ -226,7 +226,7 @@ public class CarInfoCenterPanel extends JDialog {
 		jcbStatSold.setForeground(new Color(0x000000));
 		jcbStatSold.setBackground(new Color(0xFFFFFF));
 		jcbStatSold.setBorder(null);
-		jcbStatSold.setSelectedItem(cDTO.getStatus_sold());
+		jcbStatSold.setSelectedItem(cDTO.getSoldStat());
 		jcbStatSold.setBounds(670, 555, 488, 60);
 		
 		if(userType.equals("a")) {
@@ -250,10 +250,9 @@ public class CarInfoCenterPanel extends JDialog {
 		jlblCenterScroll.add(jpDetail);
 		
 		// 차량 세부 정보 - 연식
-		String carYearInfo = cDTO.getCar_year().toString();
+		String carYearInfo = cDTO.getCarYear().toString();
 		String carYearInfoYear = carYearInfo.substring(0, carYearInfo.indexOf("-"));
-		String carYearInfoMonth = carYearInfo.substring(carYearInfo.indexOf("-") + 1, carYearInfo.lastIndexOf("-"));
-		jlblYear = new JLabel(" 연식: " + carYearInfoYear + "년 " + carYearInfoMonth + "월");
+		jlblYear = new JLabel(" 연식: " + carYearInfoYear + "년 ");
 		jlblYear.setFont(new Font("맑은 고딕", Font.BOLD, 25));
 		jlblYear.setOpaque(true);
 		jlblYear.setForeground(new Color(0x000000));
@@ -262,22 +261,13 @@ public class CarInfoCenterPanel extends JDialog {
 		jlblYear.setBounds(5, 5, 478, 42);
 		
 		// 차량 세부 정보 - 연식 연도
-		jtfYear1 = new JTextField("2023");
+		jtfYear1 = new JTextField(carYearInfoYear);
 		jtfYear1.setFont(new Font("맑은 고딕", Font.BOLD, 25));
 		jtfYear1.setForeground(new Color(0x000000));
 		jtfYear1.setBackground(new Color(0xFFFFFF));
 		jtfYear1.setHorizontalAlignment(4);
 		jtfYear1.setBorder(BorderFactory.createLineBorder(new Color(0x000000), 1));
 		jtfYear1.setBounds(73, 0, 60, 42);
-		
-		// 차량 세부 정보 - 연식 월
-		jtfYear2 = new JTextField("06");
-		jtfYear2.setFont(new Font("맑은 고딕", Font.BOLD, 25));
-		jtfYear2.setForeground(new Color(0x000000));
-		jtfYear2.setBackground(new Color(0xFFFFFF));
-		jtfYear2.setHorizontalAlignment(4);
-		jtfYear2.setBorder(BorderFactory.createLineBorder(new Color(0x000000), 1));
-		jtfYear2.setBounds(162, 0, 32, 42);
 		
 		// 차량 세부 정보 - 누적 주행거리 수정
 		jtfDistance = new JTextField(String.valueOf(cDTO.getDistance()));
@@ -304,7 +294,6 @@ public class CarInfoCenterPanel extends JDialog {
 		jtfCc.setBackground(new Color(0xFFFFFF));
 		jtfCc.setBorder(BorderFactory.createLineBorder(new Color(0x000000), 1));
 		jtfCc.setBounds(101, 89, 61, 42);
-
 		
 		// 차량 세부 정보 - 배기량 표시
 		jlblCc = new JLabel(" 배기량: " + cDTO.getCc() + "cc");
@@ -332,7 +321,6 @@ public class CarInfoCenterPanel extends JDialog {
 			dcbmOil.addElement(oilType);
 			jcbOil.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
 			jcbOil.setForeground(new Color(0x000000));
-			
 		} // end for
 		
 		jcbOil.setFont(new Font("맑은 고딕", Font.BOLD, 25));
@@ -351,7 +339,7 @@ public class CarInfoCenterPanel extends JDialog {
 		jlblOil.setBounds(5, 131, 478, 42);
 		
 		// 차량 세부 정보 - 번호판 수정
-		jtfNumberPlate = new JTextField(cDTO.getRegistration_number());
+		jtfNumberPlate = new JTextField(cDTO.getRegNum());
 		jtfNumberPlate.setFont(new Font("맑은 고딕", Font.BOLD, 25));
 		jtfNumberPlate.setForeground(new Color(0x000000));
 		jtfNumberPlate.setBackground(new Color(0xFFFFFF));
@@ -359,7 +347,7 @@ public class CarInfoCenterPanel extends JDialog {
 		jtfNumberPlate.setBounds(104, 173, 136, 42);
 		
 		// 차량 세부 정보 - 번호판 표시
-		jlblNumberPlate = new JLabel(" 번호판: " + cDTO.getRegistration_number());
+		jlblNumberPlate = new JLabel(" 번호판: " + cDTO.getRegNum());
 		jlblNumberPlate.setOpaque(true);
 		jlblNumberPlate.setFont(new Font("맑은 고딕", Font.BOLD, 25));
 		jlblNumberPlate.setForeground(new Color(0x000000));
@@ -369,7 +357,6 @@ public class CarInfoCenterPanel extends JDialog {
 		
 		if(userType.equals("a")) {
 			jlblYear.add(jtfYear1);
-			jlblYear.add(jtfYear2);
 			jpDetail.add(jtfDistance);
 			jpDetail.add(jtfCc);
 			jpDetail.add(jcbOil);
@@ -422,11 +409,8 @@ public class CarInfoCenterPanel extends JDialog {
 				if(carOptionName.equals(optionName)) {
 					jcbOption.setSelected(true);
 				} // end if
-				
 			} // end for
-			
 			jpOption.add(jcbOption);
-			
 		} // end for
 		
 		
@@ -496,11 +480,8 @@ public class CarInfoCenterPanel extends JDialog {
 				if(carDefectName.equals(defectName)) {
 					jcbDefect.setSelected(true);
 				} // end if
-				
 			} // end for
-			
 			jpDefect.add(jcbDefect);
-			
 		} // end for
 		
 		// 하자내역 - 하자제목
@@ -568,11 +549,8 @@ public class CarInfoCenterPanel extends JDialog {
 				if(carAccidentName.equals(accidentName)) {
 					jcbAccident.setSelected(true);
 				} // end if
-				
 			} // end for
-			
 			jpAccident.add(jcbAccident);
-			
 		} // end for
 		
 		// 사고내역 - 사고제목
@@ -639,15 +617,9 @@ public class CarInfoCenterPanel extends JDialog {
 				
 				if(carRepairName.equals(repairName)) {
 					jcbRepair.setSelected(true);
-					
 				} // end if
-				
 			} // end for
-			
-			
-			
 			jpRepair.add(jcbRepair);
-			
 		} // end for
 		
 		// 수리내역 - 수리제목
