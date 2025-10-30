@@ -60,7 +60,7 @@ public class ImageDAO {
 
     /** [관리자/데이터입력용] 이미지 파일을 DB BLOB 컬럼에 저장 */
     public int insertImageBlob(File imageFile) throws SQLException, IOException {
-        int generatedImageCode = 0; // 새로 생성된 image_code 반환용
+        int generatedImageCode = 0; // 새로 생성된 image_code 반환용, DB에서 받아온 시퀀스로 된 image_code를 저장.
         Connection con = null;
         PreparedStatement pstmtInsert = null;
         PreparedStatement pstmtSeq = null; // 시퀀스 조회용
@@ -79,9 +79,9 @@ public class ImageDAO {
 
             // 1-1. 시퀀스 실행
             pstmtSeq = con.prepareStatement(seqSql);
-            rsSeq = pstmtSeq.executeQuery();
+            rsSeq = pstmtSeq.executeQuery(); 
             if (rsSeq.next()) {
-                generatedImageCode = rsSeq.getInt(1);
+                generatedImageCode = rsSeq.getInt(1); // 시퀀스 넘버를 받음.
             } else {
                 throw new SQLException("SEQ_IMAGE 시퀀스 값을 가져오지 못했습니다.");
             }
