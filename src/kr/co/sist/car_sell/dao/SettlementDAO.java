@@ -49,7 +49,6 @@ public class SettlementDAO {
 				while (rs.next()) {
 					carNameOption = rs.getString("car_name");
 					smDTO = new SettlementDTO(carNameOption);
-					System.out.println("자동차 이름 : " + carNameOption);
 					smDTOList.add(smDTO);
 				} // end while
 			} catch (SQLException e) {
