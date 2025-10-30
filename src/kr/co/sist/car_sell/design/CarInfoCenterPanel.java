@@ -4,10 +4,15 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,28 +20,48 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import kr.co.sist.car_sell.event.CarInfoEvt;
+import kr.co.sist.car_sell.dto.CarDTO;
+import kr.co.sist.car_sell.service.CarInfoService;
 
 public class CarInfoCenterPanel extends JDialog {
 	
 	private JButton jbtnImage1, jbtnImage2, jbtnImage3, jbtnImage4, jbtnPurchase;
 	private JLabel	jlblCenterScroll, jlblImageBackground, jlblImage1, jlblImage2, jlblImage3, jlblImage4,
-					jlblProductName, jlblPrice, jlblYear, jlblDistance, jlblCC, jlblFuelType, jlblNumberPlate,
+					jlblProductName, jlblBrand, jlblCarName, jlblPrice, jlblYear, jlblDistance, jlblCc, jlblOil, jlblNumberPlate,
 					jlblOption, jlblDefect, jlblAccident, jlblRepair;
-	private JTextField jtfBrand, jtfCarName, jtfPrice, jtfYear1, jtfYear2, jtfDistance, jtfCC, jtfFuelType, jtfNumberPlate;
+	private JTextField jtfBrand, jtfCarName, jtfPrice, jtfYear1, jtfYear2, jtfDistance, jtfCc, jtfNumberPlate;
 	private JTextArea jtaOption, jtaDefect, jtaAccident, jtaRepair;
 	private JScrollPane jspCenter, jspOption, jspDefect, jspAccident, jspRepair;
-	private JPanel jpCenterScrollCover, jpImage, jpDetail;
+	private JPanel jpCenterScrollCover, jpImage, jpDetail, jpOption, jpDefect, jpAccident, jpRepair;
+	private JCheckBox jcbOption, jcbDefect, jcbAccident, jcbRepair;
+	private DefaultComboBoxModel<String> dcbmStatSold, dcbmOil;
+	private JComboBox<String> jcbStatSold, jcbOil;
+	private String carBrand, carName;
+	private String[] oilArr, optionNameArr, carOptionNameArr, defectNameArr, carDefectNameArr, accidentNameArr, carAccidentNameArr, repairNameArr, carRepairNameArr;
 	private CardLayout cl;
-
+	
 	private CarInfoDesign cid;
-	private CarInfoEvt cie;
+	private CarInfoService cis;
+	private CarDTO cDTO;
+	private int prodCode;
+	private String userType;
+	private int userCode;
 	
 	private static JPanel jpCenter;
 	
-	public CarInfoCenterPanel(CarInfoDesign cid) {
+	public CarInfoCenterPanel(CarInfoDesign cid, int prodCode, String userType, int userCode) {
 		
 		this.cid = cid;
+		this.prodCode = prodCode;
+		this.userType = userType;
+		this.userCode = userCode;
+		cis = cid.getCis();
+		
+		try {
+			cDTO = cis.getProductDetails(prodCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		// 차량 정보 구역
 		jpCenter = new JPanel(null);
@@ -47,11 +72,12 @@ public class CarInfoCenterPanel extends JDialog {
 		jspCenter.setBorder(null);
 		jspCenter.setBackground(new Color(0xFFFFFF));
 		jspCenter.setBounds(0, 0, 1185, 666);
+		jspCenter.getVerticalScrollBar().setUnitIncrement(15);
 		jpCenter.add(jspCenter);
 		
 		// 차량 정보 구역 - 크기 설정
 		jlblCenterScroll = new JLabel("I");
-		jlblCenterScroll.setFont(new Font("맑은 고딕", Font.BOLD, 1034));
+		jlblCenterScroll.setFont(new Font("맑은 고딕", Font.BOLD, 1143));
 		jlblCenterScroll.setOpaque(true);
 		jlblCenterScroll.setBackground(new Color(0xFFFFFF));
 		jlblCenterScroll.setForeground(new Color(0xFFFFFF));
@@ -75,10 +101,10 @@ public class CarInfoCenterPanel extends JDialog {
 		jlblImageBackground.add(jpImage);
 		
 		// 차량 이미지 - 출력 이미지
-		ImageIcon ii1 = new ImageIcon("C:/dev/car_img/genesis/g80/g80_1.png");
-		ImageIcon ii2 = new ImageIcon("C:/dev/car_img/genesis/g80/g80_2.png");
-		ImageIcon ii3 = new ImageIcon("C:/dev/car_img/genesis/g80/g80_3.png");
-		ImageIcon ii4 = new ImageIcon("C:/dev/car_img/genesis/g80/g80_4.png");
+		ImageIcon ii1 = new ImageIcon(getClass().getResource("/images/img_" + 1 + "_1.png"));
+		ImageIcon ii2 = new ImageIcon(getClass().getResource("/images/img_" + 1 + "_2.png"));
+		ImageIcon ii3 = new ImageIcon(getClass().getResource("/images/img_" + 1 + "_3.png"));
+		ImageIcon ii4 = new ImageIcon(getClass().getResource("/images/img_" + 1 + "_4.png"));
 		
 		jlblImage1 = new JLabel(ii1);
 		jlblImage2 = new JLabel(ii2);
@@ -93,10 +119,10 @@ public class CarInfoCenterPanel extends JDialog {
 		cl.show(jpImage, "inputA");
 		
 		// 차량 이미지 - 이미지 선택
-		ImageIcon ii1Small = new ImageIcon("C:/dev/car_img/genesis/g80/g80_1_small.png");
-		ImageIcon ii2Small = new ImageIcon("C:/dev/car_img/genesis/g80/g80_2_small.png");
-		ImageIcon ii3Small = new ImageIcon("C:/dev/car_img/genesis/g80/g80_3_small.png");
-		ImageIcon ii4Small = new ImageIcon("C:/dev/car_img/genesis/g80/g80_4_small.png");
+		ImageIcon ii1Small = new ImageIcon(getClass().getResource("/images_icon/img_" + 1 + "_1_icon.png"));
+		ImageIcon ii2Small = new ImageIcon(getClass().getResource("/images_icon/img_" + 1 + "_2_icon.png"));
+		ImageIcon ii3Small = new ImageIcon(getClass().getResource("/images_icon/img_" + 1 + "_3_icon.png"));
+		ImageIcon ii4Small = new ImageIcon(getClass().getResource("/images_icon/img_" + 1 + "_4_icon.png"));
 		
 		jbtnImage1 = new JButton(ii1Small);
 		jbtnImage2 = new JButton(ii2Small);
@@ -128,26 +154,51 @@ public class CarInfoCenterPanel extends JDialog {
 		jlblProductName.setBounds(10, 485, 650, 130);
 		jlblCenterScroll.add(jlblProductName);
 		
-		// 차량명 - 브랜드
-		jtfBrand = new JTextField("Genesis");
+		// 차량명 - 브랜드 수정
+		carBrand = cDTO.getBrandName();
+		jtfBrand = new JTextField(carBrand);
 		jtfBrand.setFont(new Font("맑은 고딕", Font.BOLD, 40));
 		jtfBrand.setForeground(new Color(0x000000));
 		jtfBrand.setBackground(new Color(0xFFFFFF));
-		jtfBrand.setBorder(null);
-		jtfBrand.setBounds(15, 5, 630, 70);
-		jlblProductName.add(jtfBrand);
+		jtfBrand.setBorder(BorderFactory.createLineBorder(new Color(0x000000), 1));
+		jtfBrand.setBounds(15, 8, 620, 62);
 		
-		// 차량명 - 차종
-		jtfCarName = new JTextField("G80 2.5T AWD");
+		// 차량명 - 차종 수정
+		carName = cDTO.getProdName();
+		jtfCarName = new JTextField(carName);
 		jtfCarName.setFont(new Font("맑은 고딕", Font.BOLD, 25));
 		jtfCarName.setForeground(new Color(0x000000));
 		jtfCarName.setBackground(new Color(0xFFFFFF));
-		jtfCarName.setBorder(null);
-		jtfCarName.setBounds(15, 65, 630, 50);
-		jlblProductName.add(jtfCarName);
+		jtfCarName.setBorder(BorderFactory.createLineBorder(new Color(0x000000), 1));
+		jtfCarName.setBounds(15, 70, 620, 52);
 		
-		// 차량 가격 - 단위
-		jlblPrice = new JLabel("만원 ");
+		// 차량명 - 브랜드 표시
+		jlblBrand = new JLabel(carBrand);
+		jlblBrand.setFont(new Font("맑은 고딕", Font.BOLD, 40));
+		jlblBrand.setForeground(new Color(0x000000));
+		jlblBrand.setBackground(new Color(0xFFFFFF));
+		jlblBrand.setBorder(null);
+		jlblBrand.setBounds(15, 8, 620, 62);
+		
+		// 차량명 - 차종 표시
+		jlblCarName = new JLabel(carName);
+		jlblCarName.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+		jlblCarName.setForeground(new Color(0x000000));
+		jlblCarName.setBackground(new Color(0xFFFFFF));
+		jlblCarName.setBorder(null);
+		jlblCarName.setBounds(15, 70, 620, 52);
+		
+		// 차량 가격 - 금액 수정
+		jtfPrice = new JTextField(String.valueOf(cDTO.getPrice()));
+		jtfPrice.setFont(new Font("맑은 고딕", Font.BOLD, 35));
+		jtfPrice.setForeground(new Color(0x000000));
+		jtfPrice.setBackground(new Color(0xFFFFFF));
+		jtfPrice.setHorizontalAlignment(JTextField.RIGHT);
+		jtfPrice.setBorder(BorderFactory.createLineBorder(new Color(0x000000), 1));
+		jtfPrice.setBounds(675, 490, 399, 50);
+		
+		// 차량 가격 - 금액 표시
+		jlblPrice = new JLabel(cDTO.getPrice() + "만원 ");
 		jlblPrice.setFont(new Font("맑은 고딕", Font.BOLD, 35));
 		jlblPrice.setOpaque(true);
 		jlblPrice.setForeground(new Color(0x000000));
@@ -155,17 +206,6 @@ public class CarInfoCenterPanel extends JDialog {
 		jlblPrice.setHorizontalAlignment(4);
 		jlblPrice.setBorder(BorderFactory.createLineBorder(new Color(0x808080), 5));
 		jlblPrice.setBounds(670, 485, 488, 60);
-		jlblCenterScroll.add(jlblPrice);
-		
-		// 차량 가격 - 금액
-		jtfPrice = new JTextField("4,390");
-		jtfPrice.setFont(new Font("맑은 고딕", Font.BOLD, 35));
-		jtfPrice.setForeground(new Color(0x000000));
-		jtfPrice.setBackground(new Color(0xFFFFFF));
-		jtfPrice.setHorizontalAlignment(4);
-		jtfPrice.setBorder(BorderFactory.createLineBorder(new Color(0x000000), 2));
-		jtfPrice.setBounds(5, 5, 396, 50);
-		jlblPrice.add(jtfPrice);
 		
 		// 차량 구매
 		jbtnPurchase = new JButton("구매하기");
@@ -176,7 +216,31 @@ public class CarInfoCenterPanel extends JDialog {
 		jbtnPurchase.setVerticalAlignment(0);
 		jbtnPurchase.setBorder(BorderFactory.createLineBorder(new Color(0x808080), 5));
 		jbtnPurchase.setBounds(670, 555, 488, 60);
-		jlblCenterScroll.add(jbtnPurchase);
+		
+		// 차량 세부 정보 - 판매여부 수정
+		dcbmStatSold = new DefaultComboBoxModel<String>();
+		jcbStatSold = new JComboBox<String>(dcbmStatSold);
+		dcbmStatSold.addElement("판매중");
+		dcbmStatSold.addElement("판매완료");
+		jcbStatSold.setFont(new Font("맑은 고딕", Font.BOLD, 35));
+		jcbStatSold.setForeground(new Color(0x000000));
+		jcbStatSold.setBackground(new Color(0xFFFFFF));
+		jcbStatSold.setBorder(null);
+		jcbStatSold.setSelectedItem(cDTO.getSoldStat());
+		jcbStatSold.setBounds(670, 555, 488, 60);
+		
+		if(userType.equals("a")) {
+			jlblProductName.add(jtfBrand);
+			jlblProductName.add(jtfCarName);
+			jlblCenterScroll.add(jtfPrice);
+			jlblCenterScroll.add(jcbStatSold);
+		} else if(userType.equals("u")) {
+			jlblCenterScroll.add(jbtnPurchase);
+		} // end if ~ else if
+		
+		jlblProductName.add(jlblBrand);
+		jlblProductName.add(jlblCarName);
+		jlblCenterScroll.add(jlblPrice);
 		
 		// 차량 세부 정보
 		jpDetail = new JPanel(null);
@@ -186,74 +250,124 @@ public class CarInfoCenterPanel extends JDialog {
 		jlblCenterScroll.add(jpDetail);
 		
 		// 차량 세부 정보 - 연식
-		jlblYear = new JLabel(" 연식: 0000년 00월");
+		String carYearInfo = cDTO.getCarYear().toString();
+		String carYearInfoYear = carYearInfo.substring(0, carYearInfo.indexOf("-"));
+		jlblYear = new JLabel(" 연식: " + carYearInfoYear + "년 ");
 		jlblYear.setFont(new Font("맑은 고딕", Font.BOLD, 25));
 		jlblYear.setOpaque(true);
 		jlblYear.setForeground(new Color(0x000000));
 		jlblYear.setBackground(new Color(0xFFFFFF));
 		jlblYear.setBorder(null);
 		jlblYear.setBounds(5, 5, 478, 42);
-		jpDetail.add(jlblYear);
 		
 		// 차량 세부 정보 - 연식 연도
-		jtfYear1 = new JTextField("2023");
+		jtfYear1 = new JTextField(carYearInfoYear);
 		jtfYear1.setFont(new Font("맑은 고딕", Font.BOLD, 25));
 		jtfYear1.setForeground(new Color(0x000000));
 		jtfYear1.setBackground(new Color(0xFFFFFF));
 		jtfYear1.setHorizontalAlignment(4);
-		jtfYear1.setBorder(null);
-		jtfYear1.setBounds(75, 0, 58, 42);
-		jlblYear.add(jtfYear1);
+		jtfYear1.setBorder(BorderFactory.createLineBorder(new Color(0x000000), 1));
+		jtfYear1.setBounds(73, 0, 60, 42);
 		
-		// 차량 세부 정보 - 연식 월
-		jtfYear2 = new JTextField("06");
-		jtfYear2.setFont(new Font("맑은 고딕", Font.BOLD, 25));
-		jtfYear2.setForeground(new Color(0x000000));
-		jtfYear2.setBackground(new Color(0xFFFFFF));
-		jtfYear2.setHorizontalAlignment(4);
-		jtfYear2.setBorder(null);
-		jtfYear2.setBounds(164, 0, 30, 42);
-		jlblYear.add(jtfYear2);
-		
-		// 차량 세부 정보 - 누적 주행거리
-		jlblDistance = new JLabel(" 주행거리: 67,000km");
-		jtfDistance = new JTextField("67,000");
+		// 차량 세부 정보 - 누적 주행거리 수정
+		jtfDistance = new JTextField(String.valueOf(cDTO.getDistance()));
 		jtfDistance.setFont(new Font("맑은 고딕", Font.BOLD, 25));
 		jtfDistance.setForeground(new Color(0x000000));
 		jtfDistance.setBackground(new Color(0xFFFFFF));
-		jtfDistance.setBorder(null);
-		jtfDistance.setBounds(5, 47, 478, 42);
-		jpDetail.add(jtfDistance);
+		jtfDistance.setHorizontalAlignment(JTextField.RIGHT);
+		jtfDistance.setBorder(BorderFactory.createLineBorder(new Color(0x000000), 1));
+		jtfDistance.setBounds(129, 47, 102, 42);
 		
-		// 차량 세부 정보 - 배기량
-		jlblCC = new JLabel(" 배기량: 2,499cc");
-		jtfCC = new JTextField(" 배기량: 2,499cc");
-		jtfCC.setFont(new Font("맑은 고딕", Font.BOLD, 25));
-		jtfCC.setForeground(new Color(0x000000));
-		jtfCC.setBackground(new Color(0xFFFFFF));
-		jtfCC.setBorder(null);
-		jtfCC.setBounds(5, 89, 478, 42);
-		jpDetail.add(jtfCC);
+		// 차량 세부 정보 - 누적 주행거리 표시
+		jlblDistance = new JLabel(" 주행거리: " + cDTO.getDistance() + "km");
+		jlblDistance.setOpaque(true);
+		jlblDistance.setBackground(new Color(0xFFFFFF));
+		jlblDistance.setForeground(new Color(0x000000));
+		jlblDistance.setBorder(null);
+		jlblDistance.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+		jlblDistance.setBounds(5, 47, 478, 42);
 		
-		// 차량 세부 정보 - 유종
-		jlblFuelType = new JLabel(" 유종: 휘발유");
-		jtfFuelType = new JTextField(" 유종: 휘발유");
-		jtfFuelType.setFont(new Font("맑은 고딕", Font.BOLD, 25));
-		jtfFuelType.setForeground(new Color(0x000000));
-		jtfFuelType.setBackground(new Color(0xFFFFFF));
-		jtfFuelType.setBorder(null);
-		jtfFuelType.setBounds(5, 131, 478, 42);
-		jpDetail.add(jtfFuelType);
+		// 차량 세부 정보 - 배기량 수정
+		jtfCc = new JTextField(String.valueOf(cDTO.getCc()));
+		jtfCc.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+		jtfCc.setForeground(new Color(0x000000));
+		jtfCc.setBackground(new Color(0xFFFFFF));
+		jtfCc.setBorder(BorderFactory.createLineBorder(new Color(0x000000), 1));
+		jtfCc.setBounds(101, 89, 61, 42);
 		
-		// 차량 세부 정보 - 번호판
-		jlblNumberPlate = new JLabel(" 번호판: 123가4567");
-		jtfNumberPlate = new JTextField(" 번호판: 123가4567");
+		// 차량 세부 정보 - 배기량 표시
+		jlblCc = new JLabel(" 배기량: " + cDTO.getCc() + "cc");
+		jlblCc.setOpaque(true);
+		jlblCc.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+		jlblCc.setBackground(new Color(0xFFFFFF));
+		jlblCc.setForeground(new Color(0x000000));
+		jlblCc.setBorder(null);
+		jlblCc.setBounds(5, 89, 478, 42);
+		
+		// 차량 세부 정보 - 유종 수정
+		try {
+			oilArr = cis.getAvailableOils();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} // end try ~ catch
+		
+		dcbmOil = new DefaultComboBoxModel<String>();
+		jcbOil = new JComboBox<String>(dcbmOil);
+		for (String oil : oilArr) {
+			final String oilType = oil;
+			
+			dcbmOil.addElement(oilType);
+			jcbOil.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
+			jcbOil.setForeground(new Color(0x000000));
+		} // end for
+		
+		jcbOil.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+		jcbOil.setForeground(new Color(0x000000));
+		jcbOil.setBackground(new Color(0xFFFFFF));
+		jcbOil.setBorder(null);
+		jcbOil.setSelectedItem(cDTO.getOil());
+		jcbOil.setBounds(77, 131, 150, 42);
+		
+		// 차량 세부 정보 - 유종 표시
+		jlblOil = new JLabel(" 유종: " + cDTO.getOil());
+		jlblOil.setOpaque(true);
+		jlblOil.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+		jlblOil.setBackground(new Color(0xFFFFFF));
+		jlblOil.setForeground(new Color(0x000000));
+		jlblOil.setBounds(5, 131, 478, 42);
+		
+		// 차량 세부 정보 - 번호판 수정
+		jtfNumberPlate = new JTextField(cDTO.getRegNum());
 		jtfNumberPlate.setFont(new Font("맑은 고딕", Font.BOLD, 25));
 		jtfNumberPlate.setForeground(new Color(0x000000));
 		jtfNumberPlate.setBackground(new Color(0xFFFFFF));
-		jtfNumberPlate.setBorder(null);
-		jtfNumberPlate.setBounds(5, 173, 478, 42);
-		jpDetail.add(jtfNumberPlate);
+		jtfNumberPlate.setBorder(BorderFactory.createLineBorder(new Color(0x000000), 1));
+		jtfNumberPlate.setBounds(104, 173, 136, 42);
+		
+		// 차량 세부 정보 - 번호판 표시
+		jlblNumberPlate = new JLabel(" 번호판: " + cDTO.getRegNum());
+		jlblNumberPlate.setOpaque(true);
+		jlblNumberPlate.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+		jlblNumberPlate.setForeground(new Color(0x000000));
+		jlblNumberPlate.setBackground(new Color(0xFFFFFF));
+		jlblNumberPlate.setBorder(null);
+		jlblNumberPlate.setBounds(5, 173, 478, 42);
+		
+		if(userType.equals("a")) {
+			jlblYear.add(jtfYear1);
+			jpDetail.add(jtfDistance);
+			jpDetail.add(jtfCc);
+			jpDetail.add(jcbOil);
+			jpDetail.add(jtfNumberPlate);
+		} // end if
+		
+		jpDetail.add(jlblYear);
+		jpDetail.add(jlblDistance);
+		jpDetail.add(jlblCc);
+		jpDetail.add(jlblOil);
+		jpDetail.add(jlblNumberPlate);
 		
 		// 차량 세부 정보 - 옵션 목록
 		jtaOption = new JTextArea
@@ -263,11 +377,54 @@ public class CarInfoCenterPanel extends JDialog {
 		jtaOption.setBackground(new Color(0xFFFFFF));
 		jtaOption.setBorder(null);
 		
+		// 차량 세부 정보 - 옵션 목록 수정
+		try {
+			optionNameArr = cis.getAvailableOptions();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} // end try ~ catch
+		
+		try {
+			carOptionNameArr = cis.getProductOptionDetails(prodCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // end try ~ catch
+		
+		jpOption = new JPanel(new GridLayout(0, 1));
+		for (String option : optionNameArr) {
+			final String optionName = option;
+			
+			jcbOption = new JCheckBox(optionName);
+			jcbOption.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+			jcbOption.setBackground(new Color(0xFFFFFF));
+			jcbOption.setForeground(new Color(0x000000));
+			jcbOption.setBorder(null);
+			jcbOption.setSelected(false);
+			
+			for (String carOption : carOptionNameArr) {
+				final String carOptionName = carOption;
+				
+				if(carOptionName.equals(optionName)) {
+					jcbOption.setSelected(true);
+				} // end if
+			} // end for
+			jpOption.add(jcbOption);
+		} // end for
+		
+		
+		
 		// 차량 세부 정보 - 옵션 목록 스크롤 바
-		jspOption = new JScrollPane(jtaOption);
+		if(userType.equals("a")) {
+			jspOption = new JScrollPane(jpOption);
+		} else if(userType.equals("u")) {
+			jspOption = new JScrollPane(jtaOption);
+		} // end if ~ else if
 		jspOption.setBorder(null);
 		jspOption.setForeground(new Color(0x000000));
 		jspOption.setBackground(new Color(0xFFFFFF));
+		jspOption.getVerticalScrollBar().setUnitIncrement(25);
 		jspOption.setBounds(14, 254, 469, 206);
 		jpDetail.add(jspOption);
 		
@@ -284,57 +441,218 @@ public class CarInfoCenterPanel extends JDialog {
 		
 		// 하자내역 - 하자목록
 		jtaDefect = new JTextArea
-				(" 하자내역\n 하자1\t처리일1\n 하자2\t처리일2\n 하자3\t처리일3\n 하자4\t처리일4\n 하자5\t처리일5\n 하자6\t처리일6");
+				(" 하자1\t처리일1\n 하자2\t처리일2\n 하자3\t처리일3\n 하자4\t처리일4\n 하자5\t처리일5\n 하자6\t처리일6");
 		jtaDefect.setFont(new Font("맑은 고딕", Font.BOLD, 30));
 		jtaDefect.setForeground(new Color(0x000000));
 		jtaDefect.setBackground(new Color(0xFFFFFF));
 		jtaDefect.setBorder(null);
 		
+		// 하자내역 - 하자목록 수정
+		try {
+			defectNameArr = cis.getAvailableDefects();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} // end try ~ catch
+		
+		try {
+			carDefectNameArr = cis.getProductDefectDetails(prodCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // end try ~ catch
+		
+		jpDefect = new JPanel(new GridLayout(0, 1));
+		for (String defect : defectNameArr) {
+			// [중요] 람다에서 사용하기 위해 final 변수로 복사
+			final String defectName = defect;
+			
+			jcbDefect = new JCheckBox(defectName);
+			jcbDefect.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+			jcbDefect.setBackground(new Color(0xFFFFFF));
+			jcbDefect.setForeground(new Color(0x000000));
+			jcbDefect.setBorder(null);
+			jcbDefect.setSelected(false);
+			
+			for (String carDefect : carDefectNameArr) {
+				final String carDefectName = carDefect;
+				
+				if(carDefectName.equals(defectName)) {
+					jcbDefect.setSelected(true);
+				} // end if
+			} // end for
+			jpDefect.add(jcbDefect);
+		} // end for
+		
+		// 하자내역 - 하자제목
+		jlblDefect = new JLabel("하자내역");
+		jlblDefect.setOpaque(true);
+		jlblDefect.setBackground(new Color(0xFFFFFF));
+		jlblDefect.setForeground(new Color(0x000000));
+		jlblDefect.setHorizontalAlignment(JLabel.CENTER);
+		jlblDefect.setFont(new Font("맑은 고딕", Font.BOLD, 30));
+		jlblDefect.setBorder(BorderFactory.createLineBorder(new Color(0x808080), 5));
+		jlblDefect.setBounds(10, 620, 1148, 55);
+		jlblCenterScroll.add(jlblDefect);
+		
 		// 하자내역 - 하자목록 스크롤 바
-		jspDefect = new JScrollPane(jtaDefect);
+		if(userType.equals("a")) {
+			jspDefect = new JScrollPane(jpDefect);
+		} else if(userType.equals("u")) {
+			jspDefect = new JScrollPane(jtaDefect);
+		} // end if ~ else if
 		jspDefect.setBorder(BorderFactory.createLineBorder(new Color(0x808080), 5));
 		jspDefect.setForeground(new Color(0x000000));
 		jspDefect.setBackground(new Color(0xFFFFFF));
-		jspDefect.setBounds(10, 625, 1148, 240);
+		jspDefect.getVerticalScrollBar().setUnitIncrement(25);
+		jspDefect.setBounds(10, 670, 1148, 240);
 		jlblCenterScroll.add(jspDefect);
 		
 		// 사고내역 - 사고목록
 		jtaAccident = new JTextArea
-				(" 사고내역\n 사고1\t사고일1\n 사고2\t사고일2\n 사고3\t사고일3\n 사고4\t사고일4\n 사고5\t사고일5\n 사고6\t사고일6");
+				(" 사고1\t사고일1\n 사고2\t사고일2\n 사고3\t사고일3\n 사고4\t사고일4\n 사고5\t사고일5\n 사고6\t사고일6");
 		jtaAccident.setFont(new Font("맑은 고딕", Font.BOLD, 30));
 		jtaAccident.setForeground(new Color(0x000000));
 		jtaAccident.setBackground(new Color(0xFFFFFF));
 		jtaAccident.setBorder(null);
 		
+		// 사고내역 - 사고목록 수정
+		try {
+			accidentNameArr = cis.getAvailableAccidents();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} // end try ~ catch
+		
+		try {
+			carAccidentNameArr = cis.getProductAccidentDetails(prodCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // end try ~ catch
+		
+		jpAccident = new JPanel(new GridLayout(0, 1));
+		for (String accident : accidentNameArr) {
+			// [중요] 람다에서 사용하기 위해 final 변수로 복사
+			final String accidentName = accident;
+			
+			jcbAccident = new JCheckBox(accidentName);
+			jcbAccident.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+			jcbAccident.setBackground(new Color(0xFFFFFF));
+			jcbAccident.setForeground(new Color(0x000000));
+			jcbAccident.setBorder(null);
+			jcbAccident.setSelected(false);
+			
+			for (String carAccident : carAccidentNameArr) {
+				final String carAccidentName = carAccident;
+				
+				if(carAccidentName.equals(accidentName)) {
+					jcbAccident.setSelected(true);
+				} // end if
+			} // end for
+			jpAccident.add(jcbAccident);
+		} // end for
+		
+		// 사고내역 - 사고제목
+		jlblAccident = new JLabel("사고내역");
+		jlblAccident.setOpaque(true);
+		jlblAccident.setBackground(new Color(0xFFFFFF));
+		jlblAccident.setForeground(new Color(0x000000));
+		jlblAccident.setHorizontalAlignment(JLabel.CENTER);
+		jlblAccident.setFont(new Font("맑은 고딕", Font.BOLD, 30));
+		jlblAccident.setBorder(BorderFactory.createLineBorder(new Color(0x808080), 5));
+		jlblAccident.setBounds(10, 920, 1148, 55);
+		jlblCenterScroll.add(jlblAccident);
+		
 		// 사고내역 - 사고목록 스크롤 바
-		jspAccident = new JScrollPane(jtaAccident);
+		if(userType.equals("a")) {
+			jspAccident = new JScrollPane(jpAccident);
+		} else if(userType.equals("u")) {
+			jspAccident = new JScrollPane(jtaAccident);
+		} // end if ~ else if
 		jspAccident.setBorder(BorderFactory.createLineBorder(new Color(0x808080), 5));
 		jspAccident.setForeground(new Color(0x000000));
 		jspAccident.setBackground(new Color(0xFFFFFF));
-		jspAccident.setBounds(10, 875, 1148, 240);
+		jspAccident.getVerticalScrollBar().setUnitIncrement(25);
+		jspAccident.setBounds(10, 970, 1148, 240);
 		jlblCenterScroll.add(jspAccident);
 		
 		// 수리내역 - 수리목록
 		jtaRepair = new JTextArea
-				(" 수리내역\n 수리1\t수리일1\n 수리2\t수리일2\n 수리3\t수리일3\n 수리4\t수리일4\n 수리5\t수리일5\n 수리6\t수리일6");
+				(" 수리1\t수리일1\n 수리2\t수리일2\n 수리3\t수리일3\n 수리4\t수리일4\n 수리5\t수리일5\n 수리6\t수리일6");
 		jtaRepair.setFont(new Font("맑은 고딕", Font.BOLD, 30));
 		jtaRepair.setForeground(new Color(0x000000));
 		jtaRepair.setBackground(new Color(0xFFFFFF));
 		jtaRepair.setBorder(null);
 		
+		// 수리내역 - 수리목록 수정
+		try {
+			repairNameArr = cis.getAvailableRepairs();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} // end try ~ catch
+		
+		try {
+			carRepairNameArr = cis.getProductRepairDetails(prodCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // end try ~ catch
+		
+		jpRepair = new JPanel(new GridLayout(0, 1));
+		for (String repair : repairNameArr) {
+			// [중요] 람다에서 사용하기 위해 final 변수로 복사
+			final String repairName = repair;
+			
+			jcbRepair = new JCheckBox(repairName);
+			jcbRepair.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+			jcbRepair.setBackground(new Color(0xFFFFFF));
+			jcbRepair.setForeground(new Color(0x000000));
+			jcbRepair.setBorder(null);
+			jcbRepair.setSelected(false);
+			
+			for (String carRepair : carRepairNameArr) {
+				final String carRepairName = carRepair;
+				
+				if(carRepairName.equals(repairName)) {
+					jcbRepair.setSelected(true);
+				} // end if
+			} // end for
+			jpRepair.add(jcbRepair);
+		} // end for
+		
+		// 수리내역 - 수리제목
+		jlblRepair = new JLabel("수리내역");
+		jlblRepair.setOpaque(true);
+		jlblRepair.setBackground(new Color(0xFFFFFF));
+		jlblRepair.setForeground(new Color(0x000000));
+		jlblRepair.setHorizontalAlignment(JLabel.CENTER);
+		jlblRepair.setFont(new Font("맑은 고딕", Font.BOLD, 30));
+		jlblRepair.setBorder(BorderFactory.createLineBorder(new Color(0x808080), 5));
+		jlblRepair.setBounds(10, 1220, 1148, 55);
+		jlblCenterScroll.add(jlblRepair);
+		
 		// 수리내역 - 수리목록 스크롤 바
-		jspRepair = new JScrollPane(jtaRepair);
+		if(userType.equals("a")) {
+			jspRepair = new JScrollPane(jpRepair);
+		} else if(userType.equals("u")) {
+			jspRepair = new JScrollPane(jtaRepair);
+		} // end if ~ else if
 		jspRepair.setBorder(BorderFactory.createLineBorder(new Color(0x808080), 5));
 		jspRepair.setForeground(new Color(0x000000));
 		jspRepair.setBackground(new Color(0xFFFFFF));
-		jspRepair.setBounds(10, 1125, 1148, 240);
+		jspRepair.getVerticalScrollBar().setUnitIncrement(25);
+		jspRepair.setBounds(10, 1270, 1148, 240);
 		jlblCenterScroll.add(jspRepair);
 		
 	} // CarInfoCenterPanel
 	
-
+	public void setJlblOil(String strOil) {
+		jlblOil.setText(strOil);
+	}
 	
-	public static JPanel getJpCenter() {
+	public JPanel getJpCenter() {
 		return jpCenter;
 	} // getJpCenter
 	
@@ -361,11 +679,65 @@ public class CarInfoCenterPanel extends JDialog {
 	public JPanel getJpImage() {
 		return jpImage;
 	}
-
+	
 	public CardLayout getCl() {
 		return cl;
 	}
 	
+	public JTextField getJtfBrand() {
+		return jtfBrand;
+	}
 	
+	public JTextField getJtfCarName() {
+		return jtfCarName;
+	}
+	
+	public JTextField getJtfPrice() {
+		return jtfPrice;
+	}
+	
+	public JTextField getJtfYear1() {
+		return jtfYear1;
+	}
+	
+	public JTextField getJtfYear2() {
+		return jtfYear2;
+	}
+	
+	public JTextField getJtfDistance() {
+		return jtfDistance;
+	}
+	
+	public JTextField getJtfCc() {
+		return jtfCc;
+	}
+	
+	public JComboBox<String> getJcbStatSold() {
+		return jcbStatSold;
+	}
+	
+	public DefaultComboBoxModel<String> getDcbmStatSold(){
+		return dcbmStatSold;
+	}
+	
+	public JComboBox<String> getJcbOil() {
+		return jcbOil;
+	}
+	
+	public DefaultComboBoxModel<String> getDcbmOil(){
+		return dcbmOil;
+	}
+	
+	public JTextField getJtfNumberPlate() {
+		return jtfNumberPlate;
+	}
+	
+	public String getCarBrand() {
+		return carBrand;
+	}
+	
+	public String getCarName() {
+		return carName;
+	}
 	
 } // class

@@ -10,17 +10,18 @@ import javax.swing.JPanel;
 
 public class CarInfoNorthPanel extends JFrame {
 	
-	private CarInfoDesign cid;
-	
 	private JLabel jlblTitle;
 	private static JPanel jpNorth;
 	
-	public CarInfoNorthPanel(CarInfoDesign cid) {
+	private CarInfoDesign cid;
+	private int prodCode;
+	
+	public CarInfoNorthPanel(CarInfoDesign cid, int prodCode) {
 		
 		this.cid = cid;
+		this.prodCode = prodCode;
 		
 		jpNorth = new JPanel();
-		
 		
 		jlblTitle = new JLabel("쌍용중고차");
 		
@@ -36,10 +37,10 @@ public class CarInfoNorthPanel extends JFrame {
 		jpNorth.setBackground(new Color(0xFFFFFF));
 		jpNorth.add(jlblTitle);
 		
-	}
+	} // CarInfoNorthPanel
 	
-	public static JPanel getJpNorth() {
+	public JPanel getJpNorth() {
 		return jpNorth;
 	} // getJpNorth
 	
-}
+} // class

@@ -52,7 +52,7 @@ public class UserOrderDesign extends JDialog {
 	/**
 	 * 생성자: 부모 프레임, 로그인 사용자 정보(uDTO), 구매할 상품 코드(productCode)를 받음
 	 */
-	public UserOrderDesign(JFrame owner, int user_code, int productCode) {
+	public UserOrderDesign(JDialog owner, int user_code, int productCode) {
 		super(owner, "차량 주문 페이지", true); // 모달 다이얼로그
 
 		// --- 이벤트 클래스 등록 ---
@@ -104,7 +104,7 @@ public class UserOrderDesign extends JDialog {
 		jbtnNext.addActionListener(cardNavListener);
 
 		// --- 차량명 (DB 데이터 적용) ---
-		jtfCarName = new JTextField(cDTO.getProduct_name()); // getProduct_name() 사용
+		jtfCarName = new JTextField(cDTO.getProdName()); // getProduct_name() 사용
 		jtfCarName.setEditable(false);
 		jtfCarName.setHorizontalAlignment(JTextField.CENTER);
 		jtfCarName.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
