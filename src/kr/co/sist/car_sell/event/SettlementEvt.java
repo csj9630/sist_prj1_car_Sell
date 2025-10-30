@@ -181,8 +181,8 @@ public class SettlementEvt extends WindowAdapter implements ActionListener {
 		} // end if
 
 		try {
-			LocalDate tempStart = LocalDate.parse(startPeriod, DateTimeFormatter.ofPattern("yyyy-MM-d"));
-			LocalDate tempEnd = LocalDate.parse(endPeriod, DateTimeFormatter.ofPattern("yyyy-MM-d"));
+			LocalDate tempStart = LocalDate.parse(startPeriod, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			LocalDate tempEnd = LocalDate.parse(endPeriod, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 			// 2.옵션에서의 시작일보다 종료일이 더 빠르다면 false 반환.
 			if (tempStart.isAfter(tempEnd)) {
 				isValid = false;
