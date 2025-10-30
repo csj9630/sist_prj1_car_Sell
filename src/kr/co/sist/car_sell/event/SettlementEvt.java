@@ -265,11 +265,11 @@ public class SettlementEvt extends WindowAdapter implements ActionListener {
 		if (smd.getJcbQuarterlySettlement().getSelectedItem().equals("분기별 판매현황")) {
 			smd.getCardLayout().show(smd.getJpCardPanel(), "cardSettlement");
 		} else if (smd.getJcbQuarterlySettlement().getSelectedItem().equals("기간 입력")) {
-			String startPeriod = JOptionPane.showInputDialog("시작 기간을 입력하여 주십시오");
+			String startPeriod = JOptionPane.showInputDialog("시작 기간을 입력하여 주십시오.\n기간은 '2025-01'와 같은 형식(월까지만)으로 입력하여 주십시오.");
 			if (startPeriod == null) {
 				return;
 			} // end if
-			String endPeriod = JOptionPane.showInputDialog("끝 기간을 입력하여 주십시오");
+			String endPeriod = JOptionPane.showInputDialog("끝 기간을 입력하여 주십시오\n기간은 '2025-01'와 같은 형식(월까지만)으로 입력하여 주십시오.");
 			if (endPeriod == null) {
 				return;
 			}
