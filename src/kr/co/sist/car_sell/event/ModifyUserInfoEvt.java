@@ -26,8 +26,8 @@ public class ModifyUserInfoEvt extends WindowAdapter implements ActionListener {
 	private boolean btnFlag = false;
 	private int user_code;// 사용자 식별 코드
 
-	public static final int UNEDITABLE = 211;
-	public static final int EDITABLE = 238;
+	private static final int UNEDITABLE = 211;
+	private static final int EDITABLE = 238;
 
 	public ModifyUserInfoEvt(ModifyUserInfoDesign mud, int user_code) {
 		this.mud = mud;
