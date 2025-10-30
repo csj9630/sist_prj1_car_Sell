@@ -8,7 +8,7 @@ public class ImageDTO {
 
 	private int image_code, product_code;
     private String image_name; // 이미지 경로
-    private Date imageadd_date;
+    private Date image_add_date;
     private File file;
 
     // 기본 생성자
@@ -18,7 +18,7 @@ public class ImageDTO {
 	@Override
 	public String toString() {
 		return "ImageDTO [image_code=" + image_code + ", product_code=" + product_code + ", image_name=" + image_name
-				+ ", imageadd_date=" + imageadd_date + "]";
+				+ ", image_add_date=" + image_add_date + "]";
 	}
   
 
@@ -29,8 +29,8 @@ public class ImageDTO {
     public void setImage_code(int image_code) { this.image_code = image_code; }
     public String getImage_name() { return image_name; }
     public void setImage_name(String image_name) { this.image_name = image_name; }
-    public Date getImageadd_date() { return imageadd_date; }
-    public void setImageadd_date(Date imageadd_date) { this.imageadd_date = imageadd_date; }
+    public Date getImage_add_date() { return image_add_date; }
+    public void setImage_add_date(Date image_add_date) { this.image_add_date = image_add_date; }
     public File getFile() {	return file;}
 	public void setFile(File file) {this.file = file;	}
 

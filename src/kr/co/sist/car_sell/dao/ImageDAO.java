@@ -71,22 +71,39 @@ public class ImageDAO {
 	public int insertImageBlob(ImageDTO idto) throws SQLException, IOException {
 		Connection con = null;
 		PreparedStatement pstmtInsert = null;
-		//ResultSet rs = null;
+		PreparedStatement pstmtSeq = null; // 시퀀스 조회용
+		ResultSet rsSeq = null;
 		FileInputStream fis = null; // 파일 읽기 스트림
+
 		int generatedImageCode = 0;
+
+		int rowsAffected = 0;
 
 		GetConnection gc = GetConnection.getInstance();
 
+		// 1. 시퀀스 값 먼저 가져오기
+		String seqSql = "SELECT SEQ_IMAGE.NEXTVAL FROM DUAL";
+
 		// ㅁ BLOB 데이터 삽입 쿼리
-		String insertSql = "INSERT INTO IMAGE (image_code, product_code, image_name, image_blob, imageadd_date) "
+		String insertSql = "INSERT INTO IMAGE (image_code, product_code, image_name, image_blob, image_add_date) "
 				+ "VALUES (SEQ_IMAGE.NEXTVAL, ?, ?, ?, SYSDATE)";
 
 		try {
 			con = gc.getConn();
 			con.setAutoCommit(false); // 트랜잭션 시작 (선택 사항)
 
-			File imageFile = idto.getFile();
+			// 1-1. 시퀀스 실행
+			pstmtSeq = con.prepareStatement(seqSql);
+			rsSeq = pstmtSeq.executeQuery();
+
+			if (rsSeq.next()) {
+				generatedImageCode = rsSeq.getInt(1); // 시퀀스 넘버를 받음.
+			} else {
+				throw new SQLException("SEQ_IMAGE 시퀀스 값을 가져오지 못했습니다.");
+			} // end else
+
 			// 1. 파일 스트림 열기
+			File imageFile = idto.getFile();// idto에서 파일 받아옴.
 			fis = new FileInputStream(imageFile);
 
 			// 2. INSERT 쿼리 실행
@@ -96,22 +113,13 @@ public class ImageDAO {
 			// ★ setBinaryStream(파라미터 인덱스, 파일 입력 스트림, 파일 길이) ★
 			pstmtInsert.setBinaryStream(3, fis, (int) imageFile.length());
 
-			int rowsAffected = pstmtInsert.executeUpdate();
-
+			rowsAffected = pstmtInsert.executeUpdate();
 			if (rowsAffected == 1) {
-				// INSERT에 대한 자동 생성 키(image_code)값 가져오기
-                try (ResultSet rs = pstmtInsert.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        generatedImageCode = rs.getInt(1);
-                        con.commit(); // 성공 시 커밋
-                    } else {
-                        // 키를 가져오지 못하면 롤백 
-                        con.rollback(); 
-                    }//end else
-                }//end try
+				con.commit();
 			} else {
 				con.rollback(); // 실패 시 롤백
-			}//end else
+				generatedImageCode = 0;
+			} // end else
 
 		} catch (SQLException | IOException e) {
 			if (con != null)
@@ -122,7 +130,9 @@ public class ImageDAO {
 			if (fis != null)
 				fis.close();
 			// DB 리소스 닫기
-			gc.dbClose(con, pstmtInsert, null); // Connection 닫기
+			if (pstmtInsert != null)
+				pstmtInsert.close();
+			gc.dbClose(con, pstmtSeq, rsSeq); // Connection 닫기
 		} // end finally
 		return generatedImageCode; // 성공 시 생성된 image_code, 실패 시 0 반환
 	}// insertImageBlob
@@ -181,7 +191,7 @@ public class ImageDAO {
 		ResultSet rs = null;
 		GetConnection gc = GetConnection.getInstance();
 
-		String sql = "SELECT i.IMAGE_CODE, i.IMAGE_NAME, i.IMAGEADD_DATE " + "FROM CAR_IMAGE ci "
+		String sql = "SELECT i.IMAGE_CODE, i.IMAGE_NAME, i.IMAGE_ADD_DATE " + "FROM CAR_IMAGE ci "
 				+ "JOIN IMAGE i ON ci.IMAGE_CODE = i.IMAGE_CODE " + "WHERE ci.PRODUCT_CODE = ? ORDER BY i.IMAGE_CODE";
 
 		try {
@@ -194,7 +204,7 @@ public class ImageDAO {
 				ImageDTO img = new ImageDTO();
 				img.setImage_code(rs.getInt("IMAGE_CODE"));
 				img.setImage_name(rs.getString("IMAGE_NAME"));
-				img.setImageadd_date(rs.getDate("IMAGEADD_DATE"));
+				img.setImage_add_date(rs.getDate("IMAGE_ADD_DATE"));
 				list.add(img);
 			}
 		} finally {

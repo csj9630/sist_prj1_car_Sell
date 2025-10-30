@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -14,31 +15,26 @@ import kr.co.sist.car_sell.service.ImageService;
 
 public class ImgBlobDesign extends JFrame implements ActionListener {
 
-	public JButton getJbtnSelect() {
-		return jbtnSelect;
-	}
-
-	public JTextField getJtfCode() {
-		return jtfCode;
-	}
+	
 
 	private JButton jbtnImage, jbtnAdd, jbtnSelect;
 	private JTextField jtfCode;
 	private JLabel jlbImage;
 	
 	private int product_code = 1;//차량코드 임시 데이터 
+//	private int image_code = 64;//이미지코드 임시 데이터 
 
 	public ImgBlobDesign() {
 		super("친구관리");
 
-		JLabel jlbInform = new JLabel("이미지 추가");
+		JLabel jlbInform = new JLabel("이미지 코드 작성.");
 
 		ImageIcon ii = new ImageIcon("src/images/default.png");
 		jlbImage = new JLabel(ii);
-		jbtnImage = new JButton("선택--비활성화");
-		jbtnAdd = new JButton("추가");
+		jbtnImage = new JButton("복수로 업로드해보기");
+		jbtnAdd = new JButton("blob 추가");
 		jtfCode = new JTextField("");
-		jbtnSelect = new JButton("불러오기--비활성화");
+		jbtnSelect = new JButton("blob 불러오기");
 		
 		setLayout(null);
 
@@ -79,9 +75,9 @@ public class ImgBlobDesign extends JFrame implements ActionListener {
 		
 
 		// 이벤트 등록
-		//jbtnImage.addActionListener(this);
+		jbtnImage.addActionListener(this);
 		jbtnAdd.addActionListener(this);
-		//jbtnSelect.addActionListener(this);
+		jbtnSelect.addActionListener(this);
 
 		setBounds(100, 100, 1000, 600);
 		setVisible(true);
@@ -92,14 +88,19 @@ public class ImgBlobDesign extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent ae) {
 		// TODO Auto-generated method stub
 		if (ae.getSource() == getJbtnImage()) {
-			
+			new ImageService().saveImg_All(product_code);
 		} // end if
 		if (ae.getSource() == getJbtnAdd()) {
-			new ImageService().addImg(product_code);
+			new ImageService().saveImg(product_code);
 		} // end if
 		
 		if (ae.getSource() == getJbtnSelect()) {
-			
+			String tempImgCode = getJtfCode().getText();
+			if(tempImgCode.isEmpty()) {
+				JOptionPane.showMessageDialog(this, "입력값이 비어있다.");
+				return;
+			}
+			getJlbImage().setIcon(new ImageService().loadDBImage(Integer.parseInt(tempImgCode)));
 		}// end if
 	}
 
@@ -113,6 +114,13 @@ public class ImgBlobDesign extends JFrame implements ActionListener {
 
 	public JButton getJbtnAdd() {
 		return jbtnAdd;
+	}
+	public JButton getJbtnSelect() {
+		return jbtnSelect;
+	}
+
+	public JTextField getJtfCode() {
+		return jtfCode;
 	}
 
 	public static void main(String[] args) {
