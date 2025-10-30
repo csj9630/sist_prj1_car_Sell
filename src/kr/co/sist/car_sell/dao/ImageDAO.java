@@ -58,38 +58,34 @@ public class ImageDAO {
         return pathList; // 경로 리스트 반환
     }
 
-    /** [관리자/데이터입력용] 이미지 파일을 DB BLOB 컬럼에 저장 */
+   
+    /**
+     * [관리자/데이터입력용] 이미지 파일을 DB BLOB 컬럼에 저장
+     * @param imageFile 파일 선택기로 고른 이미지 파일
+     * @return 1이면 성공
+     * @throws SQLException
+     * @throws IOException
+     */
     public int insertImageBlob(File imageFile) throws SQLException, IOException {
         int generatedImageCode = 0; // 새로 생성된 image_code 반환용, DB에서 받아온 시퀀스로 된 image_code를 저장.
         Connection con = null;
         PreparedStatement pstmtInsert = null;
-        PreparedStatement pstmtSeq = null; // 시퀀스 조회용
-        ResultSet rsSeq = null;
         FileInputStream fis = null; // 파일 읽기 스트림
         GetConnection gc = GetConnection.getInstance();
 
-        // 1. 시퀀스 값 먼저 가져오기
-        String seqSql = "SELECT SEQ_IMAGE.NEXTVAL FROM DUAL";
-        // 2. BLOB 데이터 삽입 쿼리
-        String insertSql = "INSERT INTO IMAGE (image_code, image_name, image_blob, imageadd_date) VALUES (?, ?, ?, SYSDATE)";
+        // ㅁ BLOB 데이터 삽입 쿼리
+        String insertSql = "INSERT INTO IMAGE (image_code, image_name, image_blob, imageadd_date) " +
+                "VALUES (SEQ_IMAGE.NEXTVAL, ?, ?, SYSDATE)";
 
         try {
             con = gc.getConn();
             con.setAutoCommit(false); // 트랜잭션 시작 (선택 사항)
 
-            // 1-1. 시퀀스 실행
-            pstmtSeq = con.prepareStatement(seqSql);
-            rsSeq = pstmtSeq.executeQuery(); 
-            if (rsSeq.next()) {
-                generatedImageCode = rsSeq.getInt(1); // 시퀀스 넘버를 받음.
-            } else {
-                throw new SQLException("SEQ_IMAGE 시퀀스 값을 가져오지 못했습니다.");
-            }
-
-            // 2-1. 파일 스트림 열기
+           
+            // 1. 파일 스트림 열기
             fis = new FileInputStream(imageFile);
 
-            // 2-2. INSERT 쿼리 실행
+            // 2. INSERT 쿼리 실행
             pstmtInsert = con.prepareStatement(insertSql);
             pstmtInsert.setInt(1, generatedImageCode); // 생성된 시퀀스 값
             pstmtInsert.setString(2, imageFile.getName()); // 원본 파일명
@@ -112,10 +108,7 @@ public class ImageDAO {
             // 스트림 닫기
             if (fis != null) fis.close();
             // DB 리소스 닫기
-//            if (rsSeq != null) rsSeq.close();
-//            if (pstmtSeq != null) pstmtSeq.close();
-            gc.dbClose(con, pstmtSeq, rsSeq); // Connection 닫기
-            if (pstmtInsert != null) pstmtInsert.close();
+            gc.dbClose(con, pstmtInsert, null); // Connection 닫기
         }//end finally
         return generatedImageCode; // 성공 시 생성된 image_code, 실패 시 0 반환
     }//insertImageBlob
