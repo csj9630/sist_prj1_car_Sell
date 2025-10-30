@@ -17,7 +17,7 @@ public class CarInfoService {
 	
 	public CarDTO getProductDetails(int prodCode) throws Exception {
 		
-		CarDTO cDTO = cDAO.findProductByProdCode(prodCode);
+		CarDTO cDTO = cDAO.selectCarByCode(prodCode);
 
         if (cDTO == null) {
             throw new Exception(prodCode + "에 해당하는 상품 정보를 찾을 수 없습니다.");
@@ -40,25 +40,24 @@ public class CarInfoService {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
-		
 		return flag;
-	} // addFriends
+	} // addCar
 	
-//	public CarDTO viewCar(int prodCode) {
-//		CarDTO cDTO = null;
-//		
-//		CarDAO cDAO = CarDAO.getInstance();
-//		try {
-//			cDTO = cDAO.selectCar(prodCode);
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		} // end try ~ catch
-//		
-//		return cDTO;
-//		
-//	}
+	public boolean updateCar(int prodCode, CarDTO cDTO) {
+		boolean flag = false;
+		
+		CarDAO cDAO = CarDAO.getInstance();
+		
+		try {
+			cDAO.updateCarsMgr(prodCode, cDTO);
+			flag = true;
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		return flag;
+	} // updateCar
 	
 	public String[] getAvailableOils() throws SQLException, IOException {
 		

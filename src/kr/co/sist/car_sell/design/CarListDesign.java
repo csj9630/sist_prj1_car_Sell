@@ -27,12 +27,11 @@ public class CarListDesign extends JFrame{
 		clnp = new CarListNorthPanel(this, userType);
 		clrp = new CarListRightPanel(this, userType, userCode);
 		
-		
 		JPanel jpNorth = CarListNorthPanel.getJpNorth();
 		JPanel jpRight = CarListRightPanel.getJpRight();
 		JPanel jpLeft = CarListLeftPanel.getJpLeft();
 		
-		cle = new CarListEvt(this, userCode, clnp, cllp, clrp);
+		cle = new CarListEvt(this, userCode, clnp, cllp, clrp, cls);
 		
 		clnp.getJbtnUserMenu().addActionListener(cle);
 		clnp.getJbtnLogout().addActionListener(cle);

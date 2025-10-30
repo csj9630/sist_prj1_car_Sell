@@ -1,6 +1,7 @@
 package kr.co.sist.car_sell.dto; // 패키지 경로 확인
 
 import java.sql.Date;
+import java.util.List;
 
 public class CarDTO {
     private int product_code;
@@ -14,11 +15,35 @@ public class CarDTO {
     private String car_name;
     private String oil;
     private String brand_name; // F5 스크립트 수정 기준
+    private List<Integer> optionCodes;
+    private List<Integer> defectCodes;
+    private List<Integer> accidentCodes;
+    private List<Integer> repairCodes;
 
     // 기본 생성자
     public CarDTO() {}
+    
+    
 
-    @Override
+    public CarDTO(int product_code, String product_name, int price, Date car_year, int cc, int distance,
+			String registration_number, String status_sold, String car_name, String oil, String brand_name) {
+		super();
+		this.product_code = product_code;
+		this.product_name = product_name;
+		this.price = price;
+		this.car_year = car_year;
+		this.cc = cc;
+		this.distance = distance;
+		this.registration_number = registration_number;
+		this.status_sold = status_sold;
+		this.car_name = car_name;
+		this.oil = oil;
+		this.brand_name = brand_name;
+	}
+
+
+
+	@Override
 	public String toString() {
 		return "CarDTO [product_code=" + product_code + ", product_name=" + product_name + ", price=" + price
 				+ ", car_year=" + car_year + ", cc=" + cc + ", distance=" + distance + ", registration_number="
@@ -49,5 +74,13 @@ public class CarDTO {
     public void setOil(String oil) { this.oil = oil; }
     public String getBrand_name() { return brand_name; }
     public void setBrand_name(String brand_name) { this.brand_name = brand_name; }
+	public List<Integer> getOptionCodes() { return optionCodes;	}
+	public void setOptionCodes(List<Integer> optionCodes) { this.optionCodes = optionCodes;	}
+	public List<Integer> getDefectCodes() { return defectCodes;	}
+	public void setDefectCodes(List<Integer> defectCodes) { this.defectCodes = defectCodes;	}
+	public List<Integer> getAccidentCodes() { return accidentCodes; }
+	public void setAccidentCodes(List<Integer> accidentCodes) { this.accidentCodes = accidentCodes; }
+	public List<Integer> getRepairCodes() { return repairCodes; }
+	public void setRepairCodes(List<Integer> repairCodes) { this.repairCodes = repairCodes; }
     // --- Getters and Setters 끝 ---
 }

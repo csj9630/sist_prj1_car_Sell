@@ -25,10 +25,6 @@ public class CarListRightPanel extends JFrame {
     private JPanel jpScroll;
     private JScrollPane jspRight;
     private JLabel jlblList;
-    private JLabel[] jlblListArr;
-    private JButton[] jbtnImageArr;
-    private JTextField[] jtfBrandArr, jtfCarNameArr, jtfOilTypeArr, jtfPriceArr;
-    private int buttonIndex;
 	private static JPanel jpRight;
 	private int[] prodCodeArr;
 	private int prodCode;
@@ -77,8 +73,8 @@ public class CarListRightPanel extends JFrame {
             jbtnImage = new JButton(ii);
             
             jlblList = new JLabel("라벨");
-            jtfBrand = new JTextField(" " + cDTO.getBrandName());
-            jtfCarName = new JTextField(" " + cDTO.getCarName());
+            jtfBrand = new JTextField(" " + cDTO.getBrand_name());
+            jtfCarName = new JTextField(" " + cDTO.getCar_name());
             jtfOilType = new JTextField(" " + cDTO.getOil());
             jtfPrice = new JTextField(cDTO.getPrice() + "만원 ");
 			
@@ -143,16 +139,8 @@ public class CarListRightPanel extends JFrame {
 		return jbtnImage;
 	} // getJbtnImage
 	
-	public JButton[] getJbtnImageArr() {
-		return jbtnImageArr;
-	} // getJbtnImageArr
-	
 	public int getProdCode() {
 		return prodCode;
-	}
-	
-	public int getButtonIndex() {
-		return buttonIndex;
 	}
 	
 }

@@ -9,9 +9,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import kr.co.sist.car_sell.event.CarListEvt;
-import prj.CarListDesign;
-
 public class CarListNorthPanel extends JFrame {
 	
 	private JLabel jlblTitle;

@@ -10,7 +10,6 @@ import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
-import kr.co.sist.car_sell.design.CarInfoDesign;
 import kr.co.sist.car_sell.design.CarListDesign;
 import kr.co.sist.car_sell.design.CarListLeftPanel;
 import kr.co.sist.car_sell.design.CarListNorthPanel;

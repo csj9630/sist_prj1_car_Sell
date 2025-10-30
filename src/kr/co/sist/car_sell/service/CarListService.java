@@ -15,29 +15,9 @@ public class CarListService {
 		cDAO = CarDAO.getInstance();
 	}
 	
-//	public CarInfoDTO searchCars(String brandName, String oil) {
-//		CarInfoDTO cDTO = null;
-//		
-//		CarInfoDAO cDAO = CarInfoDAO.getInstance();
-//		try {
-//			cDTO = cDAO.searchCars(brandName, oil);
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		} // end try ~ catch
-//		
-//		return cDTO;
-//		
-//	} // searchCars
-	
-	public void searchCars() {
-		
-	}
-	
 	public CarDTO getProductDetails(int prodCode) throws Exception {
 		
-		CarDTO cDTO = cDAO.findProductByProdCode(prodCode);
+		CarDTO cDTO = cDAO.selectCarByCode(prodCode);
 
         if (cDTO == null) {
             throw new Exception(prodCode + "에 해당하는 상품 정보를 찾을 수 없습니다.");
