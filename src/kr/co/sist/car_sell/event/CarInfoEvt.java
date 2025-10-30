@@ -12,11 +12,11 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import kr.co.sist.car_sell.design.CarInfo.CarInfoCenterPanel;
-import kr.co.sist.car_sell.design.CarInfo.CarInfoDesign;
-import kr.co.sist.car_sell.design.CarInfo.CarInfoNorthPanel;
-import kr.co.sist.car_sell.design.CarInfo.CarInfoSouthPanel;
-import kr.co.sist.car_sell.design.LoginRegister.UserOrderDesign;
+import kr.co.sist.car_sell.design.CarInfoCenterPanel;
+import kr.co.sist.car_sell.design.CarInfoDesign;
+import kr.co.sist.car_sell.design.CarInfoNorthPanel;
+import kr.co.sist.car_sell.design.CarInfoSouthPanel;
+import kr.co.sist.car_sell.design.UserOrderDesign;
 
 public class CarInfoEvt extends WindowAdapter implements ActionListener, MouseListener {
 	

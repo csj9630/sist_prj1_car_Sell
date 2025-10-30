@@ -1,6 +1,6 @@
 package kr.co.sist.car_sell.run;
 
-import kr.co.sist.car_sell.design.CarList.CarListDesign;
+import kr.co.sist.car_sell.design.CarListDesign;
 
 public class RunCarListDesign {
 	

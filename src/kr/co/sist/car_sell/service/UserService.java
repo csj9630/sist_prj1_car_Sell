@@ -6,13 +6,13 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import kr.co.sist.car_sell.dao.CarDAO;
+import kr.co.sist.car_sell.dao.ImageDAO;
+import kr.co.sist.car_sell.dao.OrderDAO;
 import kr.co.sist.car_sell.dao.UserDAO;
-import kr.co.sist.car_sell.dao.car.CarDAO;
-import kr.co.sist.car_sell.dao.image.ImageDAO;
-import kr.co.sist.car_sell.dao.order.OrderDAO;
+import kr.co.sist.car_sell.dto.CarDTO;
+import kr.co.sist.car_sell.dto.OrderDTO;
 import kr.co.sist.car_sell.dto.UserDTO;
-import kr.co.sist.car_sell.dto.car.CarDTO;
-import kr.co.sist.car_sell.dto.order.OrderDTO;
 
 public class UserService {
 	public UserService() {

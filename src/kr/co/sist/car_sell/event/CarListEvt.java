@@ -10,13 +10,13 @@ import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
-import kr.co.sist.car_sell.design.CarInfo.CarInfoDesign;
-import kr.co.sist.car_sell.design.CarList.CarListDesign;
-import kr.co.sist.car_sell.design.CarList.CarListLeftPanel;
-import kr.co.sist.car_sell.design.CarList.CarListNorthPanel;
-import kr.co.sist.car_sell.design.CarList.CarListRightPanel;
-import kr.co.sist.car_sell.design.MgrMenu.MgrMenuDesign;
-import kr.co.sist.car_sell.design.UserMenu.UserMenuDesign;
+import kr.co.sist.car_sell.design.CarInfoDesign;
+import kr.co.sist.car_sell.design.CarListDesign;
+import kr.co.sist.car_sell.design.CarListLeftPanel;
+import kr.co.sist.car_sell.design.CarListNorthPanel;
+import kr.co.sist.car_sell.design.CarListRightPanel;
+import kr.co.sist.car_sell.design.MgrMenuDesign;
+import kr.co.sist.car_sell.design.UserMenuDesign;
 
 public class CarListEvt extends WindowAdapter implements ActionListener, MouseListener {
 	
