@@ -9,12 +9,18 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import kr.co.sist.car_sell.dao.ImageDAO;
+import kr.co.sist.car_sell.dto.ImageDTO;
 
 public class ImageService {
 	//이미지 확장자
 	private static final String ALLOWED_EXTENSIONS = "png,jpg,jpeg,gif,bmp";
 	
-	public void addImg() {
+	/**
+	 * 상품코드를 받아서 파일 다이얼로그를 열어서 이미지 정보를 dto에 저장하고<br>
+	 * 그 dto로 이미지 파일을 blob 저장을 수행한다.
+	 * @param product_code
+	 */
+	public void addImg(int product_code) {
 		// 파일 다이얼로그를 연다.
 		JFileChooser jfc = new JFileChooser();
 		jfc.showOpenDialog(null);
@@ -29,11 +35,17 @@ public class ImageService {
 			return;
 		} // end if
 
+		//ImageDTO 생성
+		ImageDTO idto = new ImageDTO();
+		idto.setProduct_code(product_code);
+		idto.setImage_name(imageFile.getName());
+		idto.setFile(imageFile);
+		
 		ImageDAO idao = ImageDAO.getInstance();
 		int imageCode = 0;
 		
 		try {
-			imageCode=idao.insertImageBlob(imageFile);//DB에 이미지를 추가.
+			imageCode=idao.insertImageBlob(idto);//DB에 이미지를 추가.
 			
 			if (imageCode > 0) {
                 JOptionPane.showMessageDialog(null, "이미지 등록 성공 (Code: " + imageCode + ")");

@@ -16,195 +16,208 @@ import javax.swing.ImageIcon;
 import kr.co.sist.car_sell.dto.ImageDTO;
 
 public class ImageDAO {
-    private static ImageDAO imageDAO;
+	private static ImageDAO imageDAO;
 
-    private ImageDAO() { }
+	private ImageDAO() {
+	}
 
-    public static ImageDAO getInstance() {
-        if (imageDAO == null) { imageDAO = new ImageDAO(); }
-        return imageDAO;
-    }
-    
-    /**
-     * [신규 추가] 차량 코드로 이미지 '경로' 목록 조회 (String 리스트 반환)
-     * @param productCode 차량 코드
-     * @return 이미지 경로(String) 리스트
-     */
-    public List<String> selectCarImagePaths(int productCode) throws SQLException, IOException {
-        List<String> pathList = new ArrayList<>(); // String 리스트 생성
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-        GetConnection gc = GetConnection.getInstance();
+	public static ImageDAO getInstance() {
+		if (imageDAO == null) {
+			imageDAO = new ImageDAO();
+		}
+		return imageDAO;
+	}
 
-        // IMAGE 테이블에서 image_name (경로) 컬럼만 조회
-        String sql = "SELECT i.image_name " +
-                     "FROM CAR_IMAGE ci " +
-                     "JOIN IMAGE i ON ci.IMAGE_CODE = i.IMAGE_CODE " +
-                     "WHERE ci.PRODUCT_CODE = ? ORDER BY i.IMAGE_CODE";
+	/**
+	 * [신규 추가] 차량 코드로 이미지 '경로' 목록 조회 (String 리스트 반환)
+	 * 
+	 * @param productCode 차량 코드
+	 * @return 이미지 경로(String) 리스트
+	 */
+	public List<String> selectCarImagePaths(int productCode) throws SQLException, IOException {
+		List<String> pathList = new ArrayList<>(); // String 리스트 생성
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		GetConnection gc = GetConnection.getInstance();
 
-        try {
-            con = gc.getConn();
-            pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, productCode);
-            rs = pstmt.executeQuery();
+		// IMAGE 테이블에서 image_name (경로) 컬럼만 조회
+		String sql = "SELECT i.image_name " + "FROM CAR_IMAGE ci " + "JOIN IMAGE i ON ci.IMAGE_CODE = i.IMAGE_CODE "
+				+ "WHERE ci.PRODUCT_CODE = ? ORDER BY i.IMAGE_CODE";
 
-            while(rs.next()) {
-                pathList.add(rs.getString("image_name")); // 경로 문자열을 리스트에 추가
-            }
-        } finally {
-            gc.dbClose(con, pstmt, rs);
-        }
-        return pathList; // 경로 리스트 반환
-    }
+		try {
+			con = gc.getConn();
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, productCode);
+			rs = pstmt.executeQuery();
 
-   
-    /**
-     * [관리자/데이터입력용] 이미지 파일을 DB BLOB 컬럼에 저장
-     * @param imageFile 파일 선택기로 고른 이미지 파일
-     * @return 1이면 성공
-     * @throws SQLException
-     * @throws IOException
-     */
-    public int insertImageBlob(File imageFile) throws SQLException, IOException {
-        int generatedImageCode = 0; // 새로 생성된 image_code 반환용, DB에서 받아온 시퀀스로 된 image_code를 저장.
-        Connection con = null;
-        PreparedStatement pstmtInsert = null;
-        FileInputStream fis = null; // 파일 읽기 스트림
-        GetConnection gc = GetConnection.getInstance();
+			while (rs.next()) {
+				pathList.add(rs.getString("image_name")); // 경로 문자열을 리스트에 추가
+			}
+		} finally {
+			gc.dbClose(con, pstmt, rs);
+		}
+		return pathList; // 경로 리스트 반환
+	}
 
-        // ㅁ BLOB 데이터 삽입 쿼리
-        String insertSql = "INSERT INTO IMAGE (image_code, image_name, image_blob, imageadd_date) " +
-                "VALUES (SEQ_IMAGE.NEXTVAL, ?, ?, SYSDATE)";
+	/**
+	 * [관리자/데이터입력용] 이미지 파일을 DB BLOB 컬럼에 저장
+	 * 
+	 * @param imageFile 파일 선택기로 고른 이미지 파일
+	 * @return 1이면 성공
+	 * @throws SQLException
+	 * @throws IOException
+	 */
+	public int insertImageBlob(ImageDTO idto) throws SQLException, IOException {
+		Connection con = null;
+		PreparedStatement pstmtInsert = null;
+		//ResultSet rs = null;
+		FileInputStream fis = null; // 파일 읽기 스트림
+		int generatedImageCode = 0;
 
-        try {
-            con = gc.getConn();
-            con.setAutoCommit(false); // 트랜잭션 시작 (선택 사항)
+		GetConnection gc = GetConnection.getInstance();
 
-           
-            // 1. 파일 스트림 열기
-            fis = new FileInputStream(imageFile);
+		// ㅁ BLOB 데이터 삽입 쿼리
+		String insertSql = "INSERT INTO IMAGE (image_code, product_code, image_name, image_blob, imageadd_date) "
+				+ "VALUES (SEQ_IMAGE.NEXTVAL, ?, ?, ?, SYSDATE)";
 
-            // 2. INSERT 쿼리 실행
-            pstmtInsert = con.prepareStatement(insertSql);
-            pstmtInsert.setInt(1, generatedImageCode); // 생성된 시퀀스 값
-            pstmtInsert.setString(2, imageFile.getName()); // 원본 파일명
-            // ★ setBinaryStream(파라미터 인덱스, 파일 입력 스트림, 파일 길이) ★
-            pstmtInsert.setBinaryStream(3, fis, (int)imageFile.length());
+		try {
+			con = gc.getConn();
+			con.setAutoCommit(false); // 트랜잭션 시작 (선택 사항)
 
-            int rowsAffected = pstmtInsert.executeUpdate();
+			File imageFile = idto.getFile();
+			// 1. 파일 스트림 열기
+			fis = new FileInputStream(imageFile);
 
-            if (rowsAffected == 1) {
-                con.commit(); // 성공 시 커밋
-            } else {
-                con.rollback(); // 실패 시 롤백
-                generatedImageCode = 0; // 실패 시 0 반환
-            }
+			// 2. INSERT 쿼리 실행
+			pstmtInsert = con.prepareStatement(insertSql);
+			pstmtInsert.setInt(1, idto.getProduct_code()); // product_code값
+			pstmtInsert.setString(2, imageFile.getName()); // 원본 파일명
+			// ★ setBinaryStream(파라미터 인덱스, 파일 입력 스트림, 파일 길이) ★
+			pstmtInsert.setBinaryStream(3, fis, (int) imageFile.length());
 
-        } catch (SQLException | IOException e) {
-            if (con != null) con.rollback(); // 예외 발생 시 롤백
-            throw e; // 예외 다시 던지기
-        } finally {
-            // 스트림 닫기
-            if (fis != null) fis.close();
-            // DB 리소스 닫기
-            gc.dbClose(con, pstmtInsert, null); // Connection 닫기
-        }//end finally
-        return generatedImageCode; // 성공 시 생성된 image_code, 실패 시 0 반환
-    }//insertImageBlob
+			int rowsAffected = pstmtInsert.executeUpdate();
 
+			if (rowsAffected == 1) {
+				// INSERT에 대한 자동 생성 키(image_code)값 가져오기
+                try (ResultSet rs = pstmtInsert.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        generatedImageCode = rs.getInt(1);
+                        con.commit(); // 성공 시 커밋
+                    } else {
+                        // 키를 가져오지 못하면 롤백 
+                        con.rollback(); 
+                    }//end else
+                }//end try
+			} else {
+				con.rollback(); // 실패 시 롤백
+			}//end else
 
-    /** [구매/상세용] 이미지 코드로 BLOB 데이터를 ImageIcon으로 반환 */
-    public ImageIcon getImageIconFromBlob(int imageCode) throws SQLException, IOException {
-        // (이전에 제공한 코드와 동일)
-        ImageIcon icon = null;
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-        GetConnection gc = GetConnection.getInstance();
-        InputStream is = null;
-        ByteArrayOutputStream baos = null; //출력 데이터를 메모리(RAM) 상의 바이트 배열에 저장
+		} catch (SQLException | IOException e) {
+			if (con != null)
+				con.rollback(); // 예외 발생 시 롤백
+			throw e; // 예외 다시 던지기
+		} finally {
+			// 스트림 닫기
+			if (fis != null)
+				fis.close();
+			// DB 리소스 닫기
+			gc.dbClose(con, pstmtInsert, null); // Connection 닫기
+		} // end finally
+		return generatedImageCode; // 성공 시 생성된 image_code, 실패 시 0 반환
+	}// insertImageBlob
 
-        String sql = "SELECT image_blob FROM IMAGE WHERE image_code = ?"; // BLOB 컬럼명 확인
+	/** [구매/상세용] 이미지 코드로 BLOB 데이터를 ImageIcon으로 반환 */
+	public ImageIcon getImageIconFromBlob(int imageCode) throws SQLException, IOException {
+		// (이전에 제공한 코드와 동일)
+		ImageIcon icon = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		GetConnection gc = GetConnection.getInstance();
+		InputStream is = null;
+		ByteArrayOutputStream baos = null; // 출력 데이터를 메모리(RAM) 상의 바이트 배열에 저장
 
-        try {
-            con = gc.getConn();
-            pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, imageCode);
-            rs = pstmt.executeQuery();
+		String sql = "SELECT image_blob FROM IMAGE WHERE image_code = ?"; // BLOB 컬럼명 확인
 
-            if (rs.next()) {
-                is = rs.getBinaryStream("image_blob"); // BLOB 읽기
-                if (is != null) {
-                    baos = new ByteArrayOutputStream();
-                    byte[] buffer = new byte[4096];
-                    int bytesRead;
-                    while ((bytesRead = is.read(buffer)) != -1) { // 메모리로 복사
-                        baos.write(buffer, 0, bytesRead);
-                    }
-                    baos.flush();
-                    byte[] imageData = baos.toByteArray(); // byte 배열로 변환
-                    if (imageData.length > 0) {
-                        icon = new ImageIcon(imageData); // ImageIcon 생성
-                    }
-                }
-            }
-        } finally {
-            if (is != null) is.close();
-            if (baos != null) baos.close();
-            gc.dbClose(con, pstmt, rs);
-        }
-        return icon;
-    }//getImageIconFromBlob
+		try {
+			con = gc.getConn();
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, imageCode);
+			rs = pstmt.executeQuery();
 
-    /** [구매/상세용] 차량 코드로 '이미지 정보(DTO)' 목록 조회 (BLOB 제외) */
-    public List<ImageDTO> selectCarImages(int productCode) throws SQLException, IOException {
-        // (이전에 제공한 코드와 동일 - image_code, image_name 등만 가져옴)
-        List<ImageDTO> list = new ArrayList<>();
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-        GetConnection gc = GetConnection.getInstance();
+			if (rs.next()) {
+				is = rs.getBinaryStream("image_blob"); // BLOB 읽기
+				if (is != null) {
+					baos = new ByteArrayOutputStream();
+					byte[] buffer = new byte[4096];
+					int bytesRead;
+					while ((bytesRead = is.read(buffer)) != -1) { // 메모리로 복사
+						baos.write(buffer, 0, bytesRead);
+					}
+					baos.flush();
+					byte[] imageData = baos.toByteArray(); // byte 배열로 변환
+					if (imageData.length > 0) {
+						icon = new ImageIcon(imageData); // ImageIcon 생성
+					}
+				}
+			}
+		} finally {
+			if (is != null)
+				is.close();
+			if (baos != null)
+				baos.close();
+			gc.dbClose(con, pstmt, rs);
+		}
+		return icon;
+	}// getImageIconFromBlob
 
-        String sql = "SELECT i.IMAGE_CODE, i.IMAGE_NAME, i.IMAGEADD_DATE " +
-                     "FROM CAR_IMAGE ci " +
-                     "JOIN IMAGE i ON ci.IMAGE_CODE = i.IMAGE_CODE " +
-                     "WHERE ci.PRODUCT_CODE = ? ORDER BY i.IMAGE_CODE";
+	/** [구매/상세용] 차량 코드로 '이미지 정보(DTO)' 목록 조회 (BLOB 제외) */
+	public List<ImageDTO> selectCarImages(int productCode) throws SQLException, IOException {
+		// (이전에 제공한 코드와 동일 - image_code, image_name 등만 가져옴)
+		List<ImageDTO> list = new ArrayList<>();
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		GetConnection gc = GetConnection.getInstance();
 
-        try {
-            con = gc.getConn();
-            pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, productCode);
-            rs = pstmt.executeQuery();
+		String sql = "SELECT i.IMAGE_CODE, i.IMAGE_NAME, i.IMAGEADD_DATE " + "FROM CAR_IMAGE ci "
+				+ "JOIN IMAGE i ON ci.IMAGE_CODE = i.IMAGE_CODE " + "WHERE ci.PRODUCT_CODE = ? ORDER BY i.IMAGE_CODE";
 
-            while(rs.next()) {
-                ImageDTO img = new ImageDTO();
-                img.setImage_code(rs.getInt("IMAGE_CODE"));
-                img.setImage_name(rs.getString("IMAGE_NAME"));
-                img.setImageadd_date(rs.getDate("IMAGEADD_DATE"));
-                list.add(img);
-            }
-        } finally {
-            gc.dbClose(con, pstmt, rs);
-        }
-        return list;
-    }
+		try {
+			con = gc.getConn();
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, productCode);
+			rs = pstmt.executeQuery();
 
-     // ★ 중요: CAR_IMAGE 테이블에 매핑 정보 추가하는 메소드도 필요 ★
-     public void insertCarImageMapping(int productCode, int imageCode) throws SQLException, IOException {
-         Connection con = null;
-         PreparedStatement pstmt = null;
-         GetConnection gc = GetConnection.getInstance();
-         String sql = "INSERT INTO CAR_IMAGE (image_code, product_code) VALUES (?, ?)";
+			while (rs.next()) {
+				ImageDTO img = new ImageDTO();
+				img.setImage_code(rs.getInt("IMAGE_CODE"));
+				img.setImage_name(rs.getString("IMAGE_NAME"));
+				img.setImageadd_date(rs.getDate("IMAGEADD_DATE"));
+				list.add(img);
+			}
+		} finally {
+			gc.dbClose(con, pstmt, rs);
+		}
+		return list;
+	}
 
-         try {
-             con = gc.getConn();
-             pstmt = con.prepareStatement(sql);
-             pstmt.setInt(1, imageCode);
-             pstmt.setInt(2, productCode);
-             pstmt.executeUpdate();
-         } finally {
-             gc.dbClose(con, pstmt, null);
-         }
-     }
+	// ★ 중요: CAR_IMAGE 테이블에 매핑 정보 추가하는 메소드도 필요 ★
+	public void insertCarImageMapping(int productCode, int imageCode) throws SQLException, IOException {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		GetConnection gc = GetConnection.getInstance();
+		String sql = "INSERT INTO CAR_IMAGE (image_code, product_code) VALUES (?, ?)";
+
+		try {
+			con = gc.getConn();
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, imageCode);
+			pstmt.setInt(2, productCode);
+			pstmt.executeUpdate();
+		} finally {
+			gc.dbClose(con, pstmt, null);
+		}
+	}
 }

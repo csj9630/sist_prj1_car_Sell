@@ -22,11 +22,11 @@ public class ImgBlobDesign extends JFrame implements ActionListener {
 		return jtfCode;
 	}
 
-	private JButton jbtnImage;
-	private JButton jbtnAdd, jbtnSelect;
+	private JButton jbtnImage, jbtnAdd, jbtnSelect;
 	private JTextField jtfCode;
-
 	private JLabel jlbImage;
+	
+	private int product_code = 1;//차량코드 임시 데이터 
 
 	public ImgBlobDesign() {
 		super("친구관리");
@@ -95,7 +95,7 @@ public class ImgBlobDesign extends JFrame implements ActionListener {
 			
 		} // end if
 		if (ae.getSource() == getJbtnAdd()) {
-			new ImageService().addImg();
+			new ImageService().addImg(product_code);
 		} // end if
 		
 		if (ae.getSource() == getJbtnSelect()) {
