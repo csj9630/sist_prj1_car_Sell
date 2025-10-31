@@ -181,8 +181,8 @@ public class SettlementEvt extends WindowAdapter implements ActionListener {
 		} // end if
 
 		try {
-			LocalDate tempStart = LocalDate.parse(startPeriod, DateTimeFormatter.ofPattern("yyyy-MM-d"));
-			LocalDate tempEnd = LocalDate.parse(endPeriod, DateTimeFormatter.ofPattern("yyyy-MM-d"));
+			LocalDate tempStart = LocalDate.parse(startPeriod, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			LocalDate tempEnd = LocalDate.parse(endPeriod, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 			// 2.옵션에서의 시작일보다 종료일이 더 빠르다면 false 반환.
 			if (tempStart.isAfter(tempEnd)) {
 				isValid = false;
@@ -265,11 +265,11 @@ public class SettlementEvt extends WindowAdapter implements ActionListener {
 		if (smd.getJcbQuarterlySettlement().getSelectedItem().equals("분기별 판매현황")) {
 			smd.getCardLayout().show(smd.getJpCardPanel(), "cardSettlement");
 		} else if (smd.getJcbQuarterlySettlement().getSelectedItem().equals("기간 입력")) {
-			String startPeriod = JOptionPane.showInputDialog("시작 기간을 입력하여 주십시오");
+			String startPeriod = JOptionPane.showInputDialog("시작 기간을 입력하여 주십시오.\n기간은 '2025-01'와 같은 형식(월까지만)으로 입력하여 주십시오.");
 			if (startPeriod == null) {
 				return;
 			} // end if
-			String endPeriod = JOptionPane.showInputDialog("끝 기간을 입력하여 주십시오");
+			String endPeriod = JOptionPane.showInputDialog("끝 기간을 입력하여 주십시오\n기간은 '2025-01'와 같은 형식(월까지만)으로 입력하여 주십시오.");
 			if (endPeriod == null) {
 				return;
 			}

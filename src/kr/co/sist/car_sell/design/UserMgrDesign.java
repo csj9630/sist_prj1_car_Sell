@@ -125,7 +125,7 @@ public class UserMgrDesign extends JDialog {
 		setSize(950, 900);
 		setLocationRelativeTo(parentFrame);
 		
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		
 	}
 	
