@@ -192,6 +192,8 @@ public class ImageDAO_CSJ {
 		ResultSet rs = null;
 		GetConnection gc = GetConnection.getInstance();
 
+//		String sql = "SELECT i.IMAGE_CODE, i.IMAGE_NAME, i.IMAGE_ADD_DATE " + "FROM CAR_IMAGE ci "
+//				+ "JOIN IMAGE i ON ci.IMAGE_CODE = i.IMAGE_CODE " + "WHERE ci.PRODUCT_CODE = ? ORDER BY i.IMAGE_CODE";
 		String sql = "SELECT i.IMAGE_CODE, i.IMAGE_NAME, i.IMAGE_ADD_DATE " + "FROM CAR_IMAGE ci "
 				+ "JOIN IMAGE i ON ci.IMAGE_CODE = i.IMAGE_CODE " + "WHERE ci.PRODUCT_CODE = ? ORDER BY i.IMAGE_CODE";
 
