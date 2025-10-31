@@ -188,7 +188,7 @@ public class ImageDAO {
                 ImageDTO img = new ImageDTO();
                 img.setImage_code(rs.getInt("IMAGE_CODE"));
                 img.setImage_name(rs.getString("IMAGE_NAME"));
-                img.setImageadd_date(rs.getDate("IMAGEADD_DATE"));
+                img.setImage_add_date(rs.getDate("IMAGEADD_DATE"));
                 list.add(img);
             }
         } finally {
