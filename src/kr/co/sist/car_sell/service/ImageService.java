@@ -1,14 +1,18 @@
 package kr.co.sist.car_sell.service;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import kr.co.sist.car_sell.dao.ImageDAO;
 import kr.co.sist.car_sell.dao.ImageDAO_CSJ;
 import kr.co.sist.car_sell.dto.ImageDTO;
 import kr.co.sist.util.img.ImageResize;
@@ -26,7 +30,9 @@ public class ImageService {
 	public void saveImg(int product_code) {
 		// 파일 다이얼로그를 연다.
 		JFileChooser jfc = new JFileChooser();
+		jfc.setMultiSelectionEnabled(true);
 		jfc.showOpenDialog(null);
+		
 		File imageFile = jfc.getSelectedFile();
 		if (imageFile == null) {
 			JOptionPane.showMessageDialog(null, "이미지가 선택되지 않았습니다.");
@@ -155,6 +161,36 @@ public class ImageService {
 //
 //
 //	}// prviewImg
+	
+	
+	
+	/**
+	 * DB에서 상품코드가 같은 이미지를 리스트로 불러온다.
+	 * @param product_code
+	 * @return 상품이미지 리스트
+	 */
+	public List<ImageIcon> loadCarImgList(int product_code){
+		List<ImageIcon> iconlist = new ArrayList<>();
+		
+		ImageDAO_CSJ idao = ImageDAO_CSJ.getInstance();
+		
+		//이미지가 없을 때의 오류처리
+		try {
+			iconlist = idao.selectImageList(product_code);
+		} catch (SQLException e) {
+			handleException("데이터베이스 처리 중 오류가 발생했습니다.", e);
+		} catch (IOException e) {
+			handleException("이미지 파일 처리 중 오류가 발생했습니다.", e);
+		} // end catch
+		
+		
+		
+		return iconlist;
+	}//loadCarImgSet
+	
+	
+	
+	//----------------------------동작 메서드-----------------------------------------------------
 
 	/**
 	 * 파일명의 확장자가 이미지 확장자인지 체크.
@@ -184,4 +220,5 @@ public class ImageService {
 		ex.printStackTrace(); // 콘솔에 상세 오류 출력
 		JOptionPane.showMessageDialog(null, message + "\n" + ex.getMessage(), "오류", JOptionPane.ERROR_MESSAGE);
 	}// handleException
+	
 }// class
