@@ -220,7 +220,7 @@ public class ImageDAO_CSJ {
 					baos.flush();
 					byte[] imageData = baos.toByteArray(); // byte 배열로 변환
 					if (imageData.length > 0) {
-						icon = new ImageIcon(imageData); // ImageIcon 생성
+						icon = new ImageIcon(imageData); // ImageIcon 생성해서 blob이미지 저장.
 					} // end if
 				} // end if
 				iconlist.add(icon); // List에 imageIcon 추가.

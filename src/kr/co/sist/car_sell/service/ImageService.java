@@ -174,7 +174,7 @@ public class ImageService {
 		
 		ImageDAO_CSJ idao = ImageDAO_CSJ.getInstance();
 		
-		
+		//이미지가 없을 때의 오류처리
 		try {
 			iconlist = idao.selectImageList(product_code);
 		} catch (SQLException e) {
