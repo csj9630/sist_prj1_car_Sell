@@ -26,7 +26,9 @@ public class ImageService {
 	public void saveImg(int product_code) {
 		// 파일 다이얼로그를 연다.
 		JFileChooser jfc = new JFileChooser();
+		jfc.setMultiSelectionEnabled(true);
 		jfc.showOpenDialog(null);
+		
 		File imageFile = jfc.getSelectedFile();
 		if (imageFile == null) {
 			JOptionPane.showMessageDialog(null, "이미지가 선택되지 않았습니다.");

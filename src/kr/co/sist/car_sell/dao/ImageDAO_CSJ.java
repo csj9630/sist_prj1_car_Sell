@@ -141,7 +141,6 @@ public class ImageDAO_CSJ {
 
 	/** [구매/상세용] 이미지 코드로 BLOB 데이터를 ImageIcon으로 반환 */
 	public ImageIcon getImageIconFromBlob(int imageCode) throws SQLException, IOException {
-		// (이전에 제공한 코드와 동일)
 		ImageIcon icon = null;
 		Connection con = null;
 		PreparedStatement pstmt = null;

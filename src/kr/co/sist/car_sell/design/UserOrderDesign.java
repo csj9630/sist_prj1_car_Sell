@@ -28,6 +28,7 @@ import javax.swing.JTextField;
 import kr.co.sist.car_sell.dto.CarDTO;
 import kr.co.sist.car_sell.dto.UserDTO; // dto 패키지 (njw 버전)
 import kr.co.sist.car_sell.event.UserOrderEvt;
+import kr.co.sist.car_sell.service.ImageService;
 
 public class UserOrderDesign extends JDialog {
 
@@ -62,12 +63,11 @@ public class UserOrderDesign extends JDialog {
 		this.uDTO = uoe.getuDTO();
 		this.cDTO = uoe.getcDTO();
 		this.imagePathList = uoe.getImagePathList();
-		
-		//비어 있는 list를 주고 빈 이미지 나오는지테스트.
+
+		// 비어 있는 list를 주고 빈 이미지 나오는지테스트.
 //		this.imagePathList = new ArrayList<String>();
-		
-		
-		//DB 데이터 테스트.
+
+		// DB 데이터 테스트.
 		System.out.println(uDTO);
 		System.out.println(cDTO);
 		System.out.println(imagePathList);
@@ -89,7 +89,8 @@ public class UserOrderDesign extends JDialog {
 		jpCardImages.setPreferredSize(new Dimension(350, 250)); // 패널 크기 지정
 
 		// --- 이미지 삽입 ----
-		buildCarImg(imagePathList);
+//		buildCarImg(imagePathList);
+		buildCarImgByBlob(productCode); // blob에서 이미지 로드
 
 		// --- 이미지 네비게이션 버튼 ---
 		jbtnPrev = new JButton("◀ 이전");
@@ -150,10 +151,12 @@ public class UserOrderDesign extends JDialog {
 		// UserOrderDesign 생성자 내부에서 이미 자체적으로 처리되었습니다.)
 
 		// --- 다이얼로그 기본 설정 ---
-		
-//		setSize(1250, 700);
+
+		setSize(1250, 700);
+		setLocation(300,300);
 //		setLocationRelativeTo(owner);
-		setBounds(owner.getX() + 30, owner.getY() + 30, owner.getWidth() - 50, owner.getHeight() -50); // 부모좌표를 가져올 수 있음.		
+//		setBounds(owner.getX() + 30, owner.getY() + 30, owner.getWidth() - 50, owner.getHeight() - 50); // 부모좌표를 가져올 수
+																										// 있음.
 		setVisible(true);
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -236,14 +239,14 @@ public class UserOrderDesign extends JDialog {
 
 	private void buildCarImg(List<String> imagePathList) {
 		String localPath = "src/";
-		
+
 		if (imagePathList.isEmpty()) { // 이미지 없을 때
 			buildBlankImg();
 		} else { // 이미지 있을 때
 			int cardIndex = 1;
 			for (String imagePath : imagePathList) {
 				// ★ 경로로 ImageIcon 생성 (파일 존재 및 경로 확인 필수!) ★
-				ImageIcon icon = new ImageIcon(localPath+imagePath);
+				ImageIcon icon = new ImageIcon(localPath + imagePath);
 				JLabel lblImg;
 
 				// 이미지 로딩 상태 확인 (선택 사항)
@@ -262,6 +265,32 @@ public class UserOrderDesign extends JDialog {
 				jpCardImages.add(lblImg, "card" + cardIndex++);
 			} // end for
 		} // end else
+	}// buildCarImg
+
+	private void buildCarImgByBlob(int productCode) {
+
+		ImageService is = new ImageService();
+//		ImageIcon icon = null;
+
+		ImageIcon icon = is.loadDBImage(productCode);
+		System.out.println(icon);
+		JLabel lblImg;
+		
+		// 이미지 로딩 상태 확인 (선택 사항)
+		if (icon.getImageLoadStatus() == java.awt.MediaTracker.ERRORED) {
+			System.err.println("이미지 로드 실패: " + productCode);
+			lblImg = new JLabel("  (X)  "); // 실패 시 표시
+		} else {
+			// (선택) 이미지 크기 조절 (패널 크기에 맞게)
+			Image scaledImage = icon.getImage().getScaledInstance(350, 250, Image.SCALE_SMOOTH);
+			lblImg = new JLabel(new ImageIcon(scaledImage));
+		} // end else
+		lblImg.setPreferredSize(new Dimension(350, 250));
+		lblImg.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		lblImg.setHorizontalAlignment(JLabel.CENTER);
+		jpCardImages.add(lblImg, "card" + productCode);
+		
+		
 	}// buildCarImg
 
 	// --- Evt 클래스용 Getter 메소드 ---
