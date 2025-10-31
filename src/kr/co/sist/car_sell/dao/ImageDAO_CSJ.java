@@ -98,7 +98,7 @@ public class ImageDAO_CSJ {
 
 			if (rsSeq.next()) {
 				generatedImageCode = rsSeq.getInt(1); // 시퀀스 넘버를 받음.
-				System.out.println("gic : "+ generatedImageCode);
+				System.out.println("gic : " + generatedImageCode);
 			} else {
 				throw new SQLException("SEQ_IMAGE 시퀀스 값을 가져오지 못했습니다.");
 			} // end else
@@ -141,7 +141,6 @@ public class ImageDAO_CSJ {
 
 	/** [구매/상세용] 이미지 코드로 BLOB 데이터를 ImageIcon으로 반환 */
 	public ImageIcon getImageIconFromBlob(int imageCode) throws SQLException, IOException {
-		// (이전에 제공한 코드와 동일)
 		ImageIcon icon = null;
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -185,16 +184,22 @@ public class ImageDAO_CSJ {
 	}// getImageIconFromBlob
 
 	/** [구매/상세용] 차량 코드로 '이미지 정보(DTO)' 목록 조회 (BLOB 제외) */
-	public List<ImageDTO> selectCarImages(int productCode) throws SQLException, IOException {
+	public List<ImageIcon> selectImageList(int productCode) throws SQLException, IOException {
 		// (이전에 제공한 코드와 동일 - image_code, image_name 등만 가져옴)
-		List<ImageDTO> list = new ArrayList<>();
+		List<ImageIcon> iconlist = new ArrayList<>();
+		ImageIcon icon = null;
+
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		GetConnection gc = GetConnection.getInstance();
 
-		String sql = "SELECT i.IMAGE_CODE, i.IMAGE_NAME, i.IMAGE_ADD_DATE " + "FROM CAR_IMAGE ci "
-				+ "JOIN IMAGE i ON ci.IMAGE_CODE = i.IMAGE_CODE " + "WHERE ci.PRODUCT_CODE = ? ORDER BY i.IMAGE_CODE";
+		InputStream is = null;
+		ByteArrayOutputStream baos = null;
+//		String sql = "SELECT i.IMAGE_CODE, i.IMAGE_NAME, i.IMAGE_ADD_DATE " + "FROM CAR_IMAGE ci "
+//				+ "JOIN IMAGE i ON ci.IMAGE_CODE = i.IMAGE_CODE " + "WHERE ci.PRODUCT_CODE = ? ORDER BY i.IMAGE_CODE";
+//		String sql = " select image_code, product_code, image_name, image_blob, image_add_date from image where product_code = ? order by image_code ";
+		String sql = " select image_blob from image where product_code = ? order by image_code ";
 
 		try {
 			con = gc.getConn();
@@ -203,17 +208,32 @@ public class ImageDAO_CSJ {
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
-				ImageDTO img = new ImageDTO();
-				img.setImage_code(rs.getInt("IMAGE_CODE"));
-				img.setImage_name(rs.getString("IMAGE_NAME"));
-				img.setImage_add_date(rs.getDate("IMAGE_ADD_DATE"));
-				list.add(img);
-			}
+
+				is = rs.getBinaryStream("image_blob"); // BLOB 읽기
+				if (is != null) {
+					baos = new ByteArrayOutputStream();
+					byte[] buffer = new byte[4096];
+					int bytesRead;
+					while ((bytesRead = is.read(buffer)) != -1) { // 메모리로 복사
+						baos.write(buffer, 0, bytesRead);
+					}
+					baos.flush();
+					byte[] imageData = baos.toByteArray(); // byte 배열로 변환
+					if (imageData.length > 0) {
+						icon = new ImageIcon(imageData); // ImageIcon 생성해서 blob이미지 저장.
+					} // end if
+				} // end if
+				iconlist.add(icon); // List에 imageIcon 추가.
+			} // end while
+
 		} finally {
+			if (is != null) is.close(); 
+			if (baos != null) baos.close();
 			gc.dbClose(con, pstmt, rs);
-		}
-		return list;
-	}
+		} // end finally
+
+		return iconlist;
+	}// method
 
 	// ★ 중요: CAR_IMAGE 테이블에 매핑 정보 추가하는 메소드도 필요 ★
 	public void insertCarImageMapping(int productCode, int imageCode) throws SQLException, IOException {
