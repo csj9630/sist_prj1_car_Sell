@@ -25,9 +25,9 @@ public class ImgBlobDesign extends JFrame implements ActionListener {
 //	private int image_code = 64;//이미지코드 임시 데이터 
 
 	public ImgBlobDesign() {
-		super("친구관리");
+		super("BlobBraker");
 
-		JLabel jlbInform = new JLabel("이미지 코드 작성.");
+		JLabel jlbInform = new JLabel("image_code로 blob에서 이미지 부르기.");
 
 		ImageIcon ii = new ImageIcon("src/images/default.png");
 		jlbImage = new JLabel(ii);
@@ -39,8 +39,8 @@ public class ImgBlobDesign extends JFrame implements ActionListener {
 		setLayout(null);
 
 		//타이틀 라벨 세팅
-		jlbInform.setSize(200, 50);
-		jlbInform.setLocation(10, 10);
+		jlbInform.setSize(400, 50);
+		jlbInform.setLocation(600, 10);
 		add(jlbInform);
 
 		//이미지 라벨 세팅
@@ -51,31 +51,35 @@ public class ImgBlobDesign extends JFrame implements ActionListener {
 		jlbImage.setHorizontalAlignment(SwingConstants.CENTER);
 		add(jlbImage);
 
-		//이미지 버튼 세팅
-		jbtnImage.setSize(170, 50);
-		jbtnImage.setLocation(600, 200);
-		add(jbtnImage);
-		
 		//추가 버튼 세팅
 		jbtnAdd.setSize(170, 50);
-		jbtnAdd.setLocation(600, 300);
+		jbtnAdd.setLocation(600, 100);
 		add(jbtnAdd);
 		
 		
 		//선택 버튼 세팅
 		jbtnSelect.setSize(170, 50);
-		jbtnSelect.setLocation(600, 400);
+		jbtnSelect.setLocation(600, 200);
 		add(jbtnSelect);
 		
+		//이미지 버튼 세팅
+		jbtnImage.setSize(170, 50);
+		jbtnImage.setLocation(600, 300);
+		add(jbtnImage);
+		
+	
+		
+	
+		
 		//텍스트필드 세팅
-		jtfCode.setSize(200, 30);
-		jtfCode.setLocation(600, 10);
+		jtfCode.setSize(150, 60);
+		jtfCode.setLocation(800, 200);
 		add(jtfCode);
 
-		
+		jbtnImage.setText("복수로 업로드--비활성화)");
 
 		// 이벤트 등록
-		jbtnImage.addActionListener(this);
+//		jbtnImage.addActionListener(this);
 		jbtnAdd.addActionListener(this);
 		jbtnSelect.addActionListener(this);
 
