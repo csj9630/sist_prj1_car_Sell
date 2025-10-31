@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import kr.co.sist.car_sell.dao.ImageDAO;
 import kr.co.sist.car_sell.design.UserOrderDesign;
 import kr.co.sist.car_sell.dto.CarDTO;
+import kr.co.sist.car_sell.dto.OrderDTO;
 import kr.co.sist.car_sell.dto.UserDTO;
 import kr.co.sist.car_sell.service.UserService;
 
@@ -68,17 +69,36 @@ public class UserOrderEvt implements ActionListener {
 			// 2. 사용자가 "예(Yes)" 버튼을 눌렀는지 확인합니다.
 			if (result == JOptionPane.YES_OPTION) {
 
-				// --- "예"를 눌렀을 때만 기존 로직 실행 ---
-				// TODO: 실제 주문 로직 처리 (DAO 연동)
+				try {
+					// 1. 주문 정보를 담을 OrderDTO 객체 생성
+					OrderDTO oDTO = new OrderDTO();
+					oDTO.setUser_code(this.user_code);     // Evt에 저장된 현재 사용자 코드
+					oDTO.setProduct_code(this.productCode); // Evt에 저장된 현재 차량 코드
 
-				System.out.println("주문하기 시도");
+					// 2. 서비스의 주문 메소드 호출
+					//    이 메소드는 내부적으로 OrderDAO.insertOrder를 호출하여
+					//    INSERT(주문)와 UPDATE(판매완료)를 실행합니다.
+					userService.placeOrder(oDTO);
 
-				// (임시) 주문이 성공했다고 가정하고 성공 메시지 띄우기
-				JOptionPane.showMessageDialog(uod, "구매가 완료되었습니다.");
-				uod.dispose(); // 현재 주문 창 닫기
+					// 3. 성공 처리
+					System.out.println("주문하기 성공: " + productCode + " 차량이 판매완료 처리되었습니다.");
+					JOptionPane.showMessageDialog(uod, "구매가 완료되었습니다.");
+					uod.dispose(); // 주문 성공 시 창 닫기
 
-			} // end if
-		} // end if
+				} catch (SQLException | IOException ex) {
+					// 4. 실패 처리 (DB 오류 등)
+					System.err.println("주문 처리 중 오류 발생: " + ex.getMessage());
+					// handleException 메소드가 있다면 사용
+					handleException("주문 처리 중 오류가 발생했습니다.", ex);
+				} catch (Exception ex) {
+                    // 5. 기타 예외 처리
+                    System.err.println("주문 처리 중 알 수 없는 오류 발생: " + ex.getMessage());
+                    handleException("주문 처리 중 알 수 없는 오류가 발생했습니다.", ex);
+                }
+                // --- ★★★ 로직 수정 완료 ★★★ ---
+
+			} // end if (YES_OPTION)
+		} // end if (jbtnOrder)
 	}// actionPerformed
 	
 	

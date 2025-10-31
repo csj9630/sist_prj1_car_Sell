@@ -12,10 +12,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import kr.co.sist.car_sell.dao.ImageDAO;
 import kr.co.sist.car_sell.dao.ImageDAO_CSJ;
 import kr.co.sist.car_sell.dto.ImageDTO;
-import kr.co.sist.util.img.ImageResize;
 
 public class ImageService {
 	// 이미지 확장자
@@ -75,46 +73,65 @@ public class ImageService {
 	
 	public void saveImg_All(int product_code) {
 		// 파일 다이얼로그를 연다.
-		
-		for(int i = 1; i<10;i++) {
-			
-			File imageFile = new File("src/temp_dir/CAR_00"+Integer.toString(i)+".png");
-			if (imageFile == null) {
-				JOptionPane.showMessageDialog(null, "이미지가 선택되지 않았습니다.");
-				return;
-			} // end if
-			if (!checkExt(imageFile.getName())) {
-				JOptionPane.showMessageDialog(null, "이미지 확장자가 아닙니다.");
-				return;
-			} // end if.
-			
-			// ImageDTO 생성
-			ImageDTO idto = new ImageDTO();
-			idto.setProduct_code(product_code);
-			idto.setImage_name(imageFile.getName());
-			idto.setFile(imageFile);
+		for (int i = 1; i <= 200; i++) {
 
-			ImageDAO_CSJ idao = ImageDAO_CSJ.getInstance();
-			int imageCode = 0;// 삽입하는 이미지코드
+	          File imageFile = new File(String.format("src/temp_dir/%03d.jpg", i));
 
-			try {
-				imageCode = idao.insertImageBlob(idto);// DB에 이미지를 추가.
-				if (imageCode > 0) {
-					JOptionPane.showMessageDialog(null, "이미지 등록 성공 (Code: " + imageCode + ")");
-				} else {
-					// DB에서 롤백되었거나 행이 삽입되지 않은 경우
-					JOptionPane.showMessageDialog(null, "이미지 등록에 실패했습니다.(삽입 실패)", "경고", JOptionPane.WARNING_MESSAGE);
-				} // end else
-			} catch (SQLException e) {// DB 오류
-				handleException("데이터베이스 처리 중 오류가 발생했습니다.", e);
-				return;
-			} catch (IOException e) {// 파일 오류
-				handleException("이미지 파일 처리 중 오류가 발생했습니다.", e);
-				return;
-			} // end catch
-		}
-		
-	}// addImg
+	          // 파일 존재 여부 확인
+	          if (!imageFile.exists()) {
+	              System.out.println(imageFile.getName() + " 파일이 존재하지 않아 건너뜁니다.");
+	              continue; // 다음 루프로 이동
+	          }
+
+	          if (!checkExt(imageFile.getName())) {
+	              JOptionPane.showMessageDialog(null, "이미지 확장자가 아닙니다.");
+	              return;
+	          }
+
+	          // ImageDTO 생성
+	          ImageDTO idto = new ImageDTO();
+	          
+	          // ★ 1. 현재 product_code 값을 DTO에 설정합니다.
+	          idto.setProduct_code(product_code); 
+	          
+	          idto.setImage_name(imageFile.getName());
+	          idto.setFile(imageFile);
+
+	          ImageDAO_CSJ idao = ImageDAO_CSJ.getInstance();
+	          int imageCode = 0;
+
+	          try {
+	              imageCode = idao.insertImageBlob(idto); // DB에 이미지를 추가.
+	              
+	              if (imageCode > 0) {
+	                  System.out.println(imageFile.getName() + " 등록 성공 (ProductCode: " + product_code + ", ImageCode: " + imageCode + ")");
+	              } else {
+	                  JOptionPane.showMessageDialog(null, imageFile.getName() + " 등록에 실패했습니다.", "경고", JOptionPane.WARNING_MESSAGE);
+	              }
+	          } catch (SQLException e) {
+	              handleException("데이터베이스 처리 중 오류가 발생했습니다.", e);
+	              return;
+	          } catch (IOException e) {
+	              handleException("이미지 파일 처리 중 오류가 발생했습니다.", e);
+	              return;
+	          }
+
+	          // --- ▼ 4개 배치 처리 로직 ▼ ---
+	          
+	          // ★ 2. 4번째 이미지가 방금 처리되었는지 확인합니다. (i가 4의 배수인가?)
+	          if (i % 4 == 0) {
+	              // 4개의 이미지가 한 배치를 완료했으므로, product_code를 1 증가시킵니다.
+	              product_code++;
+	              
+	              System.out.println("--- 4개 배치 완료. 다음 Product Code: " + product_code + " ---");
+	          }
+	          // --- ▲ 4개 배치 처리 로직 ▲ ---
+
+	      } // end for
+
+	      // 100개 작업 완료
+	      JOptionPane.showMessageDialog(null, "이미지 등록 작업이 완료되었습니다.");
+			}// addImg
 	
 	
 	
@@ -128,9 +145,10 @@ public class ImageService {
 		try {
 			icon = idao.getImageIconFromBlob(imageCode);
 			if(icon ==null) {
-				handleException("imagecode가 일치하는 이미지가 없습니다!",null);
-				
-			}
+	
+				JOptionPane.showMessageDialog(null, "imagecode가 일치하는 이미지가 없습니다!", "경고", JOptionPane.WARNING_MESSAGE);
+			} // end else
+			
 		} catch (SQLException e) {
 			handleException("데이터베이스 처리 중 오류가 발생했습니다.", e);
 		} catch (IOException e) {

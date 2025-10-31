@@ -10,7 +10,7 @@ public class Run_UserOrderDesign {
 		// TODO Auto-generated method stub
 //		UserDTO udto = new UserDTO(1,"ggggg", "q1w2e3r4", "김처루", "asdf@ggggg.com", "010-7889-9988",
 //				"경상북도 고령군 성산면 고탄길 37-1", "9999-9999-9999-9999");
-		new UserOrderDesign(new JDialog(), 1, 1);
+		new UserOrderDesign(new JDialog(), 1, 40);
 	}
 
 }
