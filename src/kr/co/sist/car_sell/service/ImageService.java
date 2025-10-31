@@ -9,7 +9,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import kr.co.sist.car_sell.dao.ImageDAO;
+import kr.co.sist.car_sell.dao.ImageDAO_CSJ;
 import kr.co.sist.car_sell.dto.ImageDTO;
 import kr.co.sist.util.img.ImageResize;
 
@@ -44,7 +44,7 @@ public class ImageService {
 		idto.setImage_name(imageFile.getName());
 		idto.setFile(imageFile);
 
-		ImageDAO idao = ImageDAO.getInstance();
+		ImageDAO_CSJ idao = ImageDAO_CSJ.getInstance();
 		int imageCode = 0;// 삽입하는 이미지코드
 
 		try {
@@ -88,7 +88,7 @@ public class ImageService {
 			idto.setImage_name(imageFile.getName());
 			idto.setFile(imageFile);
 
-			ImageDAO idao = ImageDAO.getInstance();
+			ImageDAO_CSJ idao = ImageDAO_CSJ.getInstance();
 			int imageCode = 0;// 삽입하는 이미지코드
 
 			try {
@@ -123,7 +123,7 @@ public class ImageService {
 	 */
 	public ImageIcon loadDBImage(int imageCode) {
 		ImageIcon icon = null;
-		ImageDAO idao = ImageDAO.getInstance();
+		ImageDAO_CSJ idao = ImageDAO_CSJ.getInstance();
 		try {
 			icon = idao.getImageIconFromBlob(imageCode);
 		} catch (SQLException e) {
