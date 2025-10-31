@@ -81,7 +81,7 @@ public class ImgBlobDesign extends JFrame implements ActionListener {
 
 		setBounds(100, 100, 1000, 600);
 		setVisible(true);
-
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}//생성자
 	
 	@Override
