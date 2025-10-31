@@ -86,7 +86,7 @@ public class ImageDAO_CSJ {
 
 		// ㅁ BLOB 데이터 삽입 쿼리
 		String insertSql = "INSERT INTO IMAGE (image_code, product_code, image_name, image_blob, image_add_date) "
-				+ "VALUES (SEQ_IMAGE.NEXTVAL, ?, ?, ?, SYSDATE)";
+				+ "VALUES (?, ?, ?, ?, SYSDATE)";
 
 		try {
 			con = gc.getConn();
@@ -98,6 +98,7 @@ public class ImageDAO_CSJ {
 
 			if (rsSeq.next()) {
 				generatedImageCode = rsSeq.getInt(1); // 시퀀스 넘버를 받음.
+				System.out.println("gic : "+ generatedImageCode);
 			} else {
 				throw new SQLException("SEQ_IMAGE 시퀀스 값을 가져오지 못했습니다.");
 			} // end else
@@ -108,10 +109,11 @@ public class ImageDAO_CSJ {
 
 			// 2. INSERT 쿼리 실행
 			pstmtInsert = con.prepareStatement(insertSql);
-			pstmtInsert.setInt(1, idto.getProduct_code()); // product_code값
-			pstmtInsert.setString(2, imageFile.getName()); // 원본 파일명
+			pstmtInsert.setInt(1, generatedImageCode); // 시퀀스로 받은 image_code값
+			pstmtInsert.setInt(2, idto.getProduct_code()); // product_code값
+			pstmtInsert.setString(3, imageFile.getName()); // 원본 파일명
 			// ★ setBinaryStream(파라미터 인덱스, 파일 입력 스트림, 파일 길이) ★
-			pstmtInsert.setBinaryStream(3, fis, (int) imageFile.length());
+			pstmtInsert.setBinaryStream(4, fis, (int) imageFile.length());
 
 			rowsAffected = pstmtInsert.executeUpdate();
 			if (rowsAffected == 1) {
