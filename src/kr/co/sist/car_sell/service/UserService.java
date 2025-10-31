@@ -151,7 +151,5 @@ public class UserService {
 
 		return flag;
 	}// modifyUser
-	
-	
 
 }// class

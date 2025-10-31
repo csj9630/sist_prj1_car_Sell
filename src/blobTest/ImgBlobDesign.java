@@ -95,7 +95,7 @@ public class ImgBlobDesign extends JFrame implements ActionListener {
 		jbtnSave.setText("복수로 업로드--비활성화)");
 
 		// 이벤트 등록
-		jbtnSave.addActionListener(this);
+//		jbtnSave.addActionListener(this);
 		jbtnAdd.addActionListener(this);
 		jbtnSelect.addActionListener(this);
 		jbtnLoad4.addActionListener(this);
