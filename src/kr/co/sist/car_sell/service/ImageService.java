@@ -108,11 +108,6 @@ public class ImageService {
 			} // end catch
 		}
 		
-
-		
-
-		
-
 	}// addImg
 	
 	
@@ -126,6 +121,10 @@ public class ImageService {
 		ImageDAO_CSJ idao = ImageDAO_CSJ.getInstance();
 		try {
 			icon = idao.getImageIconFromBlob(imageCode);
+			if(icon ==null) {
+				handleException("imagecode가 일치하는 이미지가 없습니다!",null);
+				
+			}
 		} catch (SQLException e) {
 			handleException("데이터베이스 처리 중 오류가 발생했습니다.", e);
 		} catch (IOException e) {
