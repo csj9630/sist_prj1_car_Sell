@@ -149,7 +149,7 @@ public class ImageDAO_CSJ {
 		InputStream is = null;
 		ByteArrayOutputStream baos = null; // 출력 데이터를 메모리(RAM) 상의 바이트 배열에 저장
 
-		String sql = "SELECT image_blob FROM IMAGE WHERE image_code = ?"; // BLOB 컬럼명 확인
+		String sql = "SELECT image_blob FROM IMAGE WHERE product_code = ? order by image_code"; // BLOB 컬럼명 확인
 
 		try {
 			con = gc.getConn();
