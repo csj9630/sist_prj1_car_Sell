@@ -74,9 +74,9 @@ public class ImageService {
 
 	
 	public void saveImg_All(int product_code) {
-		// 파일 다이얼로그를 연다.
 		
-		for(int i = 1; i<10;i++) {
+		
+		for(int i = 1; i<200;i++) {
 			
 			File imageFile = new File("src/temp_dir/CAR_00"+Integer.toString(i)+".png");
 			if (imageFile == null) {
