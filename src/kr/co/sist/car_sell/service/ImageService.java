@@ -220,4 +220,5 @@ public class ImageService {
 		ex.printStackTrace(); // 콘솔에 상세 오류 출력
 		JOptionPane.showMessageDialog(null, message + "\n" + ex.getMessage(), "오류", JOptionPane.ERROR_MESSAGE);
 	}// handleException
+	
 }// class
