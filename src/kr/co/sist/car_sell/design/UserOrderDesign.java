@@ -62,10 +62,10 @@ public class UserOrderDesign extends JDialog {
 		// 이벤트 클래스 생성 때 로딩한 정보를 가져오기.
 		this.uDTO = uoe.getuDTO();
 		this.cDTO = uoe.getcDTO();
-//		this.imagePathList = uoe.getImagePathList();
+		this.imagePathList = uoe.getImagePathList();
 
 		// 비어 있는 list를 주고 빈 이미지 나오는지테스트.
-		this.imagePathList = new ArrayList<String>();
+//		this.imagePathList = new ArrayList<String>();
 
 		// DB 데이터 테스트.
 		System.out.println(uDTO);
@@ -132,7 +132,7 @@ public class UserOrderDesign extends JDialog {
 		jlblPrice = new JLabel("주문 대금");
 		jlblPrice.setFont(new Font("맑은 고딕", Font.BOLD, 16));
 		DecimalFormat df = new DecimalFormat("#,###"); // 숫자 포맷
-		jtfPrice = new JTextField(df.format(cDTO.getPrice()) + " 만원", 20); // getPrice() 사용
+		jtfPrice = new JTextField(df.format(cDTO.getPrice()) + " 원", 20); // getPrice() 사용
 		jtfPrice.setFont(new Font("맑은 고딕", Font.BOLD, 14));
 		jtfPrice.setEditable(false);
 		jtfPrice.setHorizontalAlignment(JTextField.RIGHT);
@@ -208,7 +208,7 @@ public class UserOrderDesign extends JDialog {
 		jpRightForm.add(jtfAddr);
 		jpRightForm.add(jlblPrice);
 		jpRightForm.add(jtfPrice);
-//		jpRightForm.add(new JLabel()); // 빈 공간 (Grid 채우기용)
+		jpRightForm.add(new JLabel()); // 빈 공간 (Grid 채우기용)
 		jpRightForm.add(jbtnOrder);
 
 		// 스크롤 패널에 오른쪽 폼 추가
@@ -272,57 +272,23 @@ public class UserOrderDesign extends JDialog {
 		ImageService is = new ImageService();
 //		ImageIcon icon = null;
 
-//		ImageIcon icon = is.loadDBImage(productCode);
-//		System.out.println(icon);
-//		JLabel lblImg;
-//		
-//		for (int i = 0; i < 4; i++) {
-//			
-//		// 이미지 로딩 상태 확인 (선택 사항)
-//		if (icon.getImageLoadStatus() == java.awt.MediaTracker.ERRORED) {
-//			System.err.println("이미지 로드 실패: " + productCode);
-//			lblImg = new JLabel("  (X)  "); // 실패 시 표시
-//		} else {
-//			// (선택) 이미지 크기 조절 (패널 크기에 맞게)
-//			Image scaledImage = icon.getImage().getScaledInstance(350, 250, Image.SCALE_SMOOTH);
-//			lblImg = new JLabel(new ImageIcon(scaledImage));
-//		} // end else
-//		lblImg.setPreferredSize(new Dimension(350, 250));
-//		lblImg.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-//		lblImg.setHorizontalAlignment(JLabel.CENTER);
-//		jpCardImages.add(lblImg, "card" + productCode);
-//		
-//		i++;
-//		}
+		ImageIcon icon = is.loadDBImage(productCode);
+		System.out.println(icon);
+		JLabel lblImg;
 		
-List<ImageIcon> imageIconList = is.loadCarImgList(productCode);
-		
-		System.out.println(productCode + "번 차량 이미지 " + imageIconList.size() + "개 로드 시도.");
-
-		if (imageIconList == null || imageIconList.isEmpty()) { // 리스트가 비어있는지 확인
-			buildBlankImg(); // 이미지 없을 때
-		} else { // 이미지 있을 때
-			int cardIndex = 1;
-			// ★★★ [수정] 리스트를 순회하며 모든 이미지를 추가합니다 ★★★
-			for (ImageIcon icon : imageIconList) {
-				JLabel lblImg;
-
-				// 이미지 로딩 상태 확인 (선택 사항)
-				if (icon != null && icon.getImageLoadStatus() != java.awt.MediaTracker.ERRORED) {
-					// (선택) 이미지 크기 조절 (패널 크기에 맞게)
-					Image scaledImage = icon.getImage().getScaledInstance(350, 250, Image.SCALE_SMOOTH);
-					lblImg = new JLabel(new ImageIcon(scaledImage));
-				} else {
-					System.err.println("이미지 로드 실패 (buildCarImgByBlob)");
-					lblImg = new JLabel("  (X)  "); // 실패 시 표시
-				} 
-
-				lblImg.setPreferredSize(new Dimension(350, 250));
-				lblImg.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-				lblImg.setHorizontalAlignment(JLabel.CENTER);
-				jpCardImages.add(lblImg, "card" + cardIndex++); // 카드를 순서대로 추가
-			} // end for
+		// 이미지 로딩 상태 확인 (선택 사항)
+		if (icon.getImageLoadStatus() == java.awt.MediaTracker.ERRORED) {
+			System.err.println("이미지 로드 실패: " + productCode);
+			lblImg = new JLabel("  (X)  "); // 실패 시 표시
+		} else {
+			// (선택) 이미지 크기 조절 (패널 크기에 맞게)
+			Image scaledImage = icon.getImage().getScaledInstance(350, 250, Image.SCALE_SMOOTH);
+			lblImg = new JLabel(new ImageIcon(scaledImage));
 		} // end else
+		lblImg.setPreferredSize(new Dimension(350, 250));
+		lblImg.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		lblImg.setHorizontalAlignment(JLabel.CENTER);
+		jpCardImages.add(lblImg, "card" + productCode);
 		
 		
 	}// buildCarImg
