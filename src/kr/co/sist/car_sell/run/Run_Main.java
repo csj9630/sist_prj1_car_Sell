@@ -1,7 +1,6 @@
 package kr.co.sist.car_sell.run;
 
-import kr.co.sist.car_sell.design.LoginRegister.FirstSelectDesign;
-import kr.co.sist.car_sell.event.LoginRegister.FirstSelectEvt;
+import kr.co.sist.car_sell.design.FirstSelectDesign;
 
 public class Run_Main {
 
