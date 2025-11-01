@@ -13,9 +13,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import kr.co.sist.car_sell.dao.ImageDAO;
-import kr.co.sist.car_sell.dao.ImageDAO_CSJ;
 import kr.co.sist.car_sell.dto.ImageDTO;
-import kr.co.sist.util.img.ImageResize;
 
 public class ImageService {
 	// 이미지 확장자
@@ -50,7 +48,7 @@ public class ImageService {
 		idto.setImage_name(imageFile.getName());
 		idto.setFile(imageFile);
 
-		ImageDAO_CSJ idao = ImageDAO_CSJ.getInstance();
+		ImageDAO idao = ImageDAO.getInstance();
 		int imageCode = 0;// 삽입하는 이미지코드
 
 		try {
@@ -100,7 +98,7 @@ public class ImageService {
 	          idto.setImage_name(imageFile.getName());
 	          idto.setFile(imageFile);
 
-	          ImageDAO_CSJ idao = ImageDAO_CSJ.getInstance();
+	          ImageDAO idao = ImageDAO.getInstance();
 	          int imageCode = 0;
 
 	          try {
@@ -145,7 +143,7 @@ public class ImageService {
 	 */
 	public ImageIcon loadDBImage(int imageCode) {
 		ImageIcon icon = null;
-		ImageDAO_CSJ idao = ImageDAO_CSJ.getInstance();
+		ImageDAO idao = ImageDAO.getInstance();
 		try {
 			icon = idao.getImageIconFromBlob(imageCode);
 			if(icon ==null) {
@@ -192,7 +190,7 @@ public class ImageService {
 	public List<ImageIcon> loadCarImgList(int product_code){
 		List<ImageIcon> iconlist = new ArrayList<>();
 		
-		ImageDAO_CSJ idao = ImageDAO_CSJ.getInstance();
+		ImageDAO idao = ImageDAO.getInstance();
 		
 		//이미지가 없을 때의 오류처리
 		try {

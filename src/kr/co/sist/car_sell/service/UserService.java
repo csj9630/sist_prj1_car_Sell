@@ -57,10 +57,10 @@ public class UserService {
 		return CarDAO.getInstance().selectCarByCode(productCode); // CarDAO 사용
 	}// getCarDetails
 
-	/** [구매페이지용] 차량 이미지 경로 목록 조회 */
-	public List<String> getCarImagePaths(int productCode) throws SQLException, IOException { // 반환 타입 List<String>
-		return ImageDAO.getInstance().selectCarImagePaths(productCode); // ImageDAO, 새 메소드 사용
-	}// getCarImagePaths
+//	/** [구매페이지용] 차량 이미지 경로 목록 조회 */
+//	public List<String> getCarImagePaths(int productCode) throws SQLException, IOException { // 반환 타입 List<String>
+//		return ImageDAO.getInstance().selectCarImagePaths(productCode); // ImageDAO, 새 메소드 사용
+//	}// getCarImagePaths
 
 	/** [구매페이지용] 주문하기 로직 (트랜잭션) */
 	public void placeOrder(OrderDTO oDTO) throws SQLException, IOException {

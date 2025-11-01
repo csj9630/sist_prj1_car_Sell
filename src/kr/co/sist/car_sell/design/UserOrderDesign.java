@@ -65,7 +65,7 @@ public class UserOrderDesign extends JDialog {
 //		this.imagePathList = uoe.getImagePathList();
 
 		// 비어 있는 list를 주고 빈 이미지 나오는지테스트.
-		this.imagePathList = new ArrayList<String>();
+//		this.imagePathList = new ArrayList<String>();
 
 		// DB 데이터 테스트.
 		System.out.println(uDTO);
@@ -153,10 +153,10 @@ public class UserOrderDesign extends JDialog {
 		// --- 다이얼로그 기본 설정 ---
 
 		setSize(1250, 700);
-		setLocation(300,300);
+		setLocation(300, 300);
 //		setLocationRelativeTo(owner);
 //		setBounds(owner.getX() + 30, owner.getY() + 30, owner.getWidth() - 50, owner.getHeight() - 50); // 부모좌표를 가져올 수
-																										// 있음.
+		// 있음.
 		setVisible(true);
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -237,66 +237,42 @@ public class UserOrderDesign extends JDialog {
 		jpCardImages.add(lblNoImg, "card1");
 	}// setBlankImg
 
-	private void buildCarImg(List<String> imagePathList) {
-		String localPath = "src/";
-
-		if (imagePathList.isEmpty()) { // 이미지 없을 때
-			buildBlankImg();
-		} else { // 이미지 있을 때
-			int cardIndex = 1;
-			for (String imagePath : imagePathList) {
-				// ★ 경로로 ImageIcon 생성 (파일 존재 및 경로 확인 필수!) ★
-				ImageIcon icon = new ImageIcon(localPath + imagePath);
-				JLabel lblImg;
-
-				// 이미지 로딩 상태 확인 (선택 사항)
-				if (icon.getImageLoadStatus() == java.awt.MediaTracker.ERRORED) {
-					System.err.println("이미지 로드 실패: " + imagePath);
-					lblImg = new JLabel("  (X)  "); // 실패 시 표시
-				} else {
-					// (선택) 이미지 크기 조절 (패널 크기에 맞게)
-					Image scaledImage = icon.getImage().getScaledInstance(560, 400, Image.SCALE_SMOOTH);
-					lblImg = new JLabel(new ImageIcon(scaledImage));
-				} // end else
-
-				lblImg.setPreferredSize(new Dimension(560, 400));
-				lblImg.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-				lblImg.setHorizontalAlignment(JLabel.CENTER);
-				jpCardImages.add(lblImg, "card" + cardIndex++);
-			} // end for
-		} // end else
-	}// buildCarImg
+//	private void buildCarImg(List<String> imagePathList) {
+//		String localPath = "src/";
+//
+//		if (imagePathList.isEmpty()) { // 이미지 없을 때
+//			buildBlankImg();
+//		} else { // 이미지 있을 때
+//			int cardIndex = 1;
+//			for (String imagePath : imagePathList) {
+//				// ★ 경로로 ImageIcon 생성 (파일 존재 및 경로 확인 필수!) ★
+//				ImageIcon icon = new ImageIcon(localPath + imagePath);
+//				JLabel lblImg;
+//
+//				// 이미지 로딩 상태 확인 (선택 사항)
+//				if (icon.getImageLoadStatus() == java.awt.MediaTracker.ERRORED) {
+//					System.err.println("이미지 로드 실패: " + imagePath);
+//					lblImg = new JLabel("  (X)  "); // 실패 시 표시
+//				} else {
+//					// (선택) 이미지 크기 조절 (패널 크기에 맞게)
+//					Image scaledImage = icon.getImage().getScaledInstance(560, 400, Image.SCALE_SMOOTH);
+//					lblImg = new JLabel(new ImageIcon(scaledImage));
+//				} // end else
+//
+//				lblImg.setPreferredSize(new Dimension(560, 400));
+//				lblImg.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+//				lblImg.setHorizontalAlignment(JLabel.CENTER);
+//				jpCardImages.add(lblImg, "card" + cardIndex++);
+//			} // end for
+//		} // end else
+//	}// buildCarImg
 
 	private void buildCarImgByBlob(int productCode) {
 
 		ImageService is = new ImageService();
-//		ImageIcon icon = null;
 
-//		ImageIcon icon = is.loadDBImage(productCode);
-//		System.out.println(icon);
-//		JLabel lblImg;
-//		
-//		for (int i = 0; i < 4; i++) {
-//			
-//		// 이미지 로딩 상태 확인 (선택 사항)
-//		if (icon.getImageLoadStatus() == java.awt.MediaTracker.ERRORED) {
-//			System.err.println("이미지 로드 실패: " + productCode);
-//			lblImg = new JLabel("  (X)  "); // 실패 시 표시
-//		} else {
-//			// (선택) 이미지 크기 조절 (패널 크기에 맞게)
-//			Image scaledImage = icon.getImage().getScaledInstance(350, 250, Image.SCALE_SMOOTH);
-//			lblImg = new JLabel(new ImageIcon(scaledImage));
-//		} // end else
-//		lblImg.setPreferredSize(new Dimension(350, 250));
-//		lblImg.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-//		lblImg.setHorizontalAlignment(JLabel.CENTER);
-//		jpCardImages.add(lblImg, "card" + productCode);
-//		
-//		i++;
-//		}
+		List<ImageIcon> imageIconList = is.loadCarImgList(productCode);
 
-List<ImageIcon> imageIconList = is.loadCarImgList(productCode);
-		
 		System.out.println(productCode + "번 차량 이미지 " + imageIconList.size() + "개 로드 시도.");
 
 		if (imageIconList == null || imageIconList.isEmpty()) { // 리스트가 비어있는지 확인
@@ -315,7 +291,7 @@ List<ImageIcon> imageIconList = is.loadCarImgList(productCode);
 				} else {
 					System.err.println("이미지 로드 실패 (buildCarImgByBlob)");
 					lblImg = new JLabel("  (X)  "); // 실패 시 표시
-				} 
+				}
 
 				lblImg.setPreferredSize(new Dimension(560, 400));
 				lblImg.setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -323,8 +299,7 @@ List<ImageIcon> imageIconList = is.loadCarImgList(productCode);
 				jpCardImages.add(lblImg, "card" + cardIndex++); // 카드를 순서대로 추가
 			} // end for
 		} // end else
-		
-		
+
 	}// buildCarImg
 
 	// --- Evt 클래스용 Getter 메소드 ---

@@ -122,7 +122,7 @@ public class UserOrderEvt implements ActionListener {
 			} // end if
 
 			// 2. 차량 이미지 경로 목록 조회 (String 리스트)
-			this.imagePathList = userService.getCarImagePaths(productCode); // Service의 메소드 호출
+//			this.imagePathList = userService.getCarImagePaths(productCode); // Service의 메소드 호출
 
 		} catch (SQLException | IOException ex) {// DB 관련 예외
 			// TODO Auto-generated catch block
