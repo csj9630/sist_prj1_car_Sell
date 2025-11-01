@@ -17,6 +17,10 @@ public class CarDAO {
 	
 	private static CarDAO carDAO;
 	private List<Integer> prodCodes;
+	private List<Integer> optionCodes;
+	private List<Integer> defectCodes;
+	private List<Integer> accidentCodes;
+	private List<Integer> repairCodes;
 	private List<String> brands;
 	private List<String> oils;
 	private List<String> options;
@@ -146,6 +150,33 @@ public class CarDAO {
 		return options;
 	} // findOption
 	
+	// 모든 옵션 조회
+	// 차량 상세 정보 - 옵션 편집을 위한 전체 옵션 목록
+	public List<Integer> findOptionCode() throws SQLException, IOException {
+		optionCodes = new ArrayList<>();
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		GetConnection gc = GetConnection.getInstance();
+		
+		String optionCodeFind = "SELECT OPTION_CODE FROM OPTION_TABLE";
+		
+		try {
+			con = gc.getConn();
+			pstmt = con.prepareStatement(optionCodeFind);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				optionCodes.add(rs.getInt("OPTION_CODE"));
+			}
+		} finally {
+			gc.dbClose(con, pstmt, rs);
+		}
+		return optionCodes;
+	} // findOption
+	
 	// 차량 코드가 prodCode인 차량의 옵션 목록 조회
 	// 차량 상세 정보 - 사용자에게 선택한 차량의 옵션 목록 출력
 	// 차량 상세 정보 - 관리자에게 전체 옵션 목록 중 선택한 차량의 옵션 목록 표기
@@ -174,6 +205,54 @@ public class CarDAO {
 		}
 		return carOptions;
 	} // findOptionNamesByProductCode
+	
+	// 차량 코드가 prodCode인 차량의 옵션을 우선 전부 삭제
+    public void deleteOptionsByProductCode(int prodCode) throws SQLException, IOException {
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		GetConnection gc = GetConnection.getInstance();
+    	
+    	String deleteOption = "DELETE FROM CAR_OPTION WHERE PRODUCT_CODE = ?";
+        
+        try {
+        	con = gc.getConn();
+        	pstmt = con.prepareStatement(deleteOption);
+            pstmt.setInt(1, prodCode);
+            pstmt.executeUpdate();
+        } finally {
+			gc.dbClose(con, pstmt, rs);
+		}
+    } // deleteOptionsByProductCode
+    
+    // 차량 코드가 prodCode인 차량의 옵션을 우선 전부 삭제
+    // 차량 코드와 옵션 코드 리스트를 받아 선택된 옵션을 삽입
+    public void insertOptions(int prodCode, List<String> optionCodes) throws SQLException, IOException {
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		GetConnection gc = GetConnection.getInstance();
+    	
+    	String insertOption = "INSERT INTO CAR_OPTION (PRODUCT_CODE, OPTION_CODE) VALUES (?, ?)";
+        
+        try {
+        	con = gc.getConn();
+        	pstmt = con.prepareStatement(insertOption);
+            
+            for (String optionCode : optionCodes) {
+                pstmt.setInt(1, prodCode);
+                pstmt.setInt(2, Integer.parseInt(optionCode));
+                pstmt.addBatch(); // 작업을 배치에 추가
+            }
+            pstmt.executeBatch(); // 배치 작업 일괄 실행
+        } finally {
+        	gc.dbClose(con, pstmt, rs);
+        }
+    } // insertOptions
 	
 	// 모든 하자 조회
 	// 차량 상세 정보 - 하자 편집을 위한 전체 하자 목록
