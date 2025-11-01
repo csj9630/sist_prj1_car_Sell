@@ -59,7 +59,7 @@ public class OrderListDetailUserDesign extends JDialog{
 		
 		jplOrderInfo.add(new JLabel("주문 ID: "+olduDTO.getPayment_code()));
         jplOrderInfo.add(new JLabel("주문일: "+olduDTO.getOrder_date()));
-        jplOrderInfo.add(new JLabel("금액: "+String.format("%,d", olduDTO.getPrice())+"원"));
+        jplOrderInfo.add(new JLabel("금액: "+String.format("%,d", olduDTO.getPrice())+"만 원"));
         jplOrderInfo.add(new JLabel("상태: "+olduDTO.getDelivery_state()));
 		
 		jplMain.add(jplCarInfo);
