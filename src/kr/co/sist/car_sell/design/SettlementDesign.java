@@ -296,14 +296,14 @@ public class SettlementDesign extends JDialog {
 		FlowLayout rightAlignFlow = new FlowLayout(FlowLayout.RIGHT);
 
 		// 총 판매 금액
-		jlbSell = new JLabel("총 판매 금액 : 원");
+		jlbSell = new JLabel("총 판매 금액 : 만원");
 		JPanel p1 = new JPanel(rightAlignFlow);
 		p1.setFont(boldFont);
 		p1.add(jlbSell);
 		jpDetailsSummary.add(p1);
 
 		// 총 정산액 (순이익)
-		jlbProfit = new JLabel("총 정산액(순이익) :원");
+		jlbProfit = new JLabel("총 정산액(순이익) :만원");
 		JPanel p2 = new JPanel(rightAlignFlow);
 		p2.add(jlbProfit);
 		jpDetailsSummary.add(p2);
