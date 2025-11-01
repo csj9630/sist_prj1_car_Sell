@@ -8,11 +8,16 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -33,7 +38,7 @@ public class CarInfoEvt extends WindowAdapter implements ActionListener {
 	private CarInfoCenterPanel cicp;
 	private CarInfoSouthPanel cisp;
 	
-	private JButton	jbtnImage1, jbtnImage2, jbtnImage3, jbtnImage4, jbtnPurchase,
+	private JButton	jbtnImageIcon1, jbtnImageIcon2, jbtnImageIcon3, jbtnImageIcon4, jbtnPurchase,
 					jbtnModify, jbtnDelete;
 	private JComboBox<String> jcbStatSold, jcbOil;
 	private DefaultComboBoxModel<String> dcbmStatSold, dcbmOil;
@@ -55,45 +60,6 @@ public class CarInfoEvt extends WindowAdapter implements ActionListener {
 		
 	} // CarInfoEvt
 	
-	public void addCars() throws IOException {
-		
-		// 이름, 이메일, 전화번호, 인트로, 이미지를 받아와서 추가 작업 수행
-		int price = Integer.parseInt(cicp.getJtfPrice().getText().trim());
-		int cc = Integer.parseInt(cicp.getJtfCc().getText().trim());
-		int distance = Integer.parseInt(cicp.getJtfDistance().getText().trim());
-		String prodName = cicp.getJtfCarName().getText();
-		String regNum = cicp.getJtfNumberPlate().getText();
-		int indSold = cicp.getJcbStatSold().getSelectedIndex();
-		String soldStat = cicp.getDcbmStatSold().getElementAt(indSold).toString().trim();
-		String carName = prodName.substring(0, prodName.indexOf(" ")).trim();
-		int indOil = cicp.getJcbOil().getSelectedIndex();
-		String oil = cicp.getDcbmOil().getElementAt(indOil).toString().trim();
-		String brandName = cicp.getJtfBrand().getText().trim();
-		DateTimeFormatter carDate = DateTimeFormatter.ofPattern("yyyyMMdd");
-		Date carYear = Date.valueOf(LocalDate.parse(cicp.getJtfYear1().getText().trim()
-				+ cicp.getJtfYear2().getText().trim() + "01", carDate));
-		
-		CarDTO cDTO = new CarDTO(0, price, cc, distance, prodName, regNum, soldStat, carName, oil, brandName, carYear);
-		
-		CarInfoService cis = new CarInfoService();
-		String msg = "차량을 추가할 수 없습니다.\n잠시 후 다시 시도해주세요.";
-		
-		if(cis.addCar(cDTO)) {
-			msg = "차량을 정상적으로 추가하였습니다.";
-		} // end if
-		
-		JOptionPane.showMessageDialog(cid, msg);
-		
-		// 입력칸 초기화
-		cicp.getJtfPrice().setText("");
-		cicp.getJtfCc().setText("");
-		cicp.getJtfDistance().setText("");
-		cicp.getJtfCarName().setText("");
-		cicp.getJtfNumberPlate().setText("");
-		cicp.getJtfYear1().setText("");
-		cicp.getJtfYear2().setText("");
-	}
-	
 	public void updateCars() throws IOException {
 		
 		// 이름, 이메일, 전화번호, 인트로, 이미지를 받아와서 추가 작업 수행
@@ -110,11 +76,31 @@ public class CarInfoEvt extends WindowAdapter implements ActionListener {
 		String brandName = cicp.getJtfBrand().getText().trim();
 		DateTimeFormatter carDate = DateTimeFormatter.ofPattern("yyyyMMdd");
 		Date carYear = Date.valueOf(LocalDate.parse(cicp.getJtfYear1().getText().trim()
-				+ cicp.getJtfYear2().getText().trim() + "01", carDate));
+				+ "0101", carDate));
 		
 		CarDTO cDTO = new CarDTO(prodCode, price, cc, distance, prodName, regNum, soldStat, carName, oil, brandName, carYear);
 		
+		List<String> selectedOptionCodes = new ArrayList<>();
+		for (Map.Entry<JCheckBox, String> entry : cicp.getOptionMap().entrySet()) {
+	        
+	        JCheckBox jcbOption = entry.getKey();   // JCheckBox 컴포넌트
+	        String optionCode = entry.getValue(); // "OPT_001" 같은 옵션 코드
+	        
+	        if (jcbOption.isSelected()) {
+	            selectedOptionCodes.add(optionCode); // 선택된 것만 리스트에 추가
+	        }
+	    }
+		
 		CarInfoService cis = new CarInfoService();
+		
+		try {
+	        cis.updateCarOptions(prodCode, selectedOptionCodes); 
+	        
+	        JOptionPane.showMessageDialog(cid, "옵션이 성공적으로 변경되었습니다.");
+	        
+	    } catch (SQLException ex) {
+	        JOptionPane.showMessageDialog(cid, "업데이트 중 오류 발생: " + ex.getMessage());
+	    }
 		
 		if(cis.updateCar(prodCode, cDTO)) {
 			String msg = "차량 정보를 정상적으로 갱신하였습니다.";
@@ -148,10 +134,10 @@ public class CarInfoEvt extends WindowAdapter implements ActionListener {
 		this.cicp = cid.getCicp();
 		this.cisp = cid.getCisp();
 		
-		jbtnImage1 = cicp.getJbtnImage1();
-		jbtnImage2 = cicp.getJbtnImage2();
-		jbtnImage3 = cicp.getJbtnImage3();
-		jbtnImage4 = cicp.getJbtnImage4();
+		jbtnImageIcon1 = cicp.getJbtnImageIcon1();
+		jbtnImageIcon2 = cicp.getJbtnImageIcon2();
+		jbtnImageIcon3 = cicp.getJbtnImageIcon3();
+		jbtnImageIcon4 = cicp.getJbtnImageIcon4();
 		jpImage = cicp.getJpImage();
 		
 		cl = cicp.getCl();
@@ -167,22 +153,22 @@ public class CarInfoEvt extends WindowAdapter implements ActionListener {
 		jbtnModify = cisp.getJbtnModify();
 		jbtnDelete = cisp.getJbtnDelete();
 		
-		if(ae.getSource() == jbtnImage1) {
+		if(ae.getSource() == jbtnImageIcon1) {
 			cl.show(jpImage, "inputA");
 			return;
 		} // end if
 		
-		if(ae.getSource() == jbtnImage2) {
+		if(ae.getSource() == jbtnImageIcon2) {
 			cl.show(jpImage, "inputB");
 			return;
 		} // end if
 		
-		if(ae.getSource() == jbtnImage3) {
+		if(ae.getSource() == jbtnImageIcon3) {
 			cl.show(jpImage, "inputC");
 			return;
 		} // end if
 		
-		if(ae.getSource() == jbtnImage4) {
+		if(ae.getSource() == jbtnImageIcon4) {
 			cl.show(jpImage, "inputD");
 			return;
 		} // end if

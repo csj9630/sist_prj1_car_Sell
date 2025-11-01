@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -25,10 +27,9 @@ import kr.co.sist.car_sell.service.CarInfoService;
 
 public class CarInfoCenterPanel extends JDialog {
 	
-	private JButton jbtnImage1, jbtnImage2, jbtnImage3, jbtnImage4, jbtnPurchase;
-	private JLabel	jlblCenterScroll, jlblImageBackground, jlblImage1, jlblImage2, jlblImage3, jlblImage4,
-					jlblProductName, jlblBrand, jlblCarName, jlblPrice, jlblYear, jlblDistance, jlblCc, jlblOil, jlblNumberPlate,
-					jlblOption, jlblDefect, jlblAccident, jlblRepair;
+	private JButton jbtnImage1, jbtnImageIcon1, jbtnImage2, jbtnImageIcon2, jbtnImage3, jbtnImageIcon3, jbtnImage4, jbtnImageIcon4, jbtnPurchase;
+	private JLabel	jlblCenterScroll, jlblImageBackground,jlblProductName, jlblBrand, jlblCarName, jlblPrice, jlblYear,
+					jlblDistance, jlblDistanceKm, jlblCc, jlblOil, jlblNumberPlate, jlblOption, jlblDefect, jlblAccident, jlblRepair;
 	private JTextField jtfBrand, jtfCarName, jtfPrice, jtfYear1, jtfYear2, jtfDistance, jtfCc, jtfNumberPlate;
 	private JTextArea jtaOption, jtaDefect, jtaAccident, jtaRepair;
 	private JScrollPane jspCenter, jspOption, jspDefect, jspAccident, jspRepair;
@@ -38,7 +39,9 @@ public class CarInfoCenterPanel extends JDialog {
 	private JComboBox<String> jcbStatSold, jcbOil;
 	private String carBrand, carName;
 	private String[] oilArr, optionNameArr, carOptionNameArr, defectNameArr, carDefectNameArr, accidentNameArr, carAccidentNameArr, repairNameArr, carRepairNameArr;
+	private int[] optionCodeArr;
 	private CardLayout cl;
+	private Map<JCheckBox, String> optionMap;
 	
 	private CarInfoDesign cid;
 	private CarInfoService cis;
@@ -62,6 +65,8 @@ public class CarInfoCenterPanel extends JDialog {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		optionMap = new HashMap<>();
 		
 		// 차량 정보 구역
 		jpCenter = new JPanel(null);
@@ -106,43 +111,43 @@ public class CarInfoCenterPanel extends JDialog {
 		ImageIcon ii3 = new ImageIcon(getClass().getResource("/images/img_" + 1 + "_3.png"));
 		ImageIcon ii4 = new ImageIcon(getClass().getResource("/images/img_" + 1 + "_4.png"));
 		
-		jlblImage1 = new JLabel(ii1);
-		jlblImage2 = new JLabel(ii2);
-		jlblImage3 = new JLabel(ii3);
-		jlblImage4 = new JLabel(ii4);
+		jbtnImage1 = new JButton(ii1);
+		jbtnImage2 = new JButton(ii2);
+		jbtnImage3 = new JButton(ii3);
+		jbtnImage4 = new JButton(ii4);
 		
-		jpImage.add(jlblImage1, "inputA");
-		jpImage.add(jlblImage2, "inputB");
-		jpImage.add(jlblImage3, "inputC");
-		jpImage.add(jlblImage4, "inputD");
+		jpImage.add(jbtnImage1, "inputA");
+		jpImage.add(jbtnImage2, "inputB");
+		jpImage.add(jbtnImage3, "inputC");
+		jpImage.add(jbtnImage4, "inputD");
 		
 		cl.show(jpImage, "inputA");
 		
 		// 차량 이미지 - 이미지 선택
-		ImageIcon ii1Small = new ImageIcon(getClass().getResource("/images_icon/img_" + 1 + "_1_icon.png"));
-		ImageIcon ii2Small = new ImageIcon(getClass().getResource("/images_icon/img_" + 1 + "_2_icon.png"));
-		ImageIcon ii3Small = new ImageIcon(getClass().getResource("/images_icon/img_" + 1 + "_3_icon.png"));
-		ImageIcon ii4Small = new ImageIcon(getClass().getResource("/images_icon/img_" + 1 + "_4_icon.png"));
+		ImageIcon ii1icon = new ImageIcon(getClass().getResource("/images_icon/img_" + 1 + "_1_icon.png"));
+		ImageIcon ii2icon = new ImageIcon(getClass().getResource("/images_icon/img_" + 1 + "_2_icon.png"));
+		ImageIcon ii3icon = new ImageIcon(getClass().getResource("/images_icon/img_" + 1 + "_3_icon.png"));
+		ImageIcon ii4icon = new ImageIcon(getClass().getResource("/images_icon/img_" + 1 + "_4_icon.png"));
 		
-		jbtnImage1 = new JButton(ii1Small);
-		jbtnImage2 = new JButton(ii2Small);
-		jbtnImage3 = new JButton(ii3Small);
-		jbtnImage4 = new JButton(ii4Small);
+		jbtnImageIcon1 = new JButton(ii1icon);
+		jbtnImageIcon2 = new JButton(ii2icon);
+		jbtnImageIcon3 = new JButton(ii3icon);
+		jbtnImageIcon4 = new JButton(ii4icon);
 		
-		jbtnImage1.setBackground(new Color(0xC0C0C0));
-		jbtnImage2.setBackground(new Color(0xC0C0C0));
-		jbtnImage3.setBackground(new Color(0xC0C0C0));
-		jbtnImage4.setBackground(new Color(0xC0C0C0));
+		jbtnImageIcon1.setBackground(new Color(0xC0C0C0));
+		jbtnImageIcon2.setBackground(new Color(0xC0C0C0));
+		jbtnImageIcon3.setBackground(new Color(0xC0C0C0));
+		jbtnImageIcon4.setBackground(new Color(0xC0C0C0));
 		
-		jbtnImage1.setBounds(5, 370, 160, 90);
-		jbtnImage2.setBounds(165, 370, 160, 90);
-		jbtnImage3.setBounds(325, 370, 160, 90);
-		jbtnImage4.setBounds(485, 370, 160, 90);
+		jbtnImageIcon1.setBounds(5, 370, 160, 90);
+		jbtnImageIcon2.setBounds(165, 370, 160, 90);
+		jbtnImageIcon3.setBounds(325, 370, 160, 90);
+		jbtnImageIcon4.setBounds(485, 370, 160, 90);
 		
-		jlblImageBackground.add(jbtnImage1);
-		jlblImageBackground.add(jbtnImage2);
-		jlblImageBackground.add(jbtnImage3);
-		jlblImageBackground.add(jbtnImage4);
+		jlblImageBackground.add(jbtnImageIcon1);
+		jlblImageBackground.add(jbtnImageIcon2);
+		jlblImageBackground.add(jbtnImageIcon3);
+		jlblImageBackground.add(jbtnImageIcon4);
 		
 		// 차량명
 		jlblProductName = new JLabel();
@@ -278,6 +283,15 @@ public class CarInfoCenterPanel extends JDialog {
 		jtfDistance.setBorder(BorderFactory.createLineBorder(new Color(0x000000), 1));
 		jtfDistance.setBounds(129, 47, 102, 42);
 		
+		// 차량 세부 정보 - 누적 주행거리 수정 단위
+		jlblDistanceKm = new JLabel("km");
+		jlblDistanceKm.setOpaque(true);
+		jlblDistanceKm.setBackground(new Color(0xFFFFFF));
+		jlblDistanceKm.setForeground(new Color(0x000000));
+		jlblDistanceKm.setBorder(null);
+		jlblDistanceKm.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+		jlblDistanceKm.setBounds(231, 47, 50, 42);
+		
 		// 차량 세부 정보 - 누적 주행거리 표시
 		jlblDistance = new JLabel(" 주행거리: " + cDTO.getDistance() + "km");
 		jlblDistance.setOpaque(true);
@@ -358,6 +372,7 @@ public class CarInfoCenterPanel extends JDialog {
 		if(userType.equals("a")) {
 			jlblYear.add(jtfYear1);
 			jpDetail.add(jtfDistance);
+			jpDetail.add(jlblDistanceKm);
 			jpDetail.add(jtfCc);
 			jpDetail.add(jcbOil);
 			jpDetail.add(jtfNumberPlate);
@@ -370,14 +385,25 @@ public class CarInfoCenterPanel extends JDialog {
 		jpDetail.add(jlblNumberPlate);
 		
 		// 차량 세부 정보 - 옵션 목록
-		jtaOption = new JTextArea
-				("옵션1\n옵션2\n옵션3\n옵션4\n옵션5\n옵션6\n옵션7\n옵션8\n옵션9\n옵션10");
+		jtaOption = new JTextArea("");
+		jtaOption.setEditable(false);
+		StringBuilder sbOption = new StringBuilder();
 		jtaOption.setFont(new Font("맑은 고딕", Font.BOLD, 25));
 		jtaOption.setForeground(new Color(0x000000));
 		jtaOption.setBackground(new Color(0xFFFFFF));
 		jtaOption.setBorder(null);
 		
 		// 차량 세부 정보 - 옵션 목록 수정
+		try {
+			optionCodeArr = cis.getAvailableOptionCodes();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		try {
 			optionNameArr = cis.getAvailableOptions();
 		} catch (SQLException e) {
@@ -393,8 +419,12 @@ public class CarInfoCenterPanel extends JDialog {
 		} // end try ~ catch
 		
 		jpOption = new JPanel(new GridLayout(0, 1));
-		for (String option : optionNameArr) {
-			final String optionName = option;
+		for (int i = 0; i < optionCodeArr.length; i++) {
+//			final String optionName = option;
+//			final int optionInd = 0;
+			final String optionName =  optionNameArr[i];
+			final int optionCode =  optionCodeArr[i];
+			String optionCodeStr = String.valueOf(optionCode);
 			
 			jcbOption = new JCheckBox(optionName);
 			jcbOption.setFont(new Font("맑은 고딕", Font.BOLD, 25));
@@ -402,18 +432,20 @@ public class CarInfoCenterPanel extends JDialog {
 			jcbOption.setForeground(new Color(0x000000));
 			jcbOption.setBorder(null);
 			jcbOption.setSelected(false);
+			optionMap.put(jcbOption, optionCodeStr);
 			
 			for (String carOption : carOptionNameArr) {
 				final String carOptionName = carOption;
 				
 				if(carOptionName.equals(optionName)) {
 					jcbOption.setSelected(true);
+					sbOption.append(carOptionName).append("\n");
 				} // end if
 			} // end for
 			jpOption.add(jcbOption);
 		} // end for
 		
-		
+		jtaOption.setText(sbOption.toString());
 		
 		// 차량 세부 정보 - 옵션 목록 스크롤 바
 		if(userType.equals("a")) {
@@ -440,8 +472,9 @@ public class CarInfoCenterPanel extends JDialog {
 		jpDetail.add(jlblOption);
 		
 		// 하자내역 - 하자목록
-		jtaDefect = new JTextArea
-				(" 하자1\t처리일1\n 하자2\t처리일2\n 하자3\t처리일3\n 하자4\t처리일4\n 하자5\t처리일5\n 하자6\t처리일6");
+		jtaDefect = new JTextArea();
+		jtaDefect.setEditable(false);
+		StringBuilder sbDefect = new StringBuilder();
 		jtaDefect.setFont(new Font("맑은 고딕", Font.BOLD, 30));
 		jtaDefect.setForeground(new Color(0x000000));
 		jtaDefect.setBackground(new Color(0xFFFFFF));
@@ -479,10 +512,13 @@ public class CarInfoCenterPanel extends JDialog {
 				
 				if(carDefectName.equals(defectName)) {
 					jcbDefect.setSelected(true);
+					sbDefect.append(" ").append(carDefectName).append("\n");
 				} // end if
 			} // end for
 			jpDefect.add(jcbDefect);
 		} // end for
+		
+		jtaDefect.setText(sbDefect.toString());
 		
 		// 하자내역 - 하자제목
 		jlblDefect = new JLabel("하자내역");
@@ -509,8 +545,9 @@ public class CarInfoCenterPanel extends JDialog {
 		jlblCenterScroll.add(jspDefect);
 		
 		// 사고내역 - 사고목록
-		jtaAccident = new JTextArea
-				(" 사고1\t사고일1\n 사고2\t사고일2\n 사고3\t사고일3\n 사고4\t사고일4\n 사고5\t사고일5\n 사고6\t사고일6");
+		jtaAccident = new JTextArea();
+		StringBuilder sbAccident = new StringBuilder();
+		jtaAccident.setEditable(false);
 		jtaAccident.setFont(new Font("맑은 고딕", Font.BOLD, 30));
 		jtaAccident.setForeground(new Color(0x000000));
 		jtaAccident.setBackground(new Color(0xFFFFFF));
@@ -548,10 +585,13 @@ public class CarInfoCenterPanel extends JDialog {
 				
 				if(carAccidentName.equals(accidentName)) {
 					jcbAccident.setSelected(true);
+					sbAccident.append(" ").append(carAccidentName).append("\n");
 				} // end if
 			} // end for
 			jpAccident.add(jcbAccident);
 		} // end for
+		
+		jtaAccident.setText(sbAccident.toString());
 		
 		// 사고내역 - 사고제목
 		jlblAccident = new JLabel("사고내역");
@@ -578,8 +618,9 @@ public class CarInfoCenterPanel extends JDialog {
 		jlblCenterScroll.add(jspAccident);
 		
 		// 수리내역 - 수리목록
-		jtaRepair = new JTextArea
-				(" 수리1\t수리일1\n 수리2\t수리일2\n 수리3\t수리일3\n 수리4\t수리일4\n 수리5\t수리일5\n 수리6\t수리일6");
+		jtaRepair = new JTextArea();
+		StringBuilder sbRepair = new StringBuilder();
+		jtaRepair.setEditable(false);
 		jtaRepair.setFont(new Font("맑은 고딕", Font.BOLD, 30));
 		jtaRepair.setForeground(new Color(0x000000));
 		jtaRepair.setBackground(new Color(0xFFFFFF));
@@ -617,10 +658,13 @@ public class CarInfoCenterPanel extends JDialog {
 				
 				if(carRepairName.equals(repairName)) {
 					jcbRepair.setSelected(true);
+					sbRepair.append(" ").append(carRepairName).append("\n");
 				} // end if
 			} // end for
 			jpRepair.add(jcbRepair);
 		} // end for
+		
+		jtaRepair.setText(sbRepair.toString());
 		
 		// 수리내역 - 수리제목
 		jlblRepair = new JLabel("수리내역");
@@ -650,26 +694,26 @@ public class CarInfoCenterPanel extends JDialog {
 	
 	public void setJlblOil(String strOil) {
 		jlblOil.setText(strOil);
-	}
+	} // setJlblOil
 	
 	public JPanel getJpCenter() {
 		return jpCenter;
 	} // getJpCenter
 	
-	public JButton getJbtnImage1() {
-		return jbtnImage1;
+	public JButton getJbtnImageIcon1() {
+		return jbtnImageIcon1;
 	} // getJbtnImage1
 	
-	public JButton getJbtnImage2() {
-		return jbtnImage2;
+	public JButton getJbtnImageIcon2() {
+		return jbtnImageIcon2;
 	} // getJbtnImage2
 	
-	public JButton getJbtnImage3() {
-		return jbtnImage3;
+	public JButton getJbtnImageIcon3() {
+		return jbtnImageIcon3;
 	} // getJbtnImage3
 	
-	public JButton getJbtnImage4() {
-		return jbtnImage4;
+	public JButton getJbtnImageIcon4() {
+		return jbtnImageIcon4;
 	} // getJbtnImage4
 	
 	public JButton getJbtnPurchase() {
@@ -678,15 +722,15 @@ public class CarInfoCenterPanel extends JDialog {
 	
 	public JPanel getJpImage() {
 		return jpImage;
-	}
+	} // getJpImage
 	
 	public CardLayout getCl() {
 		return cl;
-	}
+	} // getCl
 	
 	public JTextField getJtfBrand() {
 		return jtfBrand;
-	}
+	} // getJtfBrand
 	
 	public JTextField getJtfCarName() {
 		return jtfCarName;
@@ -739,5 +783,12 @@ public class CarInfoCenterPanel extends JDialog {
 	public String getCarName() {
 		return carName;
 	}
+
+	public Map<JCheckBox, String> getOptionMap() {
+		return optionMap;
+	}
+	
+	
+	
 	
 } // class
