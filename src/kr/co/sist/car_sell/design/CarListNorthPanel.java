@@ -44,7 +44,6 @@ public class CarListNorthPanel extends JFrame {
 		jbtnUserMenu.setBackground(new Color(0xC0C0C0));
 		jbtnUserMenu.setForeground(new Color(0x000000));
 		jbtnUserMenu.setBorder(BorderFactory.createLineBorder(new Color(0x808080), 5));
-		jpNorth.add(jbtnUserMenu);
 		
 		// 우측 상단 로그아웃 버튼
 		jbtnLogout = new JButton("로그아웃");
@@ -56,7 +55,6 @@ public class CarListNorthPanel extends JFrame {
 		jpNorth.add(jbtnLogout);
 		
 		if(userType.equals("a")) {
-			
 			// 좌측 상단 관리자 메뉴 버튼
 			jbtnMgrMenu = new JButton("관리자 메뉴");
 			jbtnMgrMenu.setBounds(87, 35, 180, 60);
@@ -65,7 +63,8 @@ public class CarListNorthPanel extends JFrame {
 			jbtnMgrMenu.setForeground(new Color(0x000000));
 			jbtnMgrMenu.setBorder(BorderFactory.createLineBorder(new Color(0x808080), 5));
 			jpNorth.add(jbtnMgrMenu);
-				
+		} else if(userType.equals("u")){
+			jpNorth.add(jbtnUserMenu);
 		} // end if
 		
 	}

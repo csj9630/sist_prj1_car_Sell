@@ -27,6 +27,7 @@ import kr.co.sist.car_sell.design.CarInfoDesign;
 import kr.co.sist.car_sell.design.CarInfoNorthPanel;
 import kr.co.sist.car_sell.design.CarInfoSouthPanel;
 import kr.co.sist.car_sell.design.CarListDesign;
+import kr.co.sist.car_sell.design.UserOrderDesign;
 import kr.co.sist.car_sell.dto.CarDTO;
 import kr.co.sist.car_sell.service.CarInfoService;
 
@@ -175,10 +176,9 @@ public class CarInfoEvt extends WindowAdapter implements ActionListener {
 		
 		if(ae.getSource() == jbtnPurchase) {
 			JOptionPane.showMessageDialog(cid, "구매 페이지 실행");
-//			new UserOrderDesign(cid, userCode, prodCode);
+			new UserOrderDesign(cid, userCode, prodCode);
 			return;
 		} // end if
-		
 		
 //		if(ae.getSource() == jbtnModify) {
 //			int ind = jcbOil.getSelectedIndex();

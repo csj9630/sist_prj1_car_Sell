@@ -25,7 +25,7 @@ public class LoginEvt implements ActionListener {
 	private LoginDesign ld;
 	private JFrame owner; // FirstSelectDesign (부모 프레임)
 	private UserService us; // ☆☆☆☆추가분
-
+	
 	public LoginEvt(LoginDesign ld, JFrame owner) {
 		this.ld = ld;
 		this.owner = owner;
@@ -36,7 +36,7 @@ public class LoginEvt implements ActionListener {
 			ld.getJbtnRegister().addActionListener(this);
 		}
 	}
-
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == ld.getJbtnLogin()) {
@@ -45,7 +45,7 @@ public class LoginEvt implements ActionListener {
 			openRegisterDialog(); // 회원가입 창 열기
 		}
 	}
-
+	
 	/**
 	 * 로그인 버튼 클릭 시 실행될 메소드 (DB 연동)
 	 */
@@ -79,9 +79,11 @@ public class LoginEvt implements ActionListener {
 				if (aDTO != null) { // 로그인 성공
 					JOptionPane.showMessageDialog(ld, "관리자로 로그인 되었습니다.");
 					ld.dispose(); // 로그인 창 닫기
+					owner.dispose(); // 로그인 선택 창 닫기
 					// TODO: 관리자 메인 창 열기 (예: new AdminDesign() 또는 new MgrMenuDesign())
 
-					new MgrMenuDesign();
+					new CarListDesign("a", 0);
+					
 
 				} else { // 로그인 실패
 					JOptionPane.showMessageDialog(ld, "아이디 또는 비밀번호를 확인해주세요.", "로그인 실패", JOptionPane.ERROR_MESSAGE);
@@ -104,6 +106,7 @@ public class LoginEvt implements ActionListener {
 				if (uDTO != null) { // 로그인 성공
 					JOptionPane.showMessageDialog(ld, uDTO.getName() + " 님, 환영합니다!");
 					ld.dispose(); // 로그인 창 닫기
+					owner.dispose(); // 로그인 선택 창 닫기
 
 			//☆★☆★☆★☆★☆★☆★페이지호출☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★
 //					new CarListDesign(); // 차량 리스트 디자인 화면 실행

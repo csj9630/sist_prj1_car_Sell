@@ -14,7 +14,9 @@ import kr.co.sist.car_sell.design.CarListDesign;
 import kr.co.sist.car_sell.design.CarListLeftPanel;
 import kr.co.sist.car_sell.design.CarListNorthPanel;
 import kr.co.sist.car_sell.design.CarListRightPanel;
+import kr.co.sist.car_sell.design.FirstSelectDesign;
 import kr.co.sist.car_sell.design.MgrMenuDesign;
+import kr.co.sist.car_sell.design.UserMenuDesign;
 import kr.co.sist.car_sell.service.CarListService;
 
 public class CarListEvt extends WindowAdapter implements ActionListener, MouseListener {
@@ -55,12 +57,14 @@ public class CarListEvt extends WindowAdapter implements ActionListener, MouseLi
 		
 		if(ae.getSource() == jbtnUserMenu) {
 			JOptionPane.showMessageDialog(cld, "내 정보 메뉴 진입");
-//			new UserMenuDesign(userCode);
+			new UserMenuDesign(userCode);
 			return;
 		} // end if
 		
 		if(ae.getSource() == jbtnLogout) {
 			JOptionPane.showMessageDialog(cld, "최초 로그인 선택창 진입");
+			cld.dispose();
+			new FirstSelectDesign();
 			return;
 		} // end if
 		
