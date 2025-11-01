@@ -6,7 +6,7 @@ public class RunCarsell_UserMenu {
 
 	public static void main(String[] args) {
 		int user_code = 1;
-//		new UserMenuDesign(user_code);
+		new UserMenuDesign(user_code);
 	}
 
 }
