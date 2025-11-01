@@ -1,4 +1,4 @@
-package kr.co.sist.car_sell.design;
+	package kr.co.sist.car_sell.design;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
