@@ -251,5 +251,5 @@ public class ImageDAO_CSJ {
 		} finally {
 			gc.dbClose(con, pstmt, null);
 		}
-	}
+	}//insertCarImageMapping
 }
