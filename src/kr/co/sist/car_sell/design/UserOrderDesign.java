@@ -86,7 +86,7 @@ public class UserOrderDesign extends JDialog {
 		// --- 이미지 패널 (CardLayout) 설정 ---
 		cardLayout = new CardLayout();
 		jpCardImages = new JPanel(cardLayout);
-		jpCardImages.setPreferredSize(new Dimension(350, 250)); // 패널 크기 지정
+		jpCardImages.setPreferredSize(new Dimension(560, 400)); // 패널 크기 지정
 
 		// --- 이미지 삽입 ----
 //		buildCarImg(imagePathList);
@@ -229,7 +229,7 @@ public class UserOrderDesign extends JDialog {
 	private void buildBlankImg() {
 		JLabel lblNoImg = new JLabel("  (이미지 없음)  ");
 		// (스타일 설정...)
-		lblNoImg.setPreferredSize(new Dimension(350, 250));
+		lblNoImg.setPreferredSize(new Dimension(560, 400));
 		lblNoImg.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		lblNoImg.setOpaque(true);
 		lblNoImg.setBackground(Color.WHITE);
@@ -255,11 +255,11 @@ public class UserOrderDesign extends JDialog {
 					lblImg = new JLabel("  (X)  "); // 실패 시 표시
 				} else {
 					// (선택) 이미지 크기 조절 (패널 크기에 맞게)
-					Image scaledImage = icon.getImage().getScaledInstance(350, 250, Image.SCALE_SMOOTH);
+					Image scaledImage = icon.getImage().getScaledInstance(560, 400, Image.SCALE_SMOOTH);
 					lblImg = new JLabel(new ImageIcon(scaledImage));
 				} // end else
 
-				lblImg.setPreferredSize(new Dimension(350, 250));
+				lblImg.setPreferredSize(new Dimension(560, 400));
 				lblImg.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 				lblImg.setHorizontalAlignment(JLabel.CENTER);
 				jpCardImages.add(lblImg, "card" + cardIndex++);
@@ -310,14 +310,14 @@ List<ImageIcon> imageIconList = is.loadCarImgList(productCode);
 				// 이미지 로딩 상태 확인 (선택 사항)
 				if (icon != null && icon.getImageLoadStatus() != java.awt.MediaTracker.ERRORED) {
 					// (선택) 이미지 크기 조절 (패널 크기에 맞게)
-					Image scaledImage = icon.getImage().getScaledInstance(350, 250, Image.SCALE_SMOOTH);
+					Image scaledImage = icon.getImage().getScaledInstance(560, 400, Image.SCALE_SMOOTH);
 					lblImg = new JLabel(new ImageIcon(scaledImage));
 				} else {
 					System.err.println("이미지 로드 실패 (buildCarImgByBlob)");
 					lblImg = new JLabel("  (X)  "); // 실패 시 표시
 				} 
 
-				lblImg.setPreferredSize(new Dimension(350, 250));
+				lblImg.setPreferredSize(new Dimension(560, 400));
 				lblImg.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 				lblImg.setHorizontalAlignment(JLabel.CENTER);
 				jpCardImages.add(lblImg, "card" + cardIndex++); // 카드를 순서대로 추가
