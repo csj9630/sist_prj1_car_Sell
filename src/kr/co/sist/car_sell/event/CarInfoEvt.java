@@ -110,7 +110,7 @@ public class CarInfoEvt extends WindowAdapter implements ActionListener {
 		String brandName = cicp.getJtfBrand().getText().trim();
 		DateTimeFormatter carDate = DateTimeFormatter.ofPattern("yyyyMMdd");
 		Date carYear = Date.valueOf(LocalDate.parse(cicp.getJtfYear1().getText().trim()
-				+ cicp.getJtfYear2().getText().trim() + "01", carDate));
+				+ "0101", carDate));
 		
 		CarDTO cDTO = new CarDTO(prodCode, price, cc, distance, prodName, regNum, soldStat, carName, oil, brandName, carYear);
 		
