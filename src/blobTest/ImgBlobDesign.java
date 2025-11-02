@@ -112,7 +112,7 @@ public class ImgBlobDesign extends JFrame implements ActionListener {
 			new ImageService().saveImg_All(product_code);
 		} // end if
 		if (ae.getSource() == getJbtnAdd()) {
-			new ImageService().saveImg(product_code);
+			new ImageService().saveImg(product_code,null);
 		} // end if
 
 		if (ae.getSource() == getJbtnSelect()) {
