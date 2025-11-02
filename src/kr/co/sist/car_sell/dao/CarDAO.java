@@ -305,9 +305,8 @@ public class CarDAO {
 	} // findOptionNamesByProductCode
 	
 	// 차량 코드가 prodCode인 차량의 옵션을 우선 전부 삭제
-    public void deleteOptionsByProductCode(int prodCode) throws SQLException, IOException {
+    public void deleteOptionsByProductCode(Connection con, int prodCode) throws SQLException, IOException {
 		
-		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
@@ -327,9 +326,8 @@ public class CarDAO {
     
     // 차량 코드가 prodCode인 차량의 옵션을 우선 전부 삭제
     // 차량 코드와 옵션 코드 리스트를 받아 선택된 옵션을 삽입
-    public void insertOptions(int prodCode, List<String> optionCodes) throws SQLException, IOException {
+    public void insertOptions(Connection con, int prodCode, List<String> optionCodes) throws SQLException, IOException {
 		
-		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
@@ -435,9 +433,8 @@ public class CarDAO {
 	} // findDefectNamesByProductCode
 	
 	// 차량 코드가 prodCode인 차량의 옵션을 우선 전부 삭제
-    public void deleteDefectsByProductCode(int prodCode) throws SQLException, IOException {
+    public void deleteDefectsByProductCode(Connection con, int prodCode) throws SQLException, IOException {
 		
-		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
@@ -457,9 +454,8 @@ public class CarDAO {
     
     // 차량 코드가 prodCode인 차량의 옵션을 우선 전부 삭제
     // 차량 코드와 옵션 코드 리스트를 받아 선택된 옵션을 삽입
-    public void insertDefects(int prodCode, List<String> defectCodes) throws SQLException, IOException {
+    public void insertDefects(Connection con, int prodCode, List<String> defectCodes) throws SQLException, IOException {
 		
-		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
@@ -686,13 +682,18 @@ public class CarDAO {
     } // selectCarByCode
     
     // 신규 차량 등록
-	public void insertCarsMgr(CarDTO cDTO) throws SQLException, IOException {
+	public int insertCarsMgr(CarDTO cDTO) throws SQLException, IOException {
 		// 1. 드라이버 로딩
 		
 		// 2. 커넥션 얻기
 		Connection con = null;
 		PreparedStatement pstmtBrand = null;
 		PreparedStatement pstmtCar = null;
+		
+		PreparedStatement pstmtProdCode = null;
+		ResultSet rs = null;
+		
+		int prodCode = 0;
 		
 		GetConnection gc = GetConnection.getInstance();
 		
@@ -703,7 +704,7 @@ public class CarDAO {
 				+ "distance, registration_number, status_sold, car_name, oil, brand_name)"
 				+ "values(SEQ_CAR_INFO.nextval,?,?,?,?,?,?,?,?,?,?)";
 		
-		String selectProdCode = "SELECT PRODUCT_CODE FROM CAR_INFO WHERE PRODUCT_CODE = SEQ_CAR_INFO.currval";
+		String findCurrProdCode = "SELECT SEQ_CAR_INFO.CURRVAL FROM DUAL";
 		
 		try {
 			con = gc.getConn();
@@ -740,10 +741,19 @@ public class CarDAO {
 			
 			pstmtCar.executeUpdate();
 			
+			pstmtProdCode = con.prepareStatement(findCurrProdCode);
+			rs = pstmtProdCode.executeQuery();
+	        if (rs.next()) {
+	            prodCode = rs.getInt(1); // 1번째 컬럼(CURRVAL) 값을 가져옴
+	        }
 			
+	        
+	        
 		} finally {
-			gc.dbClose(con, pstmtCar, null);	// 연결을 끊을 때는 commit을 수행하고 끊는다.
+			gc.dbClose(con, pstmtCar, rs);	// 연결을 끊을 때는 commit을 수행하고 끊는다.
 		} // end try ~ finally
+		
+		return prodCode;
 	} // insertCarsMgr
 	
     // 차량 정보 수정

@@ -72,6 +72,7 @@ public class CarListRightPanel extends JFrame {
 				e.printStackTrace();
 			}
             
+            jlblList = new JLabel("라벨");
             jlblList.setLayout(null);
             jlblList.setFont(new Font("맑은 고딕", Font.BOLD, 124));
             jlblList.setOpaque(true);
@@ -155,6 +156,7 @@ public class CarListRightPanel extends JFrame {
 			for (int prodCode : prodCodeArr) {
 				CarDTO cDTO = this.cls.getProductDetails(prodCode);
 				
+				jlblList = new JLabel("라벨");
 	            jlblList.setLayout(null);
 	            jlblList.setFont(new Font("맑은 고딕", Font.BOLD, 124));
 	            jlblList.setOpaque(true);
