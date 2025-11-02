@@ -73,11 +73,11 @@ public class RegisterEvt implements ActionListener {
 		}
 
 		// ☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆추가분☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆
-//		//비번 형식 체크.
-//		if(!PasswordValidator.isValid(pass)) {
-//			showError("영문자, 숫자, 특수문자를 포함한 8자 이상으로 만들어주세요.", jtfPass);
-//			return;
-//		}
+		//비번 형식 체크.
+		if(!PasswordValidator.isValid(pass)) {
+			showError("영문자, 숫자, 특수문자를 포함한 8자 이상으로 만들어주세요.", jtfPass);
+			return;
+		}
 
 		if (passCheck.length == 0) {
 			showError("패스워드 확인란을 입력하세요", jtfPassCheck);

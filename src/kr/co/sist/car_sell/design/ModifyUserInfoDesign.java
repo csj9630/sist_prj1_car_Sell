@@ -42,7 +42,7 @@ public class ModifyUserInfoDesign extends JDialog {
 		jlTitle.setFont(fontTitle);
 
 		// 텍스트필드명 라벨
-		JLabel jlName = new JLabel("이름(국문)");
+		JLabel jlName = new JLabel("이름");
 		JLabel jlEmail = new JLabel("이메일");
 		JLabel jlTel = new JLabel("전화번호");
 		JLabel jlCard = new JLabel("카드번호");

@@ -70,9 +70,9 @@ public class SettlementEvt extends WindowAdapter implements ActionListener {
 		for (SettlementDTO smDTO : listStDTO) {
 			rowData = new String[5];
 			rowData[0] = smDTO.getSalesMonth();
-			rowData[1] = String.format("%,.1f", (double) smDTO.getSalesSum()) + " 원";
-			rowData[2] = String.format("%,.1f", smDTO.getSalesSum() * 0.1) + " 원";
-			rowData[3] = String.format("%,.1f", smDTO.getSalesSum() * 0.9) + " 원";
+			rowData[1] = String.format("%,.1f", (double) smDTO.getSalesSum()) + " 만원";
+			rowData[2] = String.format("%,.1f", smDTO.getSalesSum() * 0.1) + " 만원";
+			rowData[3] = String.format("%,.1f", smDTO.getSalesSum() * 0.9) + " 만원";
 			// 전월 기록이 0원이 아니라면
 			if (preMonthSales != 0) {
 				nowMonthSales = smDTO.getSalesSum();
@@ -89,9 +89,9 @@ public class SettlementEvt extends WindowAdapter implements ActionListener {
 			// 분기별 판매 현황 테이블의 마지막 행에는, 모든 월을 더한 판매 금액을 보여줌.
 		rowData = new String[4];
 		rowData[0] = "합계";
-		rowData[1] = String.format("%,.1f", totalSellSum) + " 원";
-		rowData[2] = String.format("%,.1f", totalSellSum * 0.1) + " 원";
-		rowData[3] = String.format("%,.1f", totalSellSum * 0.9) + " 원";
+		rowData[1] = String.format("%,.1f", totalSellSum) + " 만원";
+		rowData[2] = String.format("%,.1f", totalSellSum * 0.1) + " 만원";
+		rowData[3] = String.format("%,.1f", totalSellSum * 0.9) + " 만원";
 
 		dtmMonthlyInfo.addRow(rowData);
 
@@ -127,9 +127,9 @@ public class SettlementEvt extends WindowAdapter implements ActionListener {
 			rowData[0] = String.valueOf(smDTO.getProduct_code());
 			rowData[1] = smDTO.getCar_name();
 			rowData[2] = smDTO.getOil();
-			rowData[3] = String.format("%,d", smDTO.getPrice()) + " 원";
-			rowData[4] = String.format("%,.1f", smDTO.getPrice() * 0.1) + " 원";
-			rowData[5] = String.format("%,.1f", smDTO.getPrice() * 0.9) + " 원";
+			rowData[3] = String.format("%,d", smDTO.getPrice()) + " 만원";
+			rowData[4] = String.format("%,.1f", smDTO.getPrice() * 0.1) + " 만원";
+			rowData[5] = String.format("%,.1f", smDTO.getPrice() * 0.9) + " 만원";
 			rowData[6] = smDTO.getOrder_date();
 			dtmSettlement.addRow(rowData);
 			totalSell += smDTO.getPrice();
@@ -143,8 +143,8 @@ public class SettlementEvt extends WindowAdapter implements ActionListener {
 	public void setTotalSummary() {
 		String inputPeriod = smd.getJtfStartPeriod().getText() + " ~ " + smd.getJtfEndPeriod().getText();
 		smd.getJlbMdPeriod().setText(inputPeriod);
-		smd.getJlbSell().setText("총 판매 금액 : " + String.format("%,d", totalSell) + " 원");
-		smd.getJlbProfit().setText("총 정산액(순이익) : " + String.format("%,.2f", totalProfit) + " 원");
+		smd.getJlbSell().setText("총 판매 금액 : " + String.format("%,d", totalSell) + " 만원");
+		smd.getJlbProfit().setText("총 정산액(순이익) : " + String.format("%,.2f", totalProfit) + " 만원");
 		smd.getJlbCount().setText("총 판매 건 수 : " + totalCount + " 건");
 		totalSell = 0;
 		totalProfit = 0;

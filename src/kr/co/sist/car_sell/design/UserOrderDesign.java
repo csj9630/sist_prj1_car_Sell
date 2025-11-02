@@ -28,6 +28,7 @@ import javax.swing.JTextField;
 import kr.co.sist.car_sell.dto.CarDTO;
 import kr.co.sist.car_sell.dto.UserDTO; // dto 패키지 (njw 버전)
 import kr.co.sist.car_sell.event.UserOrderEvt;
+import kr.co.sist.car_sell.service.ImageService;
 
 public class UserOrderDesign extends JDialog {
 
@@ -61,13 +62,12 @@ public class UserOrderDesign extends JDialog {
 		// 이벤트 클래스 생성 때 로딩한 정보를 가져오기.
 		this.uDTO = uoe.getuDTO();
 		this.cDTO = uoe.getcDTO();
-		this.imagePathList = uoe.getImagePathList();
-		
-		//비어 있는 list를 주고 빈 이미지 나오는지테스트.
+//		this.imagePathList = uoe.getImagePathList();
+
+		// 비어 있는 list를 주고 빈 이미지 나오는지테스트.
 //		this.imagePathList = new ArrayList<String>();
-		
-		
-		//DB 데이터 테스트.
+
+		// DB 데이터 테스트.
 		System.out.println(uDTO);
 		System.out.println(cDTO);
 		System.out.println(imagePathList);
@@ -86,10 +86,11 @@ public class UserOrderDesign extends JDialog {
 		// --- 이미지 패널 (CardLayout) 설정 ---
 		cardLayout = new CardLayout();
 		jpCardImages = new JPanel(cardLayout);
-		jpCardImages.setPreferredSize(new Dimension(350, 250)); // 패널 크기 지정
+		jpCardImages.setPreferredSize(new Dimension(560, 400)); // 패널 크기 지정
 
 		// --- 이미지 삽입 ----
-		buildCarImg(imagePathList);
+//		buildCarImg(imagePathList);
+		buildCarImgByBlob(productCode); // blob에서 이미지 로드
 
 		// --- 이미지 네비게이션 버튼 ---
 		jbtnPrev = new JButton("◀ 이전");
@@ -131,7 +132,7 @@ public class UserOrderDesign extends JDialog {
 		jlblPrice = new JLabel("주문 대금");
 		jlblPrice.setFont(new Font("맑은 고딕", Font.BOLD, 16));
 		DecimalFormat df = new DecimalFormat("#,###"); // 숫자 포맷
-		jtfPrice = new JTextField(df.format(cDTO.getPrice()) + " 원", 20); // getPrice() 사용
+		jtfPrice = new JTextField(df.format(cDTO.getPrice()) + " 만원", 20); // getPrice() 사용
 		jtfPrice.setFont(new Font("맑은 고딕", Font.BOLD, 14));
 		jtfPrice.setEditable(false);
 		jtfPrice.setHorizontalAlignment(JTextField.RIGHT);
@@ -150,10 +151,12 @@ public class UserOrderDesign extends JDialog {
 		// UserOrderDesign 생성자 내부에서 이미 자체적으로 처리되었습니다.)
 
 		// --- 다이얼로그 기본 설정 ---
-		
-//		setSize(1250, 700);
+
+		setSize(1250, 700);
+		setLocation(300, 300);
 //		setLocationRelativeTo(owner);
-		setBounds(owner.getX() + 30, owner.getY() + 30, owner.getWidth() - 50, owner.getHeight() -50); // 부모좌표를 가져올 수 있음.		
+//		setBounds(owner.getX() + 30, owner.getY() + 30, owner.getWidth() - 50, owner.getHeight() - 50); // 부모좌표를 가져올 수
+		// 있음.
 		setVisible(true);
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -205,7 +208,7 @@ public class UserOrderDesign extends JDialog {
 		jpRightForm.add(jtfAddr);
 		jpRightForm.add(jlblPrice);
 		jpRightForm.add(jtfPrice);
-		jpRightForm.add(new JLabel()); // 빈 공간 (Grid 채우기용)
+//		jpRightForm.add(new JLabel()); // 빈 공간 (Grid 채우기용)
 		jpRightForm.add(jbtnOrder);
 
 		// 스크롤 패널에 오른쪽 폼 추가
@@ -226,7 +229,7 @@ public class UserOrderDesign extends JDialog {
 	private void buildBlankImg() {
 		JLabel lblNoImg = new JLabel("  (이미지 없음)  ");
 		// (스타일 설정...)
-		lblNoImg.setPreferredSize(new Dimension(350, 250));
+		lblNoImg.setPreferredSize(new Dimension(560, 400));
 		lblNoImg.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		lblNoImg.setOpaque(true);
 		lblNoImg.setBackground(Color.WHITE);
@@ -234,34 +237,69 @@ public class UserOrderDesign extends JDialog {
 		jpCardImages.add(lblNoImg, "card1");
 	}// setBlankImg
 
-	private void buildCarImg(List<String> imagePathList) {
-		String localPath = "src/";
+//	private void buildCarImg(List<String> imagePathList) {
+//		String localPath = "src/";
+//
+//		if (imagePathList.isEmpty()) { // 이미지 없을 때
+//			buildBlankImg();
+//		} else { // 이미지 있을 때
+//			int cardIndex = 1;
+//			for (String imagePath : imagePathList) {
+//				// ★ 경로로 ImageIcon 생성 (파일 존재 및 경로 확인 필수!) ★
+//				ImageIcon icon = new ImageIcon(localPath + imagePath);
+//				JLabel lblImg;
+//
+//				// 이미지 로딩 상태 확인 (선택 사항)
+//				if (icon.getImageLoadStatus() == java.awt.MediaTracker.ERRORED) {
+//					System.err.println("이미지 로드 실패: " + imagePath);
+//					lblImg = new JLabel("  (X)  "); // 실패 시 표시
+//				} else {
+//					// (선택) 이미지 크기 조절 (패널 크기에 맞게)
+//					Image scaledImage = icon.getImage().getScaledInstance(560, 400, Image.SCALE_SMOOTH);
+//					lblImg = new JLabel(new ImageIcon(scaledImage));
+//				} // end else
+//
+//				lblImg.setPreferredSize(new Dimension(560, 400));
+//				lblImg.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+//				lblImg.setHorizontalAlignment(JLabel.CENTER);
+//				jpCardImages.add(lblImg, "card" + cardIndex++);
+//			} // end for
+//		} // end else
+//	}// buildCarImg
+
+	private void buildCarImgByBlob(int productCode) {
+
+		ImageService is = new ImageService();
+
+		List<ImageIcon> imageIconList = is.loadCarImgList(productCode);
+
+		System.out.println(productCode + "번 차량 이미지 " + imageIconList.size() + "개 로드 시도.");
 		
-		if (imagePathList.isEmpty()) { // 이미지 없을 때
-			buildBlankImg();
+		if (imageIconList == null || imageIconList.isEmpty()) { // 리스트가 비어있는지 확인
+			buildBlankImg(); // 이미지 없을 때
 		} else { // 이미지 있을 때
 			int cardIndex = 1;
-			for (String imagePath : imagePathList) {
-				// ★ 경로로 ImageIcon 생성 (파일 존재 및 경로 확인 필수!) ★
-				ImageIcon icon = new ImageIcon(localPath+imagePath);
+			// ★★★ [수정] 리스트를 순회하며 모든 이미지를 추가합니다 ★★★
+			for (ImageIcon icon : imageIconList) {
 				JLabel lblImg;
 
 				// 이미지 로딩 상태 확인 (선택 사항)
-				if (icon.getImageLoadStatus() == java.awt.MediaTracker.ERRORED) {
-					System.err.println("이미지 로드 실패: " + imagePath);
-					lblImg = new JLabel("  (X)  "); // 실패 시 표시
-				} else {
+				if (icon != null && icon.getImageLoadStatus() != java.awt.MediaTracker.ERRORED) {
 					// (선택) 이미지 크기 조절 (패널 크기에 맞게)
-					Image scaledImage = icon.getImage().getScaledInstance(350, 250, Image.SCALE_SMOOTH);
+					Image scaledImage = icon.getImage().getScaledInstance(560, 400, Image.SCALE_SMOOTH);
 					lblImg = new JLabel(new ImageIcon(scaledImage));
-				} // end else
+				} else {
+					System.err.println("이미지 로드 실패 (buildCarImgByBlob)");
+					lblImg = new JLabel("  (X)  "); // 실패 시 표시
+				}
 
-				lblImg.setPreferredSize(new Dimension(350, 250));
+				lblImg.setPreferredSize(new Dimension(560, 400));
 				lblImg.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 				lblImg.setHorizontalAlignment(JLabel.CENTER);
-				jpCardImages.add(lblImg, "card" + cardIndex++);
+				jpCardImages.add(lblImg, "card" + cardIndex++); // 카드를 순서대로 추가
 			} // end for
 		} // end else
+
 	}// buildCarImg
 
 	// --- Evt 클래스용 Getter 메소드 ---

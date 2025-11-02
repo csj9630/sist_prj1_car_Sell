@@ -41,9 +41,9 @@ public class UserMenuDesign extends JFrame {
 		jpNorth.add(jlTitle);
 
 		// ㅁㅁㅁㅁㅁㅁ테스트용 usercode 출력 ㅁㅁㅁㅁㅁㅁㅁㅁ
-		JLabel jpUserCode = new JLabel("UserCode = " + user_code);
-		jpUserCode.setFont(new Font("맑은고딕", Font.BOLD, 20));
-		add("South", jpUserCode);
+//		JLabel jpUserCode = new JLabel("UserCode = " + user_code);
+//		jpUserCode.setFont(new Font("맑은고딕", Font.BOLD, 20));
+//		add("South", jpUserCode);
 		//ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ
 		
 		// 센터 패널에 버튼 추가

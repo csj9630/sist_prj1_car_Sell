@@ -17,6 +17,10 @@ public class CarDAO {
 	
 	private static CarDAO carDAO;
 	private List<Integer> prodCodes;
+	private List<Integer> optionCodes;
+	private List<Integer> defectCodes;
+	private List<Integer> accidentCodes;
+	private List<Integer> repairCodes;
 	private List<String> brands;
 	private List<String> oils;
 	private List<String> options;
@@ -35,33 +39,33 @@ public class CarDAO {
 		return carDAO;
 	}
 	
-	// 차량 리스트용
-	// "판매중"인 차량의 상품 코드 받아오기
-	public List<Integer> findProductCodesByStatus(String status) throws SQLException, IOException  {
-		prodCodes = new ArrayList<>();
-		
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		
-		GetConnection gc = GetConnection.getInstance();
-		
-		String availableProd = "SELECT PRODUCT_CODE FROM CAR_INFO WHERE STATUS_SOLD = ?";
-		
-		try {
-			con = gc.getConn();
-			pstmt = con.prepareStatement(availableProd);
-			pstmt.setString(1, status);
-			rs = pstmt.executeQuery();
-			
-			while (rs.next()) {
-				prodCodes.add(rs.getInt("PRODUCT_CODE"));
-			}
-		} finally {
-			gc.dbClose(con, pstmt, rs);
-		}
-		return prodCodes;
-	} // findProductCodesByStatus
+//	// 차량 리스트용
+//	// "판매중"인 차량의 상품 코드 받아오기
+//	public List<Integer> findProductCodesByStatus(String status) throws SQLException, IOException  {
+//		prodCodes = new ArrayList<>();
+//		
+//		Connection con = null;
+//		PreparedStatement pstmt = null;
+//		ResultSet rs = null;
+//		
+//		GetConnection gc = GetConnection.getInstance();
+//		
+//		String availableProd = "SELECT PRODUCT_CODE FROM CAR_INFO WHERE STATUS_SOLD = ?";
+//		
+//		try {
+//			con = gc.getConn();
+//			pstmt = con.prepareStatement(availableProd);
+//			pstmt.setString(1, status);
+//			rs = pstmt.executeQuery();
+//			
+//			while (rs.next()) {
+//				prodCodes.add(rs.getInt("PRODUCT_CODE"));
+//			}
+//		} finally {
+//			gc.dbClose(con, pstmt, rs);
+//		}
+//		return prodCodes;
+//	} // findProductCodesByStatus
  	
 	// 모든 브랜드 조회
 	// 차량 리스트 - 브랜드 필터링 JCheckBox
@@ -90,6 +94,101 @@ public class CarDAO {
 		
 		return brands;
 	} // findBrand	
+	
+	public List<Integer> selectCarsByFilters(List<String> SelectedBrands, List<String> SelectedOils, String userType) throws SQLException, IOException {
+		List<Integer> prodCodeList = new ArrayList<>();
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    GetConnection gc = GetConnection.getInstance();
+	    
+	    StringBuilder carFind = new StringBuilder();
+	    carFind.append(" SELECT PRODUCT_CODE FROM CAR_INFO ");
+	    System.out.println(carFind.toString());
+	    
+	    if (SelectedBrands != null && !SelectedBrands.isEmpty()) {
+	    	carFind.append(" WHERE BRAND_NAME IN (");
+	    	
+	        for (int i = 0; i < SelectedBrands.size(); i++) {
+	        	carFind.append("?");
+	            if (i < SelectedBrands.size() - 1) {
+	            	carFind.append(", ");
+	            }
+	        }
+	        carFind.append(") ");
+	        
+		    if (SelectedOils != null && !SelectedOils.isEmpty()) {
+		    	carFind.append(" AND OIL IN (");
+		    	
+		    	for (int i = 0; i < SelectedOils.size(); i++) {
+		    		carFind.append("?");
+		    		if (i < SelectedOils.size() - 1) {
+		    			carFind.append(", ");
+		    		}
+		    	}
+		    	carFind.append(") ");
+		    }
+		    
+		    if(userType.equals("u")) {
+		    	carFind.append(" AND STATUS_SOLD = '판매중'");
+		    }
+	        
+	    } else if(SelectedOils != null && !SelectedOils.isEmpty()) {
+	    	carFind.append(" WHERE OIL IN (");
+	    	
+	    	for (int i = 0; i < SelectedOils.size(); i++) {
+	    		carFind.append("?");
+	    		if (i < SelectedOils.size() - 1) {
+	    			carFind.append(", ");
+	    		}
+	    	}
+	    	carFind.append(") ");
+	    	
+	    	if(userType.equals("u")) {
+	    		carFind.append(" AND STATUS_SOLD = '판매중'");
+	    	}
+	    	
+	    } else {
+	    	if(userType.equals("u")) {
+	    		carFind.append(" WHERE STATUS_SOLD = '판매중'");
+	    	}
+	    }
+	    
+	    try {
+	        con = gc.getConn();
+	        pstmt = con.prepareStatement(carFind.toString());
+	        
+	        int filterInd = 1;
+	        
+	        if (SelectedBrands != null && !SelectedBrands.isEmpty()) {
+	            for (String brand : SelectedBrands) {
+	            	pstmt.setString(filterInd++, brand);
+	            }
+	            if (SelectedOils != null && !SelectedOils.isEmpty()) {
+	            	for (String oil : SelectedOils) {
+	            		pstmt.setString(filterInd++, oil);
+	            	}
+	            }
+	        } else if(SelectedOils != null && !SelectedOils.isEmpty()) {
+	        	for (String oil : SelectedOils) {
+            		pstmt.setString(filterInd++, oil);
+	        	}
+	        }
+	        
+	        // 4. 쿼리 실행
+	        rs = pstmt.executeQuery();
+	        
+	        while (rs.next()) {
+	            CarDTO cDTO = new CarDTO();
+	            cDTO.setProdCode(rs.getInt("PRODUCT_CODE"));
+	            prodCodeList.add(cDTO.getProdCode());
+	        }
+	        
+	    } finally {
+	    	gc.dbClose(con, pstmt, rs);
+	    }
+	    return prodCodeList;
+	} // selectCarsByFilters
 	
 	// 모든 유종 조회
 	// 차량 리스트 - 유종 필터링 JCheckBox
@@ -146,6 +245,33 @@ public class CarDAO {
 		return options;
 	} // findOption
 	
+	// 모든 옵션 조회
+	// 차량 상세 정보 - 옵션 편집을 위한 전체 옵션 목록
+	public List<Integer> findOptionCode() throws SQLException, IOException {
+		optionCodes = new ArrayList<>();
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		GetConnection gc = GetConnection.getInstance();
+		
+		String optionCodeFind = "SELECT OPTION_CODE FROM OPTION_TABLE";
+		
+		try {
+			con = gc.getConn();
+			pstmt = con.prepareStatement(optionCodeFind);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				optionCodes.add(rs.getInt("OPTION_CODE"));
+			}
+		} finally {
+			gc.dbClose(con, pstmt, rs);
+		}
+		return optionCodes;
+	} // findOption
+	
 	// 차량 코드가 prodCode인 차량의 옵션 목록 조회
 	// 차량 상세 정보 - 사용자에게 선택한 차량의 옵션 목록 출력
 	// 차량 상세 정보 - 관리자에게 전체 옵션 목록 중 선택한 차량의 옵션 목록 표기
@@ -175,6 +301,52 @@ public class CarDAO {
 		return carOptions;
 	} // findOptionNamesByProductCode
 	
+	// 차량 코드가 prodCode인 차량의 옵션을 우선 전부 삭제
+    public void deleteOptionsByProductCode(Connection con, int prodCode) throws SQLException, IOException {
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		GetConnection gc = GetConnection.getInstance();
+    	
+    	String deleteOption = "DELETE FROM CAR_OPTION WHERE PRODUCT_CODE = ?";
+        
+        try {
+        	con = gc.getConn();
+        	pstmt = con.prepareStatement(deleteOption);
+            pstmt.setInt(1, prodCode);
+            pstmt.executeUpdate();
+        } finally {
+			gc.dbClose(con, pstmt, rs);
+		}
+    } // deleteOptionsByProductCode
+    
+    // 차량 코드가 prodCode인 차량의 옵션을 우선 전부 삭제
+    // 차량 코드와 옵션 코드 리스트를 받아 선택된 옵션을 삽입
+    public void insertOptions(Connection con, int prodCode, List<String> optionCodes) throws SQLException, IOException {
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		GetConnection gc = GetConnection.getInstance();
+    	
+    	String insertOption = "INSERT INTO CAR_OPTION (PRODUCT_CODE, OPTION_CODE) VALUES (?, ?)";
+        
+        try {
+        	con = gc.getConn();
+        	pstmt = con.prepareStatement(insertOption);
+            
+            for (String optionCode : optionCodes) {
+                pstmt.setInt(1, prodCode);
+                pstmt.setInt(2, Integer.parseInt(optionCode));
+                pstmt.addBatch(); // 작업을 배치에 추가
+            }
+            pstmt.executeBatch(); // 배치 작업 일괄 실행
+        } finally {
+        	gc.dbClose(con, pstmt, rs);
+        }
+    } // insertOptions
+	
 	// 모든 하자 조회
 	// 차량 상세 정보 - 하자 편집을 위한 전체 하자 목록
 	public List<String> findDefect() throws SQLException, IOException {
@@ -202,6 +374,31 @@ public class CarDAO {
 		}
 		return defects;
 	} // findDefect
+	
+	public List<Integer> findDefectCode() throws SQLException, IOException {
+		defectCodes = new ArrayList<>();
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		GetConnection gc = GetConnection.getInstance();
+		
+		String defectCodeFind = "SELECT DEFECT_CODE FROM DEFECT WHERE DEFECT_TYPE='외관 하자' OR DEFECT_TYPE='내부 하자' OR DEFECT_TYPE='차량 기능 하자'";
+		
+		try {
+			con = gc.getConn();
+			pstmt = con.prepareStatement(defectCodeFind);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				defectCodes.add(rs.getInt("DEFECT_CODE"));
+			}
+		} finally {
+			gc.dbClose(con, pstmt, rs);
+		}
+		return defectCodes;
+	} // findDefectCode
 	
 	// 차량 코드가 prodCode인 하자 옵션 목록 조회
 	// 차량 상세 정보 - 사용자에게 선택한 차량의 하자 목록 출력
@@ -232,6 +429,52 @@ public class CarDAO {
 		return carDefects;
 	} // findDefectNamesByProductCode
 	
+	// 차량 코드가 prodCode인 차량의 옵션을 우선 전부 삭제
+    public void deleteDefectsByProductCode(Connection con, int prodCode) throws SQLException, IOException {
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		GetConnection gc = GetConnection.getInstance();
+    	
+    	String deleteDefect = "DELETE FROM CAR_DEFECT WHERE PRODUCT_CODE = ?";
+        
+        try {
+        	con = gc.getConn();
+        	pstmt = con.prepareStatement(deleteDefect);
+            pstmt.setInt(1, prodCode);
+            pstmt.executeUpdate();
+        } finally {
+			gc.dbClose(con, pstmt, rs);
+		}
+    } // deleteOptionsByProductCode
+    
+    // 차량 코드가 prodCode인 차량의 옵션을 우선 전부 삭제
+    // 차량 코드와 옵션 코드 리스트를 받아 선택된 옵션을 삽입
+    public void insertDefects(Connection con, int prodCode, List<String> defectCodes) throws SQLException, IOException {
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		GetConnection gc = GetConnection.getInstance();
+    	
+    	String insertDefect = "INSERT INTO CAR_DEFECT (PRODUCT_CODE, DEFECT_CODE) VALUES (?, ?)";
+        
+        try {
+        	con = gc.getConn();
+        	pstmt = con.prepareStatement(insertDefect);
+            
+            for (String defectCode : defectCodes) {
+                pstmt.setInt(1, prodCode);
+                pstmt.setInt(2, Integer.parseInt(defectCode));
+                pstmt.addBatch(); // 작업을 배치에 추가
+            }
+            pstmt.executeBatch(); // 배치 작업 일괄 실행
+        } finally {
+        	gc.dbClose(con, pstmt, rs);
+        }
+    } // insertOptions
+	
 	// 모든 사고 조회
 	// 차량 상세 정보 - 사고 편집을 위한 전체 사고 목록
 	public List<String> findAccident() throws SQLException, IOException {
@@ -260,6 +503,31 @@ public class CarDAO {
 		
 		return accidents;
 	} // findAccident
+	
+	public List<Integer> findAccidentCode() throws SQLException, IOException {
+		accidentCodes = new ArrayList<>();
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		GetConnection gc = GetConnection.getInstance();
+		
+		String accidentCodeFind = "SELECT DEFECT_CODE FROM DEFECT WHERE DEFECT_TYPE='사고'";
+		
+		try {
+			con = gc.getConn();
+			pstmt = con.prepareStatement(accidentCodeFind);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				accidentCodes.add(rs.getInt("DEFECT_CODE"));
+			}
+		} finally {
+			gc.dbClose(con, pstmt, rs);
+		}
+		return accidentCodes;
+	} // findAccidentCode
 	
 	// 차량 코드가 prodCode인 사고 목록 조회
 	// 차량 상세 정보 - 사용자에게 선택한 차량의 사고 목록 출력
@@ -318,6 +586,31 @@ public class CarDAO {
 		
 		return repairs;
 	} // findRepair
+	
+	public List<Integer> findRepairCode() throws SQLException, IOException {
+		repairCodes = new ArrayList<>();
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		GetConnection gc = GetConnection.getInstance();
+		
+		String repairCodeFind = "SELECT DEFECT_CODE FROM DEFECT WHERE DEFECT_TYPE='수리'";
+		
+		try {
+			con = gc.getConn();
+			pstmt = con.prepareStatement(repairCodeFind);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				repairCodes.add(rs.getInt("DEFECT_CODE"));
+			}
+		} finally {
+			gc.dbClose(con, pstmt, rs);
+		}
+		return repairCodes;
+	} // findRepairCode
 	
 	// 차량 코드가 prodCode인 수리 목록 조회
 	// 차량 상세 정보 - 사용자에게 선택한 차량의 수리 목록 출력
@@ -386,13 +679,18 @@ public class CarDAO {
     } // selectCarByCode
     
     // 신규 차량 등록
-	public void insertCarsMgr(CarDTO cDTO) throws SQLException, IOException {
+	public int insertCarsMgr(CarDTO cDTO) throws SQLException, IOException {
 		// 1. 드라이버 로딩
 		
 		// 2. 커넥션 얻기
 		Connection con = null;
 		PreparedStatement pstmtBrand = null;
 		PreparedStatement pstmtCar = null;
+		
+		PreparedStatement pstmtProdCode = null;
+		ResultSet rs = null;
+		
+		int prodCode = 0;
 		
 		GetConnection gc = GetConnection.getInstance();
 		
@@ -402,6 +700,8 @@ public class CarDAO {
 		= "insert into car_info(product_code, product_name, price, car_year, cc,"
 				+ "distance, registration_number, status_sold, car_name, oil, brand_name)"
 				+ "values(SEQ_CAR_INFO.nextval,?,?,?,?,?,?,?,?,?,?)";
+		
+		String findCurrProdCode = "SELECT SEQ_CAR_INFO.CURRVAL FROM DUAL";
 		
 		try {
 			con = gc.getConn();
@@ -438,9 +738,19 @@ public class CarDAO {
 			
 			pstmtCar.executeUpdate();
 			
+			pstmtProdCode = con.prepareStatement(findCurrProdCode);
+			rs = pstmtProdCode.executeQuery();
+	        if (rs.next()) {
+	            prodCode = rs.getInt(1); // 1번째 컬럼(CURRVAL) 값을 가져옴
+	        }
+			
+	        
+	        
 		} finally {
-			gc.dbClose(con, pstmtCar, null);	// 연결을 끊을 때는 commit을 수행하고 끊는다.
+			gc.dbClose(con, pstmtCar, rs);	// 연결을 끊을 때는 commit을 수행하고 끊는다.
 		} // end try ~ finally
+		
+		return prodCode;
 	} // insertCarsMgr
 	
     // 차량 정보 수정

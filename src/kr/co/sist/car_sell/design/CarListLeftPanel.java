@@ -5,8 +5,11 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,8 +22,10 @@ public class CarListLeftPanel extends JFrame {
 	
 	private static JPanel jpLeft;
 	
+	private JButton jbtnFilter;
 	private JCheckBox jcbBrand, jcbOil;
 	private String[] brandArr, oilArr;
+	private Map<JCheckBox, String> brandMap, oilMap;
 	
 	private CarListDesign cld;
 	private CarListService cls;
@@ -31,19 +36,23 @@ public class CarListLeftPanel extends JFrame {
 			this.cld = cld;
 			cls = cld.getCls();
 			
+			brandMap = new HashMap<>();
+			oilMap = new HashMap<>();
+			
 			// 프로그램명
 			jpLeft = new JPanel();
 			jpLeft.setBackground(new Color(0x808080));
 			jpLeft.setLayout(null);
 			
 			// 필터링_제목
-			JLabel jlblFilterText = new JLabel("필터링");
-			jlblFilterText.setFont(new Font("맑은 고딕", Font.BOLD, 40));
-			jlblFilterText.setHorizontalAlignment(JLabel.CENTER);
-			jlblFilterText.setVerticalAlignment(JLabel.CENTER);
-			jlblFilterText.setForeground(new Color(0x000000));
-			jlblFilterText.setBounds(5, 5, 274, 120);
-			jpLeft.add(jlblFilterText);
+			jbtnFilter = new JButton("필터링");
+			jbtnFilter.setFont(new Font("맑은 고딕", Font.BOLD, 40));
+			jbtnFilter.setHorizontalAlignment(JLabel.CENTER);
+			jbtnFilter.setVerticalAlignment(JLabel.CENTER);
+			jbtnFilter.setBackground(new Color(0xC0C0C0));
+			jbtnFilter.setForeground(new Color(0x000000));
+			jbtnFilter.setBounds(5, 5, 274, 115);
+			jpLeft.add(jbtnFilter);
 			
 			// 필터링_브랜드
 			JPanel jpBrand = new JPanel(new GridLayout(0, 1));
@@ -58,12 +67,12 @@ public class CarListLeftPanel extends JFrame {
 			} // end try ~ catch
 			
 			for (String brand : brandArr) {
-				// [중요] 람다에서 사용하기 위해 final 변수로 복사
 				final String brandName = brand;
 				
 				jcbBrand = new JCheckBox(brandName);
 				jcbBrand.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
 				jcbBrand.setForeground(new Color(0x000000));
+				brandMap.put(jcbBrand, brandName);
 				jpBrand.add(jcbBrand);
 				
 			} // end for
@@ -88,12 +97,12 @@ public class CarListLeftPanel extends JFrame {
 			} // end try ~ catch
 			
 			for (String oil : oilArr) {
-				// [중요] 람다에서 사용하기 위해 final 변수로 복사
 				final String oilType = oil;
 				
 				jcbOil = new JCheckBox(oilType);
 				jcbOil.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
 				jcbOil.setForeground(new Color(0x000000));
+				oilMap.put(jcbOil, oilType);
 				jpOil.add(jcbOil);
 				
 			} // end for
@@ -110,5 +119,17 @@ public class CarListLeftPanel extends JFrame {
 	public static JPanel getJpLeft() {
 		return jpLeft;
 	} // getJpLeft
+	
+	public JButton getJbtnFilter() {
+		return jbtnFilter;
+	} // getJbtnFilter
+	
+	public Map<JCheckBox, String> getBrandMap() {
+		return brandMap;
+	} // getBrandList
+	
+	public Map<JCheckBox, String> getOilMap() {
+		return oilMap;
+	} // getOilList
 	
 }

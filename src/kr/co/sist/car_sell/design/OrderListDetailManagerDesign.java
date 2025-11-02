@@ -82,7 +82,7 @@ public class OrderListDetailManagerDesign extends JDialog{
 		
 		jplOrderInfo.add(new JLabel("주문 ID: "+oldmDTO.getPayment_code()));
         jplOrderInfo.add(new JLabel("주문일: "+oldmDTO.getOrder_date()));
-        jplOrderInfo.add(new JLabel("금액: "+String.format("%,d", oldmDTO.getPrice())+"원"));
+        jplOrderInfo.add(new JLabel("금액: "+String.format("%,d", oldmDTO.getPrice())+"만 원"));
         jplOrderInfo.add(jlblstatus=new JLabel("상태: "+oldmDTO.getDelivery_state())); //다른 라벨처럼 관리하면 변경버튼 눌렀을때 값이 변하지 않으므로 변수 선언
 		
         //상태 변경 패널

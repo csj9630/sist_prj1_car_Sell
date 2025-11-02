@@ -1,15 +1,20 @@
 package kr.co.sist.car_sell.service;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import kr.co.sist.car_sell.dao.CarDAO;
+import kr.co.sist.car_sell.dao.GetConnection;
 import kr.co.sist.car_sell.dto.CarDTO;
 
 public class CarInfoService {
 	
 	private CarDAO cDAO;
+	
+	private Map<String, String> optionMap;
 	
 	public CarInfoService() {
 		cDAO = CarDAO.getInstance();
@@ -25,24 +30,6 @@ public class CarInfoService {
         
         return cDTO;
     } // getProductDetails
-	
-	
-	public boolean addCar(CarDTO cDTO) {
-		boolean flag = false;
-		
-		CarDAO cDAO = CarDAO.getInstance();
-		
-		try {
-			cDAO.insertCarsMgr(cDTO);
-			flag = true;
-		} catch(SQLException e) {
-			e.printStackTrace();
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
-		
-		return flag;
-	} // addFriends
 	
 	public boolean updateCar(int prodCode, CarDTO cDTO) {
 		boolean flag = false;
@@ -96,6 +83,17 @@ public class CarInfoService {
 		return optionArray;
 	} // getAvailableOptions
 	
+	public int[] getOptionCodes() throws SQLException, IOException {
+		
+		List<Integer> optionCodeList = cDAO.findOptionCode();
+		
+		int[] optionCodeArray = optionCodeList.stream()
+				.mapToInt(Integer::intValue)
+				.toArray();
+		
+		return optionCodeArray;
+	} // getOptionCodes
+	
 	public String[] getProductOptionDetails(int prodCode) throws Exception {
 		
 		List<String> carOptionList = cDAO.findOptionNamesByProductCode(prodCode);
@@ -106,6 +104,36 @@ public class CarInfoService {
         return carOptionArray;
     } // getProductOptionDetails
 	
+	public void updateCarOptions(int prodCode, List<String> optionCodes) throws SQLException, IOException {
+        Connection con = null;
+        GetConnection gc = GetConnection.getInstance();
+        
+        try {
+        	con = gc.getConn(); // DB 연결 가져오기
+            con.setAutoCommit(false); // 1. 트랜잭션 시작 (Auto-Commit 해제)
+            
+            // 2. 기존 옵션 모두 삭제
+            cDAO.deleteOptionsByProductCode(con, prodCode);
+            
+            // 3. 새 옵션 목록 삽입 (선택된 것이 하나도 없다면 이 단계는 건너뜀)
+            if (optionCodes != null && !optionCodes.isEmpty()) {
+                cDAO.insertOptions(con, prodCode, optionCodes);
+            }
+            con.commit(); // 4. 모든 작업 성공 시 커밋
+
+        } catch (SQLException e) {
+            if (con != null) {
+            	con.rollback(); // 5. 오류 발생 시 롤백
+            }
+            throw e; // 예외를 다시 던져서 Event 층에서 처리하도록 함
+        } finally {
+            if (con != null) {
+            	con.setAutoCommit(true); // Auto-Commit 원상 복구
+            	con.close(); // 연결 반환
+            }
+        }
+    }
+	
 	public String[] getAvailableDefects() throws SQLException, IOException {
 		
 		List<String> defectList = cDAO.findDefect();
@@ -115,6 +143,17 @@ public class CarInfoService {
 		
 		return defectArray;
 	} // getAvailableDefects
+	
+	public int[] getDefectCodes() throws SQLException, IOException {
+		
+		List<Integer> defectCodeList = cDAO.findDefectCode();
+		
+		int[] defectCodeArray = defectCodeList.stream()
+				.mapToInt(Integer::intValue)
+				.toArray();
+		
+		return defectCodeArray;
+	} // getDefectCodes
 	
 	public String[] getProductDefectDetails(int prodCode) throws Exception {
 		
@@ -130,6 +169,30 @@ public class CarInfoService {
 		return carDefectArray;
 	} // getProductDefectDetails
 	
+	public void updateCarDefects(int prodCode, List<String> defectCodes) throws SQLException, IOException {
+        Connection con = null;
+        GetConnection gc = GetConnection.getInstance();
+        
+        try {
+        	con = gc.getConn(); // DB 연결 가져오기
+            con.setAutoCommit(false); // 1. 트랜잭션 시작 (Auto-Commit 해제)
+            
+            // 2. 기존 옵션 모두 삭제
+            cDAO.deleteDefectsByProductCode(con, prodCode);
+            
+            // 3. 새 옵션 목록 삽입 (선택된 것이 하나도 없다면 이 단계는 건너뜀)
+            if (defectCodes != null && !defectCodes.isEmpty()) {
+                cDAO.insertDefects(con, prodCode, defectCodes);
+            }
+            con.commit(); // 4. 모든 작업 성공 시 커밋
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            gc.dbClose(con, null, null);
+        }
+    }
+	
 	public String[] getAvailableAccidents() throws SQLException, IOException {
 		
 		List<String> accidentList = cDAO.findAccident();
@@ -139,6 +202,17 @@ public class CarInfoService {
 		
 		return accidentArray;
 	} // getAvailableAccidents
+	
+	public int[] getAccidentCodes() throws SQLException, IOException {
+		
+		List<Integer> accidentCodeList = cDAO.findAccidentCode();
+		
+		int[] accidentCodeArray = accidentCodeList.stream()
+				.mapToInt(Integer::intValue)
+				.toArray();
+		
+		return accidentCodeArray;
+	} // getAccidentCodes
 	
 	public String[] getProductAccidentDetails(int prodCode) throws Exception {
 		
@@ -159,6 +233,17 @@ public class CarInfoService {
 		
 		return repairArray;
 	} // getAvailableRepairs
+	
+	public int[] getRepairCodes() throws SQLException, IOException {
+		
+		List<Integer> repairCodeList = cDAO.findRepairCode();
+		
+		int[] repairCodeArray = repairCodeList.stream()
+				.mapToInt(Integer::intValue)
+				.toArray();
+		
+		return repairCodeArray;
+	} // getRepairCodes
 	
 	public String[] getProductRepairDetails(int prodCode) throws Exception {
 		

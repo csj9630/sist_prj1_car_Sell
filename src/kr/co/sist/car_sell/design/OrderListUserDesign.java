@@ -85,7 +85,7 @@ public class OrderListUserDesign extends JDialog{
 				rowData[1]=oluDTO.getOrder_date();
 				rowData[2]=oluDTO.getProduct_code();
 				rowData[3]=oluDTO.getProduct_name();
-				rowData[4]=String.format("%,d", oluDTO.getPrice())+"원";
+				rowData[4]=String.format("%,d", oluDTO.getPrice())+"만 원";
 				rowData[5]=oluDTO.getDelivery_state();
 				
 				dtmOrderList.addRow(rowData);

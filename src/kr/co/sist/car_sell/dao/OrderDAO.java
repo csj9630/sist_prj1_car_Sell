@@ -52,7 +52,7 @@ public class OrderDAO {
             // 2. 주문 내역(ORDER_HISTORY) 삽입
             String insertOrderSql =
                 "INSERT INTO ORDER_HISTORY (PAYMENT_CODE, ORDER_DATE, DELIVERY_STATE, PRODUCT_CODE, USER_CODE) " +
-                "VALUES (?, SYSDATE, '배송준비중', ?, ?)"; // 초기 상태 '배송준비중'
+                "VALUES (?, SYSDATE, '탁송 준비', ?, ?)"; // 초기 상태 '배송준비중'
 
             pstmtOrder = con.prepareStatement(insertOrderSql);
             pstmtOrder.setInt(1, nextPaymentCode);

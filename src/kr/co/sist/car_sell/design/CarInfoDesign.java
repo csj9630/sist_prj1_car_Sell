@@ -19,7 +19,7 @@ public class CarInfoDesign extends JDialog {
 	private String userType;
 	private int userCode;
 	
-	private static JPanel jpNorth, jpCenter, jpSouth; 
+	private static JPanel jpNorth, jpCenter, jpSouth;
 	
 	public CarInfoDesign(CarListDesign cld, int prodCode, String userType, int userCode) {
 		
@@ -35,10 +35,10 @@ public class CarInfoDesign extends JDialog {
 		
 		cie = new CarInfoEvt(this, cld, prodCode, userCode, cinp, cicp, cisp);
 		
-		cicp.getJbtnImage1().addActionListener(cie);
-		cicp.getJbtnImage2().addActionListener(cie);
-		cicp.getJbtnImage3().addActionListener(cie);
-		cicp.getJbtnImage4().addActionListener(cie);
+		cicp.getJbtnImageIcon1().addActionListener(cie);
+		cicp.getJbtnImageIcon2().addActionListener(cie);
+		cicp.getJbtnImageIcon3().addActionListener(cie);
+		cicp.getJbtnImageIcon4().addActionListener(cie);
 		
 		if(userType.equals("a")) {
 			cicp.getJcbStatSold().addActionListener(cie);

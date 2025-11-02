@@ -41,16 +41,26 @@ public class CarListService {
 		
 	} // selectCar
 	
-	public int[] getAvailableProductCodes() throws SQLException, IOException {
+//	public int[] getAvailableProductCodes() throws SQLException, IOException {
+//		
+//        List<Integer> prodCodeList = cDAO.findProductCodesByStatus("판매중");
+//        
+//        int[] codeArray = prodCodeList.stream()
+//        					.mapToInt(Integer::intValue)
+//        					.toArray();
+//        
+//        return codeArray;
+//    } // getAvailableProductCodes
+	
+	public int[] getFilteredCars(List<String> SelectedBrands, List<String> SelectedOils, String userType) throws SQLException, IOException {
 		
-        List<Integer> prodCodeList = cDAO.findProductCodesByStatus("판매중");
+        int[] prodCodeArray = cDAO.selectCarsByFilters(SelectedBrands, SelectedOils, userType).stream()
+				.mapToInt(Integer::intValue)
+				.toArray();
         
-        int[] codeArray = prodCodeList.stream()
-        					.mapToInt(Integer::intValue)
-        					.toArray();
+        return prodCodeArray;
         
-        return codeArray;
-    } // getAvailableProductCodes
+    }
 	
 	public String[] getAvailableBrands() throws SQLException, IOException {
 		
