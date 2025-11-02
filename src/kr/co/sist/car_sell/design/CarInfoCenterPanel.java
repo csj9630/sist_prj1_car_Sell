@@ -760,6 +760,22 @@ public class CarInfoCenterPanel extends JDialog {
 		return jpCenter;
 	} // getJpCenter
 	
+	public JButton getJbtnImage1() {
+		return jbtnImage1;
+	}
+
+	public JButton getJbtnImage2() {
+		return jbtnImage2;
+	}
+
+	public JButton getJbtnImage3() {
+		return jbtnImage3;
+	}
+
+	public JButton getJbtnImage4() {
+		return jbtnImage4;
+	}
+
 	public JButton getJbtnImageIcon1() {
 		return jbtnImageIcon1;
 	} // getJbtnImage1

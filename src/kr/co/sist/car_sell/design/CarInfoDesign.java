@@ -35,11 +35,12 @@ public class CarInfoDesign extends JDialog {
 		
 		cie = new CarInfoEvt(this, cld, prodCode, userCode, cinp, cicp, cisp);
 		
+		cicp.getJbtnImageIcon1().addActionListener(cie);
+		cicp.getJbtnImageIcon2().addActionListener(cie);
+		cicp.getJbtnImageIcon3().addActionListener(cie);
+		cicp.getJbtnImageIcon4().addActionListener(cie);
+		
 		if(userType.equals("a")) {
-			cicp.getJbtnImageIcon1().addActionListener(cie);
-			cicp.getJbtnImageIcon2().addActionListener(cie);
-			cicp.getJbtnImageIcon3().addActionListener(cie);
-			cicp.getJbtnImageIcon4().addActionListener(cie);
 			cicp.getJcbStatSold().addActionListener(cie);
 			cicp.getJcbOil().addActionListener(cie);
 			cisp.getJbtnModify().addActionListener(cie);

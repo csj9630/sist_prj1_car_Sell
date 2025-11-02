@@ -98,8 +98,4 @@ public class CarAddDesign extends JDialog {
 		return prodCode;
 	}
 	
-	public static void main(String[] args) {
-		new CarAddDesign(new MgrMenuDesign());
-	}
-	
 }
