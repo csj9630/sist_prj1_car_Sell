@@ -63,12 +63,7 @@ public class GetConnection {
 		}catch(IOException e) {// 스트림 로드 중 예외 처리
 			throw new IOException("properties 파일 로드 중 오류가 발생했습니다. -"+e.getMessage());	
 		}//end catch
-        
-		
-		
-		
-		
-		
+ 
 //		---------------------------------------------------------------
 		//ㅁ File 클래스로 properties 경로를 가져옴.
 		// 2. 로딩된 드라이버를 사용하여 커넥션 얻기 => Properties 도입.
