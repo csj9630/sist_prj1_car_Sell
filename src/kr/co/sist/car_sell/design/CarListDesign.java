@@ -13,6 +13,7 @@ public class CarListDesign extends JFrame{
 	private CarListRightPanel clrp;
 	private CarListEvt cle;
 	private CarListService cls;
+	private int[] prodCodeArray;
 	private String userType;
 	private int userCode;
 	
@@ -31,10 +32,11 @@ public class CarListDesign extends JFrame{
 		JPanel jpRight = CarListRightPanel.getJpRight();
 		JPanel jpLeft = CarListLeftPanel.getJpLeft();
 		
-		cle = new CarListEvt(this, userCode, clnp, cllp, clrp, cls);
+		cle = new CarListEvt(this, userType, userCode, clnp, cllp, clrp, cls);
 		
 		clnp.getJbtnUserMenu().addActionListener(cle);
 		clnp.getJbtnLogout().addActionListener(cle);
+		cllp.getJbtnFilter().addActionListener(cle);
 		
 		if(userType.equals("a")) {
 			clnp.getJbtnMgrMenu().addActionListener(cle);

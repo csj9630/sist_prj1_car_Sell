@@ -81,27 +81,49 @@ public class CarInfoEvt extends WindowAdapter implements ActionListener {
 		
 		CarDTO cDTO = new CarDTO(prodCode, price, cc, distance, prodName, regNum, soldStat, carName, oil, brandName, carYear);
 		
+		CarInfoService cis = new CarInfoService();
+		
 		List<String> selectedOptionCodes = new ArrayList<>();
+		
 		for (Map.Entry<JCheckBox, String> entry : cicp.getOptionMap().entrySet()) {
 	        
-	        JCheckBox jcbOption = entry.getKey();   // JCheckBox 컴포넌트
-	        String optionCode = entry.getValue(); // "OPT_001" 같은 옵션 코드
+	        JCheckBox jcbOption = entry.getKey();
+	        String optionCode = entry.getValue();
 	        
 	        if (jcbOption.isSelected()) {
-	            selectedOptionCodes.add(optionCode); // 선택된 것만 리스트에 추가
+	            selectedOptionCodes.add(optionCode);
 	        }
 	    }
 		
-		CarInfoService cis = new CarInfoService();
-		
 		try {
-	        cis.updateCarOptions(prodCode, selectedOptionCodes); 
+	        cis.updateCarOptions(prodCode, selectedOptionCodes);
 	        
 	        JOptionPane.showMessageDialog(cid, "옵션이 성공적으로 변경되었습니다.");
 	        
 	    } catch (SQLException ex) {
 	        JOptionPane.showMessageDialog(cid, "업데이트 중 오류 발생: " + ex.getMessage());
 	    }
+		
+		List<String> selectedDefectCodes = new ArrayList<>();
+		
+		for (Map.Entry<JCheckBox, String> entry : cicp.getDefectMap().entrySet()) {
+			
+			JCheckBox jcbdefect = entry.getKey();   // JCheckBox 컴포넌트
+			String defectCode = entry.getValue(); // "OPT_001" 같은 옵션 코드
+			
+			if (jcbdefect.isSelected()) {
+				selectedDefectCodes.add(defectCode); // 선택된 것만 리스트에 추가
+			}
+		}
+		
+		try {
+			cis.updateCarDefects(prodCode, selectedDefectCodes);
+			
+			JOptionPane.showMessageDialog(cid, "옵션이 성공적으로 변경되었습니다.");
+			
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(cid, "업데이트 중 오류 발생: " + ex.getMessage());
+		}
 		
 		if(cis.updateCar(prodCode, cDTO)) {
 			String msg = "차량 정보를 정상적으로 갱신하였습니다.";
