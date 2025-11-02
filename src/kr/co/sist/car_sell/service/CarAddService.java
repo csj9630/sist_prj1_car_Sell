@@ -13,6 +13,7 @@ import kr.co.sist.car_sell.dto.CarDTO;
 public class CarAddService {
 	
 	private CarDAO cDAO;
+	private int prodCode;
 	
 	private Map<String, String> optionMap;
 	
@@ -32,54 +33,21 @@ public class CarAddService {
     } // getProductDetails
 	
 	
-	public boolean addCar(CarDTO cDTO) {
-		boolean flag = false;
+	public int addCar(CarDTO cDTO) {
+		int prodCode = 0;
 		
 		CarDAO cDAO = CarDAO.getInstance();
 		
 		try {
-			cDAO.insertCarsMgr(cDTO);
-			flag = true;
+			prodCode = cDAO.insertCarsMgr(cDTO);
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
 		
-		return flag;
-	} // addFriends
-	
-	public boolean updateCar(int prodCode, CarDTO cDTO) {
-		boolean flag = false;
-		
-		CarDAO cDAO = CarDAO.getInstance();
-		
-		try {
-			cDAO.updateCarsMgr(prodCode, cDTO);
-			flag = true;
-		} catch(SQLException e) {
-			e.printStackTrace();
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
-		return flag;
-	} // updateCar
-	
-	public boolean deleteCar(int prodCode) {
-		boolean flag = false;
-		
-		CarDAO cDAO = CarDAO.getInstance();
-		
-		try {
-			cDAO.deleteCarsMgr(prodCode);
-			flag = true;
-		} catch(SQLException e) {
-			e.printStackTrace();
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
-		return flag;
-	} // deleteCar
+		return prodCode;
+	} // addCar
 	
 	public String[] getAvailableOils() throws SQLException, IOException {
 		
@@ -131,11 +99,11 @@ public class CarAddService {
             con.setAutoCommit(false); // 1. 트랜잭션 시작 (Auto-Commit 해제)
             
             // 2. 기존 옵션 모두 삭제
-            cDAO.deleteOptionsByProductCode(prodCode);
+            cDAO.deleteOptionsByProductCode(con, prodCode);
             
             // 3. 새 옵션 목록 삽입 (선택된 것이 하나도 없다면 이 단계는 건너뜀)
             if (optionCodes != null && !optionCodes.isEmpty()) {
-                cDAO.insertOptions(prodCode, optionCodes);
+                cDAO.insertOptions(con, prodCode, optionCodes);
             }
             con.commit(); // 4. 모든 작업 성공 시 커밋
 
@@ -190,11 +158,11 @@ public class CarAddService {
             con.setAutoCommit(false); // 1. 트랜잭션 시작 (Auto-Commit 해제)
             
             // 2. 기존 옵션 모두 삭제
-            cDAO.deleteDefectsByProductCode(prodCode);
+            cDAO.deleteDefectsByProductCode(con, prodCode);
             
             // 3. 새 옵션 목록 삽입 (선택된 것이 하나도 없다면 이 단계는 건너뜀)
             if (defectCodes != null && !defectCodes.isEmpty()) {
-                cDAO.insertDefects(prodCode, defectCodes);
+                cDAO.insertDefects(con, prodCode, defectCodes);
             }
             con.commit(); // 4. 모든 작업 성공 시 커밋
             

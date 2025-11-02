@@ -57,9 +57,6 @@ public class CarAddEvt extends WindowAdapter implements ActionListener {
 	public CarAddEvt(CarAddDesign cad, CarAddNorthPanel canp, CarAddCenterPanel cacp, CarAddSouthPanel casp) {
 
 		this.cad = cad;
-		this.cld = cld;
-		this.prodCode = prodCode;
-		this.userCode = userCode;
 		this.canp = canp;
 		this.cacp = cacp;
 		this.casp = casp;
@@ -67,13 +64,14 @@ public class CarAddEvt extends WindowAdapter implements ActionListener {
 
 	} // CarInfoEvt
 
-	public void addCars() throws IOException {
-
+public void addCars() throws IOException {
+		
+		CarAddService cas = new CarAddService();
 		// 이름, 이메일, 전화번호, 인트로, 이미지를 받아와서 추가 작업 수행
 		int price = Integer.parseInt(cacp.getJtfPrice().getText().trim());
 		int cc = Integer.parseInt(cacp.getJtfCc().getText().trim());
 		int distance = Integer.parseInt(cacp.getJtfDistance().getText().trim());
-		String prodName = cacp.getJtfCarName().getText() + " ";
+		String prodName = cacp.getJtfCarName().getText()+" ";
 		String regNum = cacp.getJtfNumberPlate().getText();
 		int indSold = cacp.getJcbStatSold().getSelectedIndex();
 		String soldStat = cacp.getDcbmStatSold().getElementAt(indSold).toString().trim();
@@ -82,74 +80,80 @@ public class CarAddEvt extends WindowAdapter implements ActionListener {
 		String oil = cacp.getDcbmOil().getElementAt(indOil).toString().trim();
 		String brandName = cacp.getJtfBrand().getText().trim();
 		DateTimeFormatter carDate = DateTimeFormatter.ofPattern("yyyyMMdd");
-		Date carYear = Date.valueOf(LocalDate.parse(cacp.getJtfYear1().getText().trim() + "0101", carDate));
-
-		CarDTO cDTO = new CarDTO(prodCode, price, cc, distance, prodName, regNum, soldStat, carName, oil, brandName,
-				carYear);
-
-		CarAddService cas = new CarAddService();
-
-		if (cas.addCar(cDTO)) {
+		Date carYear = Date.valueOf(LocalDate.parse(cacp.getJtfYear1().getText().trim()
+				+ "0101", carDate));
+		
+		CarDTO cDTO = new CarDTO(prodCode, price, cc, distance, prodName, regNum, soldStat, carName, oil, brandName, carYear);
+		System.out.println();
+		
+		int tempProdCode = cas.addCar(cDTO);
+		System.out.println(String.valueOf(tempProdCode));
+		
+		if(tempProdCode > 0) {
 			String msg = "차량 정보를 정상적으로 갱신하였습니다.";
 			JOptionPane.showMessageDialog(cad, msg);
-			// 입력칸 초기화
+			
+			prodCode = tempProdCode;
+			System.out.println(prodCode);
 		} else {
 			String msg = "차량 정보를 갱신할 수 없습니다.\n잠시 후 다시 시도해주세요.";
 			JOptionPane.showMessageDialog(cad, msg);
+			
+			return;
 		}
-
-		prodCode = cDTO.getProdCode();
+		
+		
 		System.out.println(prodCode);
-
+		
 		List<String> selectedOptionCodes = new ArrayList<>();
-
+		
 		for (Map.Entry<JCheckBox, String> entry : cacp.getOptionMap().entrySet()) {
-
-			JCheckBox jcbOption = entry.getKey();
-			String optionCode = entry.getValue();
-
-			if (jcbOption.isSelected()) {
-				selectedOptionCodes.add(optionCode);
-			}
-		}
-
+	        
+	        JCheckBox jcbOption = entry.getKey();
+	        String optionCode = entry.getValue();
+	        
+	        if (jcbOption.isSelected()) {
+	            selectedOptionCodes.add(optionCode);
+	        }
+	    }
+		
 		try {
 			cas.updateCarOptions(prodCode, selectedOptionCodes);
-
-			JOptionPane.showMessageDialog(cad, "옵션이 성공적으로 변경되었습니다.");
-
-		} catch (SQLException ex) {
-			JOptionPane.showMessageDialog(cad, "업데이트 중 오류 발생: " + ex.getMessage());
-		}
-
+	        
+	        JOptionPane.showMessageDialog(cad, "옵션이 성공적으로 변경되었습니다.");
+	        
+	    } catch (SQLException ex) {
+	        JOptionPane.showMessageDialog(cad, "업데이트 중 오류 발생: " + ex.getMessage());
+	    }
+		
 		List<String> selectedDefectCodes = new ArrayList<>();
-
+		
 		for (Map.Entry<JCheckBox, String> entry : cacp.getDefectMap().entrySet()) {
-
-			JCheckBox jcbdefect = entry.getKey(); // JCheckBox 컴포넌트
+			
+			JCheckBox jcbdefect = entry.getKey();   // JCheckBox 컴포넌트
 			String defectCode = entry.getValue(); // "OPT_001" 같은 옵션 코드
-
+			
 			if (jcbdefect.isSelected()) {
 				selectedDefectCodes.add(defectCode); // 선택된 것만 리스트에 추가
 			}
 		}
-
+		
 		try {
 			cas.updateCarDefects(prodCode, selectedDefectCodes);
-
+			
 			JOptionPane.showMessageDialog(cad, "차량내역이 성공적으로 변경되었습니다.");
-
+			
 		} catch (SQLException ex) {
 			JOptionPane.showMessageDialog(cad, "업데이트 중 오류 발생: " + ex.getMessage());
 		}
-
+		
 		cacp.getJtfPrice().setText("");
 		cacp.getJtfCc().setText("");
 		cacp.getJtfDistance().setText("");
 		cacp.getJtfCarName().setText("");
 		cacp.getJtfNumberPlate().setText("");
 		cacp.getJtfYear1().setText("");
-
+		
 	}
 
 	public void windowClosing(WindowEvent we) {
