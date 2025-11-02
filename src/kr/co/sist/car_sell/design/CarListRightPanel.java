@@ -3,6 +3,7 @@ package kr.co.sist.car_sell.design;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -17,6 +18,7 @@ import javax.swing.JTextField;
 
 import kr.co.sist.car_sell.dto.CarDTO;
 import kr.co.sist.car_sell.service.CarListService;
+import kr.co.sist.car_sell.service.ImageService;
 
 public class CarListRightPanel extends JFrame {
 	
@@ -30,6 +32,7 @@ public class CarListRightPanel extends JFrame {
 	private int prodCode;
 	private String userType;
 	private int userCode;
+//	private List<ImageIcon> iiList;
 	
 	private CarListDesign cld;
 	private CarListService cls;
@@ -52,7 +55,7 @@ public class CarListRightPanel extends JFrame {
 		jspRight.getVerticalScrollBar().setUnitIncrement(20);
 		
 		try {
-			prodCodeArr = cls.getAvailableProductCodes();
+			prodCodeArr = cls.getFilteredCars(null, null, userType);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -69,32 +72,34 @@ public class CarListRightPanel extends JFrame {
 				e.printStackTrace();
 			}
             
-            ImageIcon ii = new ImageIcon(getClass().getResource("/images_prev/img_" + 1 + "_prev.png"));
-            jbtnImage = new JButton(ii);
+            jlblList.setLayout(null);
+            jlblList.setFont(new Font("맑은 고딕", Font.BOLD, 124));
+            jlblList.setOpaque(true);
+            jlblList.setHorizontalAlignment(JLabel.CENTER);
+            jlblList.setVerticalAlignment(JLabel.CENTER);
+            jlblList.setForeground(new Color(0x808080));
+            jlblList.setBackground(new Color(0x808080));
+            jpScroll.add(jlblList);
             
-            jlblList = new JLabel("라벨");
+			ImageService is = new ImageService();
+			ImageIcon ii = is.loadDBImage(productCode);
+			Image origImg = ii.getImage();
+			Image resizedImg = origImg.getScaledInstance(284, 160, Image.SCALE_SMOOTH);
+			ImageIcon reii = new ImageIcon(resizedImg);
+            
+            jbtnImage = new JButton(reii);
+            jbtnImage.setBounds(0, 3, 284, 160);
+            jbtnImage.setBackground(new Color(0x808080));
+            jbtnImage.addActionListener(ae -> {
+            	new CarInfoDesign(cld, productCode, userType, userCode).setVisible(true);
+            });
+            jlblList.add(jbtnImage);
+            
             jtfBrand = new JTextField(" " + cDTO.getBrandName());
             jtfCarName = new JTextField(" " + cDTO.getCarName());
             jtfOilType = new JTextField(" " + cDTO.getOil());
             jtfPrice = new JTextField(cDTO.getPrice() + "만원 ");
-			
-			jlblList.setLayout(null);
-			jlblList.setFont(new Font("맑은 고딕", Font.BOLD, 124));
-			jlblList.setOpaque(true);
-			jlblList.setHorizontalAlignment(JLabel.CENTER);
-			jlblList.setVerticalAlignment(JLabel.CENTER);
-			jlblList.setForeground(new Color(0x808080));
-			jlblList.setBackground(new Color(0x808080));
-			jpScroll.add(jlblList);
-			
-			jbtnImage.setBounds(0, 3, 284, 160);
-			jbtnImage.setBackground(new Color(0x808080));
-			jbtnImage.addActionListener(ae -> {
-				new CarInfoDesign(cld, productCode, userType, userCode).setVisible(true);
-			});
-			
-			jlblList.add(jbtnImage);
-			
+            
 			jtfBrand.setBounds(289, 4, 285, 54);
 			jtfBrand.setFont(new Font("맑은 고딕", Font.BOLD, 25));
 			jtfBrand.setBorder(null);
@@ -131,6 +136,98 @@ public class CarListRightPanel extends JFrame {
 		jpRight.add(jspRight);
 	}
 	
+	
+	public void refreshCarList(int[] prodCodeArr) throws Exception {
+		
+		// 1. 기존의 모든 차량 정보(컴포넌트)를 패널에서 제거합니다.
+		jpRight.removeAll();
+		
+		// 2. 새로운 차량 코드 리스트(carCodes)를 기반으로 UI 컴포넌트를 다시 만듭니다.
+		jpScroll = new JPanel();
+		jpScroll.setLayout(new GridLayout(0, 1));
+		
+		jspRight = new JScrollPane(jpScroll);
+		jspRight.setBorder(BorderFactory.createLineBorder(new Color(0x808080), 5));
+		jspRight.setBackground(new Color(0x808080));
+		jspRight.getVerticalScrollBar().setUnitIncrement(20);
+		
+		try {
+			for (int prodCode : prodCodeArr) {
+				CarDTO cDTO = this.cls.getProductDetails(prodCode);
+				
+	            jlblList.setLayout(null);
+	            jlblList.setFont(new Font("맑은 고딕", Font.BOLD, 124));
+	            jlblList.setOpaque(true);
+	            jlblList.setHorizontalAlignment(JLabel.CENTER);
+	            jlblList.setVerticalAlignment(JLabel.CENTER);
+	            jlblList.setForeground(new Color(0x808080));
+	            jlblList.setBackground(new Color(0x808080));
+	            jpScroll.add(jlblList);
+	            
+				ImageService is = new ImageService();
+				ImageIcon ii = is.loadDBImage(prodCode);
+				Image origImg = ii.getImage();
+				Image resizedImg = origImg.getScaledInstance(284, 160, Image.SCALE_SMOOTH);
+				ImageIcon reii = new ImageIcon(resizedImg);
+	            
+	            jbtnImage = new JButton(reii);
+	            jbtnImage.setBounds(0, 3, 284, 160);
+	            jbtnImage.setBackground(new Color(0x808080));
+	            jbtnImage.addActionListener(ae -> {
+	            	new CarInfoDesign(cld, prodCode, userType, userCode).setVisible(true);
+	            });
+	            jlblList.add(jbtnImage);
+	            
+	            jtfBrand = new JTextField(" " + cDTO.getBrandName());
+	            jtfCarName = new JTextField(" " + cDTO.getCarName());
+	            jtfOilType = new JTextField(" " + cDTO.getOil());
+	            jtfPrice = new JTextField(cDTO.getPrice() + "만원 ");
+	            
+				jtfBrand.setBounds(289, 4, 285, 54);
+				jtfBrand.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+				jtfBrand.setBorder(null);
+				jtfBrand.setEditable(false);
+				jtfBrand.setBackground(new Color(0xFFFFFF));
+				jlblList.add(jtfBrand);
+				
+				jtfCarName.setBounds(289, 58, 285, 50);
+				jtfCarName.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+				jtfCarName.setBorder(null);
+				jtfCarName.setEditable(false);
+				jtfCarName.setBackground(new Color(0xFFFFFF));
+				jlblList.add(jtfCarName);
+				
+				jtfOilType.setBounds(289, 108, 285, 54);
+				jtfOilType.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+				jtfOilType.setBorder(null);
+				jtfOilType.setEditable(false);
+				jtfOilType.setBackground(new Color(0xFFFFFF));
+				jlblList.add(jtfOilType);
+				
+				jtfPrice.setBounds(574, 4, 220, 158);
+				jtfPrice.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+				jtfPrice.setBorder(null);
+				jtfPrice.setHorizontalAlignment(JTextField.RIGHT);
+				jtfPrice.setEditable(false);
+				jtfPrice.setBackground(new Color(0xFFFFFF));
+				jlblList.add(jtfPrice);
+				
+			}
+			
+			jspRight.setBounds(5, 5, 826, 716);
+			
+			jpRight.add(jspRight);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			// 오류 처리
+		}
+		
+		// 3. 패널의 레이아웃을 새로고침하고 다시 그리도록 강제합니다. (필수!)
+		jpRight.revalidate(); // 레이아웃을 다시 계산
+		jpRight.repaint();    // 화면을 다시 그림
+	}
+	
 	public static JPanel getJpRight() {
 		return jpRight;
 	} // getJpRight
@@ -141,6 +238,14 @@ public class CarListRightPanel extends JFrame {
 	
 	public int getProdCode() {
 		return prodCode;
-	}
+	} // getProdCode
+	
+	public int[] getProdCodeArr() {
+		return prodCodeArr;
+	} // getProdCodeArr
+	
+	public void setProdCodeArr(int[] prodCodeArr) {
+		this.prodCodeArr = prodCodeArr;
+	} // setProdCodeArr
 	
 }

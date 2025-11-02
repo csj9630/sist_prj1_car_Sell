@@ -101,7 +101,7 @@ public class CarInfoService {
 		return optionArray;
 	} // getAvailableOptions
 	
-	public int[] getAvailableOptionCodes() throws SQLException, IOException {
+	public int[] getOptionCodes() throws SQLException, IOException {
 		
 		List<Integer> optionCodeList = cDAO.findOptionCode();
 		
@@ -110,7 +110,7 @@ public class CarInfoService {
 				.toArray();
 		
 		return optionCodeArray;
-	} // getAvailableOptions
+	} // getOptionCodes
 	
 	public String[] getProductOptionDetails(int prodCode) throws Exception {
 		
@@ -162,6 +162,17 @@ public class CarInfoService {
 		return defectArray;
 	} // getAvailableDefects
 	
+	public int[] getDefectCodes() throws SQLException, IOException {
+		
+		List<Integer> defectCodeList = cDAO.findDefectCode();
+		
+		int[] defectCodeArray = defectCodeList.stream()
+				.mapToInt(Integer::intValue)
+				.toArray();
+		
+		return defectCodeArray;
+	} // getDefectCodes
+	
 	public String[] getProductDefectDetails(int prodCode) throws Exception {
 		
 		List<String> carDefectList = cDAO.findDefectNamesByProductCode(prodCode);
@@ -176,6 +187,30 @@ public class CarInfoService {
 		return carDefectArray;
 	} // getProductDefectDetails
 	
+	public void updateCarDefects(int prodCode, List<String> defectCodes) throws SQLException, IOException {
+        Connection con = null;
+        GetConnection gc = GetConnection.getInstance();
+        
+        try {
+        	con = gc.getConn(); // DB 연결 가져오기
+            con.setAutoCommit(false); // 1. 트랜잭션 시작 (Auto-Commit 해제)
+            
+            // 2. 기존 옵션 모두 삭제
+            cDAO.deleteDefectsByProductCode(prodCode);
+            
+            // 3. 새 옵션 목록 삽입 (선택된 것이 하나도 없다면 이 단계는 건너뜀)
+            if (defectCodes != null && !defectCodes.isEmpty()) {
+                cDAO.insertDefects(prodCode, defectCodes);
+            }
+            con.commit(); // 4. 모든 작업 성공 시 커밋
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            gc.dbClose(con, null, null);
+        }
+    }
+	
 	public String[] getAvailableAccidents() throws SQLException, IOException {
 		
 		List<String> accidentList = cDAO.findAccident();
@@ -185,6 +220,17 @@ public class CarInfoService {
 		
 		return accidentArray;
 	} // getAvailableAccidents
+	
+	public int[] getAccidentCodes() throws SQLException, IOException {
+		
+		List<Integer> accidentCodeList = cDAO.findAccidentCode();
+		
+		int[] accidentCodeArray = accidentCodeList.stream()
+				.mapToInt(Integer::intValue)
+				.toArray();
+		
+		return accidentCodeArray;
+	} // getAccidentCodes
 	
 	public String[] getProductAccidentDetails(int prodCode) throws Exception {
 		
@@ -205,6 +251,17 @@ public class CarInfoService {
 		
 		return repairArray;
 	} // getAvailableRepairs
+	
+	public int[] getRepairCodes() throws SQLException, IOException {
+		
+		List<Integer> repairCodeList = cDAO.findRepairCode();
+		
+		int[] repairCodeArray = repairCodeList.stream()
+				.mapToInt(Integer::intValue)
+				.toArray();
+		
+		return repairCodeArray;
+	} // getRepairCodes
 	
 	public String[] getProductRepairDetails(int prodCode) throws Exception {
 		

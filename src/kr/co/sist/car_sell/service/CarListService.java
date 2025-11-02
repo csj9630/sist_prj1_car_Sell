@@ -15,22 +15,6 @@ public class CarListService {
 		cDAO = CarDAO.getInstance();
 	}
 	
-//	public CarInfoDTO searchCars(String brandName, String oil) {
-//		CarInfoDTO cDTO = null;
-//		
-//		CarInfoDAO cDAO = CarInfoDAO.getInstance();
-//		try {
-//			cDTO = cDAO.searchCars(brandName, oil);
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		} // end try ~ catch
-//		
-//		return cDTO;
-//		
-//	} // searchCars
-	
 	public CarDTO getProductDetails(int prodCode) throws Exception {
 		
 		CarDTO cDTO = cDAO.selectCarByCode(prodCode);
@@ -57,16 +41,26 @@ public class CarListService {
 		
 	} // selectCar
 	
-	public int[] getAvailableProductCodes() throws SQLException, IOException {
+//	public int[] getAvailableProductCodes() throws SQLException, IOException {
+//		
+//        List<Integer> prodCodeList = cDAO.findProductCodesByStatus("판매중");
+//        
+//        int[] codeArray = prodCodeList.stream()
+//        					.mapToInt(Integer::intValue)
+//        					.toArray();
+//        
+//        return codeArray;
+//    } // getAvailableProductCodes
+	
+	public int[] getFilteredCars(List<String> SelectedBrands, List<String> SelectedOils, String userType) throws SQLException, IOException {
 		
-        List<Integer> prodCodeList = cDAO.findProductCodesByStatus("판매중");
+        int[] prodCodeArray = cDAO.selectCarsByFilters(SelectedBrands, SelectedOils, userType).stream()
+				.mapToInt(Integer::intValue)
+				.toArray();
         
-        int[] codeArray = prodCodeList.stream()
-        					.mapToInt(Integer::intValue)
-        					.toArray();
+        return prodCodeArray;
         
-        return codeArray;
-    } // getAvailableProductCodes
+    }
 	
 	public String[] getAvailableBrands() throws SQLException, IOException {
 		

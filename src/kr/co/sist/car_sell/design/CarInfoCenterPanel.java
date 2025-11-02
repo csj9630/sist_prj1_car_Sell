@@ -4,9 +4,11 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -24,6 +26,7 @@ import javax.swing.JTextField;
 
 import kr.co.sist.car_sell.dto.CarDTO;
 import kr.co.sist.car_sell.service.CarInfoService;
+import kr.co.sist.car_sell.service.ImageService;
 
 public class CarInfoCenterPanel extends JDialog {
 	
@@ -39,9 +42,10 @@ public class CarInfoCenterPanel extends JDialog {
 	private JComboBox<String> jcbStatSold, jcbOil;
 	private String carBrand, carName;
 	private String[] oilArr, optionNameArr, carOptionNameArr, defectNameArr, carDefectNameArr, accidentNameArr, carAccidentNameArr, repairNameArr, carRepairNameArr;
-	private int[] optionCodeArr;
+	private int[] optionCodeArr, defectCodeArr, repairCodeArr, accidentCodeArr;
 	private CardLayout cl;
-	private Map<JCheckBox, String> optionMap;
+	private List<ImageIcon> iiList;
+	private Map<JCheckBox, String> optionMap, defectMap;
 	
 	private CarInfoDesign cid;
 	private CarInfoService cis;
@@ -67,6 +71,7 @@ public class CarInfoCenterPanel extends JDialog {
 		}
 		
 		optionMap = new HashMap<>();
+		defectMap = new HashMap<>();
 		
 		// 차량 정보 구역
 		jpCenter = new JPanel(null);
@@ -106,15 +111,30 @@ public class CarInfoCenterPanel extends JDialog {
 		jlblImageBackground.add(jpImage);
 		
 		// 차량 이미지 - 출력 이미지
-		ImageIcon ii1 = new ImageIcon(getClass().getResource("/images/img_" + 1 + "_1.png"));
-		ImageIcon ii2 = new ImageIcon(getClass().getResource("/images/img_" + 1 + "_2.png"));
-		ImageIcon ii3 = new ImageIcon(getClass().getResource("/images/img_" + 1 + "_3.png"));
-		ImageIcon ii4 = new ImageIcon(getClass().getResource("/images/img_" + 1 + "_4.png"));
+		ImageService is = new ImageService();
+		iiList = is.loadCarImgList(prodCode);
 		
-		jbtnImage1 = new JButton(ii1);
-		jbtnImage2 = new JButton(ii2);
-		jbtnImage3 = new JButton(ii3);
-		jbtnImage4 = new JButton(ii4);
+		ImageIcon ii1 = iiList.get(0);
+		Image origImg = ii1.getImage();
+		Image resizedImg = origImg.getScaledInstance(640, 360, Image.SCALE_SMOOTH);
+		ImageIcon reii1 = new ImageIcon(resizedImg);
+		ImageIcon ii2 = iiList.get(1);
+		origImg = ii2.getImage();
+		resizedImg = origImg.getScaledInstance(640, 360, Image.SCALE_SMOOTH);
+		ImageIcon reii2 = new ImageIcon(resizedImg);
+		ImageIcon ii3 = iiList.get(2);
+		origImg = ii3.getImage();
+		resizedImg = origImg.getScaledInstance(640, 360, Image.SCALE_SMOOTH);
+		ImageIcon reii3 = new ImageIcon(resizedImg);
+		ImageIcon ii4 = iiList.get(3);
+		origImg = ii4.getImage();
+		resizedImg = origImg.getScaledInstance(640, 360, Image.SCALE_SMOOTH);
+		ImageIcon reii4 = new ImageIcon(resizedImg);
+		
+		jbtnImage1 = new JButton(reii1);
+		jbtnImage2 = new JButton(reii2);
+		jbtnImage3 = new JButton(reii3);
+		jbtnImage4 = new JButton(reii4);
 		
 		jpImage.add(jbtnImage1, "inputA");
 		jpImage.add(jbtnImage2, "inputB");
@@ -124,15 +144,27 @@ public class CarInfoCenterPanel extends JDialog {
 		cl.show(jpImage, "inputA");
 		
 		// 차량 이미지 - 이미지 선택
-		ImageIcon ii1icon = new ImageIcon(getClass().getResource("/images_icon/img_" + 1 + "_1_icon.png"));
-		ImageIcon ii2icon = new ImageIcon(getClass().getResource("/images_icon/img_" + 1 + "_2_icon.png"));
-		ImageIcon ii3icon = new ImageIcon(getClass().getResource("/images_icon/img_" + 1 + "_3_icon.png"));
-		ImageIcon ii4icon = new ImageIcon(getClass().getResource("/images_icon/img_" + 1 + "_4_icon.png"));
+		ImageIcon ii1Icon = iiList.get(0);
+		Image origImgIcon = ii1Icon.getImage();
+		Image resizedImgIcon = origImgIcon.getScaledInstance(160, 90, Image.SCALE_SMOOTH);
+		ImageIcon reii1Icon = new ImageIcon(resizedImgIcon);
+		ImageIcon ii2Icon = iiList.get(1);
+		origImgIcon = ii2Icon.getImage();
+		resizedImgIcon = origImgIcon.getScaledInstance(160, 90, Image.SCALE_SMOOTH);
+		ImageIcon reii2Icon = new ImageIcon(resizedImgIcon);
+		ImageIcon ii3Icon = iiList.get(2);
+		origImgIcon = ii3Icon.getImage();
+		resizedImgIcon = origImgIcon.getScaledInstance(160, 90, Image.SCALE_SMOOTH);
+		ImageIcon reii3Icon = new ImageIcon(resizedImgIcon);
+		ImageIcon ii4Icon = iiList.get(3);
+		origImgIcon = ii4Icon.getImage();
+		resizedImgIcon = origImgIcon.getScaledInstance(160, 90, Image.SCALE_SMOOTH);
+		ImageIcon reii4Icon = new ImageIcon(resizedImgIcon);
 		
-		jbtnImageIcon1 = new JButton(ii1icon);
-		jbtnImageIcon2 = new JButton(ii2icon);
-		jbtnImageIcon3 = new JButton(ii3icon);
-		jbtnImageIcon4 = new JButton(ii4icon);
+		jbtnImageIcon1 = new JButton(reii1Icon);
+		jbtnImageIcon2 = new JButton(reii2Icon);
+		jbtnImageIcon3 = new JButton(reii3Icon);
+		jbtnImageIcon4 = new JButton(reii4Icon);
 		
 		jbtnImageIcon1.setBackground(new Color(0xC0C0C0));
 		jbtnImageIcon2.setBackground(new Color(0xC0C0C0));
@@ -395,12 +427,10 @@ public class CarInfoCenterPanel extends JDialog {
 		
 		// 차량 세부 정보 - 옵션 목록 수정
 		try {
-			optionCodeArr = cis.getAvailableOptionCodes();
+			optionCodeArr = cis.getOptionCodes();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -482,6 +512,14 @@ public class CarInfoCenterPanel extends JDialog {
 		
 		// 하자내역 - 하자목록 수정
 		try {
+			defectCodeArr = cis.getDefectCodes();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		try {
 			defectNameArr = cis.getAvailableDefects();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -496,9 +534,10 @@ public class CarInfoCenterPanel extends JDialog {
 		} // end try ~ catch
 		
 		jpDefect = new JPanel(new GridLayout(0, 1));
-		for (String defect : defectNameArr) {
-			// [중요] 람다에서 사용하기 위해 final 변수로 복사
-			final String defectName = defect;
+		for (int i = 0; i < defectCodeArr.length; i++) {
+			final String defectName = defectNameArr[i];
+			final int defectCode = defectCodeArr[i];
+			String defectCodeStr = String.valueOf(defectCode);
 			
 			jcbDefect = new JCheckBox(defectName);
 			jcbDefect.setFont(new Font("맑은 고딕", Font.BOLD, 25));
@@ -506,13 +545,14 @@ public class CarInfoCenterPanel extends JDialog {
 			jcbDefect.setForeground(new Color(0x000000));
 			jcbDefect.setBorder(null);
 			jcbDefect.setSelected(false);
+			defectMap.put(jcbDefect, defectCodeStr);
 			
 			for (String carDefect : carDefectNameArr) {
 				final String carDefectName = carDefect;
 				
 				if(carDefectName.equals(defectName)) {
 					jcbDefect.setSelected(true);
-					sbDefect.append(" ").append(carDefectName).append("\n");
+					sbDefect.append(carDefectName).append("\n");
 				} // end if
 			} // end for
 			jpDefect.add(jcbDefect);
@@ -555,6 +595,14 @@ public class CarInfoCenterPanel extends JDialog {
 		
 		// 사고내역 - 사고목록 수정
 		try {
+			accidentCodeArr = cis.getAccidentCodes();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		try {
 			accidentNameArr = cis.getAvailableAccidents();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -567,11 +615,12 @@ public class CarInfoCenterPanel extends JDialog {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} // end try ~ catch
-		
+
 		jpAccident = new JPanel(new GridLayout(0, 1));
-		for (String accident : accidentNameArr) {
-			// [중요] 람다에서 사용하기 위해 final 변수로 복사
-			final String accidentName = accident;
+		for (int i = 0; i < accidentCodeArr.length; i++) {
+			final String accidentName = accidentNameArr[i];
+			final int accidentCode = accidentCodeArr[i];
+			String accidentCodeStr = String.valueOf(accidentCode);
 			
 			jcbAccident = new JCheckBox(accidentName);
 			jcbAccident.setFont(new Font("맑은 고딕", Font.BOLD, 25));
@@ -579,13 +628,14 @@ public class CarInfoCenterPanel extends JDialog {
 			jcbAccident.setForeground(new Color(0x000000));
 			jcbAccident.setBorder(null);
 			jcbAccident.setSelected(false);
+			defectMap.put(jcbAccident, accidentCodeStr);
 			
 			for (String carAccident : carAccidentNameArr) {
 				final String carAccidentName = carAccident;
 				
 				if(carAccidentName.equals(accidentName)) {
 					jcbAccident.setSelected(true);
-					sbAccident.append(" ").append(carAccidentName).append("\n");
+					sbAccident.append(carAccidentName).append("\n"); 
 				} // end if
 			} // end for
 			jpAccident.add(jcbAccident);
@@ -628,6 +678,14 @@ public class CarInfoCenterPanel extends JDialog {
 		
 		// 수리내역 - 수리목록 수정
 		try {
+			repairCodeArr = cis.getRepairCodes();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		try {
 			repairNameArr = cis.getAvailableRepairs();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -642,9 +700,10 @@ public class CarInfoCenterPanel extends JDialog {
 		} // end try ~ catch
 		
 		jpRepair = new JPanel(new GridLayout(0, 1));
-		for (String repair : repairNameArr) {
-			// [중요] 람다에서 사용하기 위해 final 변수로 복사
-			final String repairName = repair;
+		for (int i = 0; i < repairCodeArr.length; i++) {
+			final String repairName = repairNameArr[i];
+			final int repairCode = repairCodeArr[i];
+			String repairCodeStr = String.valueOf(repairCode);
 			
 			jcbRepair = new JCheckBox(repairName);
 			jcbRepair.setFont(new Font("맑은 고딕", Font.BOLD, 25));
@@ -652,6 +711,7 @@ public class CarInfoCenterPanel extends JDialog {
 			jcbRepair.setForeground(new Color(0x000000));
 			jcbRepair.setBorder(null);
 			jcbRepair.setSelected(false);
+			defectMap.put(jcbRepair, repairCodeStr);
 			
 			for (String carRepair : carRepairNameArr) {
 				final String carRepairName = carRepair;
@@ -786,6 +846,10 @@ public class CarInfoCenterPanel extends JDialog {
 
 	public Map<JCheckBox, String> getOptionMap() {
 		return optionMap;
+	}
+	
+	public Map<JCheckBox, String> getDefectMap() {
+		return defectMap;
 	}
 	
 	

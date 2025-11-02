@@ -53,9 +53,10 @@ public class CarInfoSouthPanel extends JDialog{
 		jbtnDelete.setBorder(BorderFactory.createLineBorder(new Color(0x808080), 5));
 		jbtnDelete.setBounds(625, 10, 200, 60);
 		
-		jpSouth.add(jbtnModify);
-		jpSouth.add(jbtnDelete);
-		
+		if(userType.equals("a")) {
+			jpSouth.add(jbtnModify);
+			jpSouth.add(jbtnDelete);
+		} // end if
 	}
 	
 	public JPanel getJpSouth() {

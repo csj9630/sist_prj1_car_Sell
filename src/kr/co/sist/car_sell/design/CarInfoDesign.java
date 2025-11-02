@@ -19,7 +19,7 @@ public class CarInfoDesign extends JDialog {
 	private String userType;
 	private int userCode;
 	
-	private static JPanel jpNorth, jpCenter, jpSouth; 
+	private static JPanel jpNorth, jpCenter, jpSouth;
 	
 	public CarInfoDesign(CarListDesign cld, int prodCode, String userType, int userCode) {
 		

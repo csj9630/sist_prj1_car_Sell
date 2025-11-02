@@ -6,8 +6,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 
 import kr.co.sist.car_sell.design.CarListDesign;
@@ -28,16 +34,69 @@ public class CarListEvt extends WindowAdapter implements ActionListener, MouseLi
 	private CarListLeftPanel cllp;
 	private CarListRightPanel clrp;
 	private CarListService cls;
+	private String userType;
+	private int[] prodCodeArray;
 	private int userCode;
 	
-	public CarListEvt(CarListDesign cld, int userCode, CarListNorthPanel clnp, CarListLeftPanel cllp, CarListRightPanel clrp, CarListService cls) {
+	public CarListEvt(CarListDesign cld, String userType, int userCode, CarListNorthPanel clnp, CarListLeftPanel cllp, CarListRightPanel clrp, CarListService cls) {
 		this.cld = cld;
 		this.clnp = clnp;
 		this.cllp = cllp;
 		this.clrp = clrp;
 		this.cls = cls;
-		this.userCode =  userCode;
+		this.userType = userType;
+		this.userCode = userCode;
 	} // CarListEvt
+	
+	public int[] searchCars() {
+		
+		List<String> SelectedBrands = new ArrayList<>();
+		List<String> SelectedOils = new ArrayList<>();
+		
+		for(Map.Entry<JCheckBox, String> entry : cllp.getBrandMap().entrySet()) {
+	        JCheckBox jcbBrand = entry.getKey();
+	        String BrandName = entry.getValue();
+			
+	        if (jcbBrand.isSelected()) {
+	            SelectedBrands.add(BrandName);
+	        }
+		}
+		
+		for(Map.Entry<JCheckBox, String> entry : cllp.getOilMap().entrySet()) {
+			JCheckBox jcbOil = entry.getKey();
+			String OilName = entry.getValue();
+			
+			if (jcbOil.isSelected()) {
+				SelectedOils.add(OilName);
+			}
+		}
+		
+		// 2. Service 레이어를 호출합니다.
+		try {
+			// Service에 필터링된 차량 목록을 요청합니다.
+	        
+	        prodCodeArray = cls.getFilteredCars(SelectedBrands, SelectedOils, userType);
+	        
+	        try {
+				clrp.refreshCarList(prodCodeArray);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        
+	        
+		} catch (SQLException e) {
+			e.printStackTrace();
+			// 사용자에게 오류 메시지 표시
+			JOptionPane.showMessageDialog(cld, "차량 검색 중 오류가 발생했습니다.");
+		} catch (IOException e) {
+			e.printStackTrace();
+			// 사용자에게 오류 메시지 표시
+			JOptionPane.showMessageDialog(cld, "차량 검색 중 오류가 발생했습니다.");
+		}
+		 
+		return prodCodeArray;
+	}
 	
 	public void windowClosing(WindowEvent we) {
 		cld.dispose();
