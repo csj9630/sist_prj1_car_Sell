@@ -56,7 +56,7 @@ public class SettlementDesign extends JDialog {
 	 * @return
 	 */
 	public JTable monthlyTable() {
-		String[] columnNames = { "월별", "총 판매 금액", "총 세금", "총 정산 금액", "실적 증감율" };
+		String[] columnNames = { "월별", "총 판매 금액", "총 세금", "총 정산 금액", "실적 증감률" };
 		dtmMonthlyInfo = new DefaultTableModel(columnNames, 0) {
 			@Override
 			public boolean isCellEditable(int rowIndex, int mColIndex) {
