@@ -86,7 +86,53 @@ public class ImageService {
 		} // end catch
 
 //		return flag;
-	}// addImg
+	}// saveImg
+
+	/**
+	 * 상품코드와 file 4개 배열을 받아서 4개 이미지를 db에 저장한다.
+	 * 없는 경로면 패스.
+	 * 
+	 * @param product_code
+	 */
+	public void saveFourImg(int product_code, File[] imageFileArr) {
+		int flag = 0;
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < imageFileArr.length; i++) {
+			if(imageFileArr[i] == null) {
+				continue;
+			}
+			idto = new ImageDTO();
+			idto.setProduct_code(product_code);
+			idto.setImage_name(imageFileArr[i].getName());
+			idto.setFile(imageFileArr[i]);
+
+			ImageDAO idao = ImageDAO.getInstance();
+			int imageCode = 0;// 삽입하는 이미지코드
+
+			try {
+				imageCode = idao.insertImageBlob(idto);// DB에 이미지를 추가.
+				sb.append(idto.getImage_name()).append(" ");
+				flag++;
+//				System.out.println(flag);
+			} catch (SQLException e) {// DB 오류
+				handleException("데이터베이스 처리 중 오류가 발생했습니다.", e);
+				return;
+			} catch (IOException e) {// 파일 오류
+				handleException("이미지 파일 처리 중 오류가 발생했습니다.", e);
+				return;
+			} // end catch
+
+		} // end for
+		if (flag > 0) {
+
+			JOptionPane.showMessageDialog(null, "이미지 등록 성공 (Code: " + sb.toString() + ")");
+		} else {
+			// DB에서 롤백되었거나 행이 삽입되지 않은 경우
+			JOptionPane.showMessageDialog(null, "이미지 등록에 실패했습니다.(삽입 실패)", "경고", JOptionPane.WARNING_MESSAGE);
+		} // end else
+
+//		return flag;
+	}// saveImg
 
 	public void saveImg_All(int product_code) {
 		// 파일 다이얼로그를 연다.

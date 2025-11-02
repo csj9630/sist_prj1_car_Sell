@@ -49,6 +49,8 @@ public class CarAddEvt extends WindowAdapter implements ActionListener {
 	private JPanel jpImage;
 	private int prodCode;
 	private int userCode;
+	
+	private File[] imgFile;
 
 	private CardLayout cl;
 
@@ -61,6 +63,7 @@ public class CarAddEvt extends WindowAdapter implements ActionListener {
 		this.canp = canp;
 		this.cacp = cacp;
 		this.casp = casp;
+		this.imgFile = new File[4];
 
 	} // CarInfoEvt
 
@@ -183,28 +186,44 @@ public class CarAddEvt extends WindowAdapter implements ActionListener {
 		jbtnInsert = casp.getJbtnInsert();
 
 		if (ae.getSource() == jbtnImage1) {
-			is.saveImg(prodCode);
-//			ImageIcon ii = new ImageIcon("src/images/test_img.png");
-			ImageIcon ii = new ImageIcon(is.getIdto().getFile().getAbsolutePath());
+//			ImageIcon ii = new ImageIcon(is.getIdto().getFile().getAbsolutePath());
+//			is.saveImg(prodCode, imgFile1);
+			cl.show(jpImage, "inputA");
+			if((imgFile[0] = chooseImgPath())==null) {
+				return;
+			}//end if
+			ImageIcon ii = new ImageIcon(imgFile[0].getAbsolutePath());
 			jbtnImage1.setIcon(ii);
 			return;
 		} // end if
 
 		if (ae.getSource() == jbtnImage2) {
 			cl.show(jpImage, "inputB");
-			is.saveImg(prodCode);
-			return;
+			if((imgFile[1] = chooseImgPath())==null) {
+				return;
+			}//end if
+			
+			ImageIcon ii = new ImageIcon(imgFile[1].getAbsolutePath());
+			jbtnImage2.setIcon(ii);
 		} // end if
 
 		if (ae.getSource() == jbtnImage3) {
 			cl.show(jpImage, "inputC");
-			is.saveImg(prodCode);
+			if((imgFile[2] = chooseImgPath())==null) {
+				return;
+			}//end if
+			ImageIcon ii = new ImageIcon(imgFile[2].getAbsolutePath());
+			jbtnImage3.setIcon(ii);
 			return;
 		} // end if
 
 		if (ae.getSource() == jbtnImage4) {
 			cl.show(jpImage, "inputD");
-			is.saveImg(prodCode);
+			if((imgFile[3] = chooseImgPath())==null) {
+				return;
+			}//end if
+			ImageIcon ii = new ImageIcon(imgFile[3].getAbsolutePath());
+			jbtnImage4.setIcon(ii);
 			return;
 		} // end if
 
@@ -229,10 +248,14 @@ public class CarAddEvt extends WindowAdapter implements ActionListener {
 		} // end if
 
 		if (ae.getSource() == jbtnInsert) {
+			
 			int result = JOptionPane.showConfirmDialog(cacp, "신규 차량을 등록하시겠습니까?");
 			if (result == JOptionPane.OK_OPTION) {
 				try {
+					
 					addCars();
+					is.saveFourImg(prodCode, imgFile);
+					
 					JOptionPane.showMessageDialog(cacp, "신규 차량을 등록했습니다.");
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(cacp, "신규 차량을 등록하지 못했습니다.");
@@ -245,6 +268,7 @@ public class CarAddEvt extends WindowAdapter implements ActionListener {
 		} // end if
 
 	} // actionPerformed
+	
 
 	public File chooseImgPath() {
 		// 파일 다이얼로그를 연다.
@@ -254,19 +278,19 @@ public class CarAddEvt extends WindowAdapter implements ActionListener {
 		jfc.setMultiSelectionEnabled(true);
 		jfc.showOpenDialog(null);
 		imageFile = jfc.getSelectedFile();
-		
-		// 파일경로 체크
-if (imageFile == null) {
-						JOptionPane.showMessageDialog(null, "이미지가 선택되지 않았습니다.");
-						return null;
-					} // end if
 
-					if (!checkExtTool.checkExt(imageFile.getName())) {
-						JOptionPane.showMessageDialog(null, "이미지 확장자가 아닙니다.");
-						return null;
-		
+		// 파일경로 체크
+		if (imageFile == null) {
+			JOptionPane.showMessageDialog(null, "이미지가 선택되지 않았습니다.");
+			return null;
+		} // end if
+
+		if (!checkExtTool.checkExt(imageFile.getName())) {
+			JOptionPane.showMessageDialog(null, "이미지 확장자가 아닙니다.");
+			return null;
+		}//end if
 		return imageFile;
-	}//chooseImgPath
+	}// chooseImgPath
 
 }
 // class
