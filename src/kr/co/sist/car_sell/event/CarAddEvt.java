@@ -51,9 +51,6 @@ public class CarAddEvt extends WindowAdapter implements ActionListener {
 	public CarAddEvt(CarAddDesign cad, CarAddNorthPanel canp, CarAddCenterPanel cacp, CarAddSouthPanel casp) {
 		
 		this.cad = cad;
-		this.cld = cld;
-		this.prodCode = prodCode;
-		this.userCode = userCode;
 		this.canp = canp;
 		this.cacp = cacp;
 		this.casp = casp;
@@ -62,6 +59,7 @@ public class CarAddEvt extends WindowAdapter implements ActionListener {
 	
 	public void addCars() throws IOException {
 		
+		CarAddService cas = new CarAddService();
 		// 이름, 이메일, 전화번호, 인트로, 이미지를 받아와서 추가 작업 수행
 		int price = Integer.parseInt(cacp.getJtfPrice().getText().trim());
 		int cc = Integer.parseInt(cacp.getJtfCc().getText().trim());
@@ -79,19 +77,25 @@ public class CarAddEvt extends WindowAdapter implements ActionListener {
 				+ "0101", carDate));
 		
 		CarDTO cDTO = new CarDTO(prodCode, price, cc, distance, prodName, regNum, soldStat, carName, oil, brandName, carYear);
+		System.out.println();
 		
-		CarAddService cas = new CarAddService();
+		int tempProdCode = cas.addCar(cDTO);
+		System.out.println(String.valueOf(tempProdCode));
 		
-		if(cas.addCar(cDTO)) {
+		if(tempProdCode > 0) {
 			String msg = "차량 정보를 정상적으로 갱신하였습니다.";
 			JOptionPane.showMessageDialog(cad, msg);
-			// 입력칸 초기화
+			
+			prodCode = tempProdCode;
+			System.out.println(prodCode);
 		} else {
 			String msg = "차량 정보를 갱신할 수 없습니다.\n잠시 후 다시 시도해주세요.";
 			JOptionPane.showMessageDialog(cad, msg);
+			
+			return;
 		}
 		
-		prodCode = cDTO.getProdCode();
+		
 		System.out.println(prodCode);
 		
 		List<String> selectedOptionCodes = new ArrayList<>();
