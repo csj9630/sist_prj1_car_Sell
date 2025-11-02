@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.DataFormatException;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -68,9 +69,9 @@ public void addCars() throws IOException {
 		
 		CarAddService cas = new CarAddService();
 		// 이름, 이메일, 전화번호, 인트로, 이미지를 받아와서 추가 작업 수행
-		int price = Integer.parseInt(cacp.getJtfPrice().getText().trim());
-		int cc = Integer.parseInt(cacp.getJtfCc().getText().trim());
-		int distance = Integer.parseInt(cacp.getJtfDistance().getText().trim());
+		int price = Integer.parseInt(cacp.getJtfPrice().getText().replaceAll("[^0-9]", "").trim());
+		int cc = Integer.parseInt(cacp.getJtfCc().getText().replaceAll("[^0-9]", "").trim());
+		int distance = Integer.parseInt(cacp.getJtfDistance().getText().replaceAll("[^0-9]", "").trim());
 		String prodName = cacp.getJtfCarName().getText()+" ";
 		String regNum = cacp.getJtfNumberPlate().getText();
 		int indSold = cacp.getJcbStatSold().getSelectedIndex();
@@ -79,9 +80,17 @@ public void addCars() throws IOException {
 		int indOil = cacp.getJcbOil().getSelectedIndex();
 		String oil = cacp.getDcbmOil().getElementAt(indOil).toString().trim();
 		String brandName = cacp.getJtfBrand().getText().trim();
+		Date carYear = null;
+		
 		DateTimeFormatter carDate = DateTimeFormatter.ofPattern("yyyyMMdd");
-		Date carYear = Date.valueOf(LocalDate.parse(cacp.getJtfYear1().getText().trim()
+		carYear = Date.valueOf(LocalDate.parse(cacp.getJtfYear1().getText().trim()
 				+ "0101", carDate));
+		
+		
+		if(String.valueOf(price).isEmpty() || String.valueOf(cc).isEmpty() || String.valueOf(distance).isEmpty() || cacp.getJtfCarName().getText().isEmpty() || regNum.isEmpty() || soldStat.isEmpty() || carName.isEmpty() || oil.isEmpty() || brandName.isEmpty()) {
+			JOptionPane.showMessageDialog(cad, "모든 칸을 기입해주세요.");
+			return;
+		}
 		
 		CarDTO cDTO = new CarDTO(prodCode, price, cc, distance, prodName, regNum, soldStat, carName, oil, brandName, carYear);
 		System.out.println();

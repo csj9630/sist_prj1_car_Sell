@@ -1,4 +1,4 @@
-package kr.co.sist.car_sell.design;
+package kr.co.sist.car_sell.event;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,7 +10,13 @@ import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
-import kr.co.sist.car_sell.event.UserMgrEvt;
+import kr.co.sist.car_sell.design.CarAddDesign;
+import kr.co.sist.car_sell.design.MgrMenuCenterPanel;
+import kr.co.sist.car_sell.design.MgrMenuDesign;
+import kr.co.sist.car_sell.design.MgrMenuNorthPanel;
+import kr.co.sist.car_sell.design.OrderListManagerDesign;
+import kr.co.sist.car_sell.design.SettlementDesign;
+import kr.co.sist.car_sell.design.UserMgrDesign;
 
 public class MgrMenuEvt extends WindowAdapter implements ActionListener, MouseListener {
 	
@@ -37,6 +43,7 @@ public class MgrMenuEvt extends WindowAdapter implements ActionListener, MouseLi
 		
 		if(ae.getSource() == jbtnAddCar) {
 			JOptionPane.showMessageDialog(mmld, "차량등록 페이지에 진입합니다.");
+			new CarAddDesign(mmld);
 			return;
 		} // end if
 		

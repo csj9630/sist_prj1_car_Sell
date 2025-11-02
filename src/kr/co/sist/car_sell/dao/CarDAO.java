@@ -108,7 +108,6 @@ public class CarDAO {
 	    
 	    if (SelectedBrands != null && !SelectedBrands.isEmpty()) {
 	    	carFind.append(" WHERE BRAND_NAME IN (");
-	    	System.out.println(carFind.toString());
 	    	
 	        for (int i = 0; i < SelectedBrands.size(); i++) {
 	        	carFind.append("?");
@@ -117,7 +116,6 @@ public class CarDAO {
 	            }
 	        }
 	        carFind.append(") ");
-	        System.out.println(carFind.toString());
 	        
 		    if (SelectedOils != null && !SelectedOils.isEmpty()) {
 		    	carFind.append(" AND OIL IN (");
@@ -184,7 +182,6 @@ public class CarDAO {
 	            CarDTO cDTO = new CarDTO();
 	            cDTO.setProdCode(rs.getInt("PRODUCT_CODE"));
 	            prodCodeList.add(cDTO.getProdCode());
-	            System.out.println(prodCodeList);
 	        }
 	        
 	    } finally {

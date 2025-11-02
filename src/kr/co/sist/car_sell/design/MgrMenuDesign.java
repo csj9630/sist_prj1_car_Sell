@@ -3,6 +3,8 @@ package kr.co.sist.car_sell.design;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import kr.co.sist.car_sell.event.MgrMenuEvt;
+
 public class MgrMenuDesign extends JFrame {
 	
 	private static JPanel jpNorth, jpCenter;

@@ -137,20 +137,19 @@ public class CarListRightPanel extends JFrame {
 		jpRight.add(jspRight);
 	}
 	
-	
 	public void refreshCarList(int[] prodCodeArr) throws Exception {
 		
 		// 1. 기존의 모든 차량 정보(컴포넌트)를 패널에서 제거합니다.
-		jpRight.removeAll();
+		jpScroll.removeAll();
 		
 		// 2. 새로운 차량 코드 리스트(carCodes)를 기반으로 UI 컴포넌트를 다시 만듭니다.
-		jpScroll = new JPanel();
-		jpScroll.setLayout(new GridLayout(0, 1));
-		
-		jspRight = new JScrollPane(jpScroll);
-		jspRight.setBorder(BorderFactory.createLineBorder(new Color(0x808080), 5));
-		jspRight.setBackground(new Color(0x808080));
-		jspRight.getVerticalScrollBar().setUnitIncrement(20);
+//		jpScroll = new JPanel();
+//		jpScroll.setLayout(new GridLayout(0, 1));
+//		
+//		jspRight = new JScrollPane(jpScroll);
+//		jspRight.setBorder(BorderFactory.createLineBorder(new Color(0x808080), 5));
+//		jspRight.setBackground(new Color(0x808080));
+//		jspRight.getVerticalScrollBar().setUnitIncrement(20);
 		
 		try {
 			for (int prodCode : prodCodeArr) {
@@ -216,9 +215,9 @@ public class CarListRightPanel extends JFrame {
 				
 			}
 			
-			jspRight.setBounds(5, 5, 826, 716);
-			
-			jpRight.add(jspRight);
+//			jspRight.setBounds(5, 5, 826, 716);
+//			
+//			jpRight.add(jspRight);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -226,8 +225,8 @@ public class CarListRightPanel extends JFrame {
 		}
 		
 		// 3. 패널의 레이아웃을 새로고침하고 다시 그리도록 강제합니다. (필수!)
-		jpRight.revalidate(); // 레이아웃을 다시 계산
-		jpRight.repaint();    // 화면을 다시 그림
+		jpScroll.revalidate(); // 레이아웃을 다시 계산
+		jpScroll.repaint();    // 화면을 다시 그림
 	}
 	
 	public static JPanel getJpRight() {

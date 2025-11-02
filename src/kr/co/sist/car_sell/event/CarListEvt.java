@@ -27,7 +27,7 @@ import kr.co.sist.car_sell.service.CarListService;
 
 public class CarListEvt extends WindowAdapter implements ActionListener, MouseListener {
 	
-	private JButton jbtnImage, jbtnMgrMenu, jbtnUserMenu, jbtnLogout;
+	private JButton jbtnFilter, jbtnMgrMenu, jbtnUserMenu, jbtnLogout;
 	
 	private CarListDesign cld;
 	private CarListNorthPanel clnp;
@@ -105,9 +105,15 @@ public class CarListEvt extends WindowAdapter implements ActionListener, MouseLi
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		
+		jbtnFilter = cllp.getJbtnFilter();
 		jbtnMgrMenu = clnp.getJbtnMgrMenu();
 		jbtnUserMenu = clnp.getJbtnUserMenu();
 		jbtnLogout = clnp.getJbtnLogout();
+		
+		if(ae.getSource() == jbtnFilter) {
+			searchCars();
+			return;
+		} // end if
 		
 		if(ae.getSource() == jbtnMgrMenu) {
 			new MgrMenuDesign();
