@@ -65,7 +65,7 @@ public class UserOrderEvt implements ActionListener {
 					"구매하시겠습니까?", // 메시지
 					"구매 확인", // 타이틀
 					JOptionPane.YES_NO_OPTION); // 버튼 (예/아니오)
-
+			
 			// 2. 사용자가 "예(Yes)" 버튼을 눌렀는지 확인합니다.
 			if (result == JOptionPane.YES_OPTION) {
 				try {
@@ -73,7 +73,7 @@ public class UserOrderEvt implements ActionListener {
 				OrderDTO oDTO = new OrderDTO();
 				oDTO.setUser_code(this.user_code);     // Evt에 저장된 현재 사용자 코드
 				oDTO.setProduct_code(this.productCode); // Evt에 저장된 현재 차량 코드
-
+				
 				// 2. 서비스의 주문 메소드 호출
 				//    이 메소드는 내부적으로 OrderDAO.insertOrder를 호출하여
 				//    INSERT(주문)와 UPDATE(판매완료)를 실행합니다.

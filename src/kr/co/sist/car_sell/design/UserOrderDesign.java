@@ -274,7 +274,7 @@ public class UserOrderDesign extends JDialog {
 		List<ImageIcon> imageIconList = is.loadCarImgList(productCode);
 
 		System.out.println(productCode + "번 차량 이미지 " + imageIconList.size() + "개 로드 시도.");
-
+		
 		if (imageIconList == null || imageIconList.isEmpty()) { // 리스트가 비어있는지 확인
 			buildBlankImg(); // 이미지 없을 때
 		} else { // 이미지 있을 때

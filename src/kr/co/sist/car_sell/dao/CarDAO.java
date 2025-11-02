@@ -703,6 +703,8 @@ public class CarDAO {
 				+ "distance, registration_number, status_sold, car_name, oil, brand_name)"
 				+ "values(SEQ_CAR_INFO.nextval,?,?,?,?,?,?,?,?,?,?)";
 		
+		String selectProdCode = "SELECT PRODUCT_CODE FROM CAR_INFO WHERE PRODUCT_CODE = SEQ_CAR_INFO.currval";
+		
 		try {
 			con = gc.getConn();
 			
@@ -737,6 +739,7 @@ public class CarDAO {
 			pstmtCar.setString(10, cDTO.getBrandName());
 			
 			pstmtCar.executeUpdate();
+			
 			
 		} finally {
 			gc.dbClose(con, pstmtCar, null);	// 연결을 끊을 때는 commit을 수행하고 끊는다.
